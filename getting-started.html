@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laser Cutting in Illustrator</title>
+    <title>Getting Started</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-    
+        
         body, html {
             margin: 0;
             padding: 0;
@@ -161,7 +161,7 @@
     <div class="background"></div>
     <div class="container">
         <div class="sidebar">
-            <h1 class="text-2xl font-bold mb-6 text-center">Laser Cutting in Illustrator</h1>
+            <h1 class="text-2xl font-bold mb-6 text-center">Getting Started</h1>
             <div class="steps-container">
                 <div class="tutorial-step active" data-step="1">
                     <h2>Step 1: File Setup</h2>
@@ -202,8 +202,8 @@
         const images = {
             1: "https://i.imgur.com/CvFWbm1.png",
             2: "https://i.imgur.com/5GFBdYI.png",
-            3: "/api/placeholder/800/400",
-            4: "/api/placeholder/800/400"
+            3: "https://i.imgur.com/4XosVvv.png",
+            4: "https://i.imgur.com/gljFsDL.png"
         };
 
         const stepContents = [
@@ -247,28 +247,40 @@
                 <div class="space-y-4">
                     <p>Selection shortcuts:</p>
                     <ul class="list-disc pl-5 space-y-2">
-                        <li>Selection Tool (V): Move and transform</li>
-                        <li>Direct Selection (A): Edit specific points</li>
-                        <li>Hold Alt while dragging to copy</li>
-                        <li>Hold Shift to maintain proportions</li>
+                        <li>Selection Tool (V): This tool is used for selecting and moving the ENTIRE object</li>
+                        <li>Direct Selection (A): This tool is used for selecting and moving SPECIFIC points (see image above for an example)</li>
+                        
+                    </ul>
+                    <p>Pro shortcuts:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                    <li>Hold Alt while dragging something to copy it</li>
+                    <li>Hold Shift while dragging things to keep things level</li>
                     </ul>
                 </div>
             </div>`,
             `<div class="space-y-6">
                 <img src="${images[4]}" alt="Stroke and fill settings illustration" class="w-full rounded-lg shadow-lg cursor-pointer">
+                <p class="text-sm text-center italic">(In the screenshot example above, the settings are shown for ENGRAVING)</p>
                 <h3 class="text-2xl font-bold">Laser Cutting Settings</h3>
-                <div class="space-y-4">
-                    <p>For cutting lines:</p>
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+    <p class="font-bold">IMPORTANT!</p>
+    <p>If these settings aren't used, your design won't cut properly.</p>
+</div>                <div class="space-y-4">
+                    <p>For <span class="font-bold">cutting</span> lines:</p>
                     <ul class="list-disc pl-5 space-y-2">
-                        <li>Stroke: 0.001 pt</li>
-                        <li>Color: RGB Red (255,0,0)</li>
-                        <li>No fill</li>
+                        <li>Stroke width needs to be set to: 0.001 pt</li>
+                        <li>Fill needs to be set to: No fill</li>
                     </ul>
-                    <p>For engraving:</p>
+                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded">
+    <p class="font-bold">Pro tip</p>
+    <p>It's normal to not see your thin cutting lines easily. Press CTRL + Y to see all your lines clearly.</p>
+</div>                    <p>For engraving:</p>
                     <ul class="list-disc pl-5 space-y-2">
                         <li>Stroke: 1 pt</li>
-                        <li>Color: RGB Black (0,0,0)</li>
+                        <li>Fill: Black fill</li>
                     </ul>
+                    <img src="https://i.imgur.com/uFfu9wN.png" alt="Engraving settings example" class="w-full rounded-lg shadow-lg cursor-pointer mt-4">
+
                 </div>
             </div>`
         ];
