@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Box Joints</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            cursor: zoom-out;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            margin: auto;
+            display: block;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: zoom-in;
+        }
+        .modal.zoomed .modal-content {
+            max-width: none;
+            max-height: none;
+            cursor: zoom-out;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #002654, #57708e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            z-index: -1;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 300px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            background-color: rgba(0, 38, 84, 0.85);
+            backdrop-filter: blur(10px);
+        }
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        .content-wrapper {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tutorial-step {
+            background-color: rgba(87, 112, 142, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .tutorial-step:hover {
+            transform: translateY(-5px);
+            background-color: rgba(87, 112, 142, 0.4);
+        }
+        .tutorial-step.active {
+            background-color: rgba(87, 112, 142, 0.6);
+        }
+        .step-content {
+            background-color: rgba(87, 112, 142, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            margin-top: auto;
+        }
+        .nav-button {
+            background-color: #57708e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .nav-button:hover {
+            background-color: #002654;
+        }
+        .nav-button:disabled {
+            background-color: #57708e;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .progress-container {
+            margin-top: auto;
+            width: 100%;
+            padding: 1rem;
+        }
+        .progress-text {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #57708e;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="sidebar">
+            <h1 class="text-2xl font-bold mb-6 text-center">Box Joint Tutorial</h1>
+            <div class="steps-container">
+                <div class="tutorial-step active" data-step="1">
+                    <h2>Step 1: Base Shape</h2>
+                </div>
+                <div class="tutorial-step" data-step="2">
+                    <h2>Step 2: Making Teeth</h2>
+                </div>
+                <div class="tutorial-step" data-step="3">
+                    <h2>Step 3: Excluding and Uniting</h2>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-text">Progress: <span id="progress-percentage">33%</span></div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 33%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="content-wrapper">
+                <div class="step-content" id="step-content"></div>
+                <div class="navigation">
+                    <button id="prevButton" class="nav-button" disabled>Previous</button>
+                    <button id="nextButton" class="nav-button">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <img id="modalImage" class="modal-content">
+    </div>
+
+    <script>
+        const images = {
+            1: "https://i.imgur.com/boVnNNi.png",
+            2: "https://i.imgur.com/v4mVzHC.png",
+            3: "/api/placeholder/800/600"
+        };
+
+        const stepContents = [
+            `<div class="space-y-6">
+                <h3 class="text-2xl font-bold">What We Are Creating</h3>
+                <p>We are aiming to create this kind of wood joint:</p>
+                <img src="https://cuttingedgeinc.ca/wp-content/uploads/2024/05/Pros-and-cons-of-box-joint-drawer-boxes-2.jpg">
+                <p>Here's what this will look like on Illustrator when we laser cut the pieces:</p>
+                <img src="https://i.imgur.com/YJBqJMt.png">
+                <p class="text-sm italic text-center">Note that this doesn't include the bottom piece.</p>
+                <h3 class="text-2xl font-bold">Creating the Base Rectangle</h3>
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+                    <p class="font-bold">IMPORTANT!</p>
+                    <p>Set stroke to 0.001pt and fill to none before starting</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded">
+                        <p class="font-bold">First: Set Keyboard Increment</p>
+                        <p>1. Ensure nothing is selected</p>
+                        <p>2. Look at Properties panel (right side)</p>
+                        <p>3. Set "Keyboard Increment" to desired spacing in mm</p>
+                    </div>
+                    <p>Create your base rectangle:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Press M for Rectangle Tool</li>
+                        <li>Create your main rectangle by clicking once with the rectangle tool.</li>
+                        <li>Enter your width and height. Make sure it is in mm and not points!</li>
+                    </ul>
+                </div>
+                <img src="${images[1]}" alt="Base shape creation" class="w-full rounded-lg shadow-lg cursor-pointer">
+
+            </div>`,
+
+            `<div class="space-y-6">
+                <h3 class="text-2xl font-bold">Creating Joint Teeth</h3>
+                <div class="space-y-4">
+                    <p>Create individual teeth:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Press M for Rectangle Tool</li>
+                        <li>Create the first tooth. Make sure you are happy with the size. We only need to make it once, as we are going to duplicate it.</li>
+                        <li>Get the first tooth in position near the corner of your design.</li>
+                    </ul>
+                    <img src="${images[2]}" alt="Creating teeth illustration" class="w-full rounded-lg shadow-lg cursor-pointer">
+                    <p class="text-sm italic mb-4 text-center">Note: My lines are 0.001pts here, but I have used CTRL + Y to visualise them better.</p>
+
+                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
+                        <p class="font-bold">Precise Duplication</p>
+                        <p>1. Select your tooth</p>
+                        <p>2. Press ALT + Arrow Key in the direction you want to duplicate (e.g. right arrow key)</p>
+                        <p>3. Keep pressing to create more teeth at same spacing</p>
+                        <p>4. If you're not happy with the spacing, delete them and increase the increment size again like in step 1.</p>
+                    </div>
+                    <img src="https://i.imgur.com/cnxA4X7.png">
+                    <p class="text-sm italic mb-4 text-center">In this example, I used 15mm increments. I have also slightly centered things by dragging all the teeth and holding shift.</p>
+                </div>
+            </div>`,
+
+            `<div class="space-y-6">
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold">To Exclude (Cut Out):</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Select all teeth + base rectangle</li>
+                        <li>With everything selected, click the exclude button.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/ekELUkT.png">
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded">
+                        <p class="font-bold">Quick Tip</p>
+                        <p class="mb-4">If this, or the next step don't work, it means your shapes aren't lined up perfectly, or your teeth and main shape have different stroke sizes.</p>
+                        <p class="mb-4">Make sure everything is touching and they are right on the edge. You can hold down shift while dragging things and you can check to see if a purple line appears - this means your lines are connecting.</p>
+                    </div>
+                    <h3 class="text-2xl font-bold">Preparing the other join</h3>
+                        <p>Before moving to the next shape:</p>
+                        <ol class="list-decimal pl-5 space-y-1 mt-2">
+                            <li>Select your completed shape</li>
+                            <li>Press CTRL + C to copy</li>
+                            <li>Press CTRL + V to paste</li>
+                            <li>Move the copy to the side</li>
+                            <li>Move your teeth up so they are overlapping the edge of the line (see image below).</li>
+                        </ol>
+                        <p>This will save you a tonne of time in making your connecting joints.</p>
+                    <img src="https://i.imgur.com/jmEV09S.png">
+                    <h3 class="text-2xl font-bold">To Unite (Join Together):</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Select all teeth + base rectangle</li>
+                        <li>With everything selected, click the unite button.</li>
+                    </ul>
+                    <img src="https://i.imgur.com/UnxAGkl.png">
+                    <h3 class="text-2xl font-bold">Check for Alignment</h3>
+                    <p class="mb-4">Before you cut, you need to check if your shapes line up when you try to put them together.</p>
+                    <p class="mb-4">If they don't there is something wrong with your joints and they won't glue correctly. Try the above steps again.</p>
+                    <img src="https://i.imgur.com/mcEuDuW.png">
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded">
+                        <p class="font-bold">Quick Tip</p>
+                        <p class="mb-4">Don't forget you can always CTRL + Z to undo things, and ALT + Arrow Key to duplicate things as many times as you need.</p>
+                    </div>
+                    <h3 class="text-2xl font-bold">Completed Example</h3>
+                    <img src="https://i.imgur.com/YJBqJMt.png">
+                    <p class="text-sm italic text-center">Remember that you will need multiple walls and joins on each side. Here's an complete 4 wall example.</p>
+                </div>
+            </div>`
+        ];
+
+        const steps = document.querySelectorAll('.tutorial-step');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const stepContent = document.getElementById('step-content');
+        const progressBar = document.querySelector('.progress');
+        const progressPercentage = document.getElementById('progress-percentage');
+        let currentStep = 1;
+
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        let isZoomed = false;
+
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('.step-content img')) {
+                modal.style.display = 'block';
+                modalImg.src = e.target.src;
+            }
+        });
+
+        modal.addEventListener('click', function() {
+            if (isZoomed) {
+                modal.classList.remove('zoomed');
+                isZoomed = false;
+            } else {
+                modal.style.display = 'none';
+            }
+        });
+
+        modalImg.addEventListener('click', function(e) {
+            e.stopPropagation();
+            modal.classList.toggle('zoomed');
+            isZoomed = !isZoomed;
+        });
+
+        function updateButtons() {
+            prevButton.disabled = currentStep === 1;
+            nextButton.disabled = currentStep === steps.length;
+            nextButton.textContent = currentStep === steps.length ? 'Finish' : 'Next';
+        }
+
+        function updateProgress() {
+            const progress = (currentStep / steps.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${Math.round(progress)}%`;
+        }
+
+        function showStep(step) {
+            steps.forEach(s => s.classList.remove('active'));
+            steps[step - 1].classList.add('active');
+            currentStep = step;
+            updateButtons();
+            updateProgress();
+            stepContent.innerHTML = stepContents[step - 1];
+        }
+
+        steps.forEach((step, index) => {
+            step.addEventListener('click', () => showStep(index + 1));
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 1) showStep(currentStep - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentStep < steps.length) {
+                showStep(currentStep + 1);
+            } else {
+                alert('Tutorial completed!');
+            }
+        });
+
+        showStep(1);
+    </script>
+</body>
+</html>
