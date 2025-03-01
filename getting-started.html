@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Getting Started</title>
+    <title>Adobe Illustrator Basics Tutorial</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
         
@@ -52,7 +55,6 @@
             height: 100%;
             background: linear-gradient(45deg, #002654, #57708e);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
             z-index: -1;
         }
         @keyframes gradientBG {
@@ -64,15 +66,7 @@
             display: flex;
             height: 100vh;
         }
-        .sidebar {
-            width: 300px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem;
-            background-color: rgba(0, 38, 84, 0.85);
-            backdrop-filter: blur(10px);
-        }
+        
         .main-content {
             flex-grow: 1;
             display: flex;
@@ -155,33 +149,254 @@
             background-color: #57708e;
             transition: width 0.3s ease;
         }
+        .video-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .video-container video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .carousel {
+            width: 100%;
+            position: relative;
+            margin: 2rem 0;
+            padding: 1rem 0;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .carousel-container {
+            display: flex;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            width: 100%;
+            padding: 1rem 0;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            transition: transform 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 1.5rem;
+        }
+        .carousel-slide img {
+            max-height: 300px;
+            width: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            /* Improve clickability with larger hit area */
+            padding: 5px;
+            transition: transform 0.2s ease;
+        }
+        .carousel-slide img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        .carousel-slide p {
+            margin-top: 0.75rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            z-index: 10;
+            padding: 0 10px;
+        }
+        .carousel-btn {
+            background-color: rgba(0, 38, 84, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .carousel-btn:hover {
+            background-color: rgba(0, 38, 84, 1);
+        }
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1rem;
+        }
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .carousel-indicator.active {
+            background-color: white;
+        }
+        .tip-box {
+            background-color: rgba(30, 64, 175, 0.2);
+            border-left: 4px solid #1e40af;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .tip-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #93c5fd;
+        }
+        .control-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            border: 1px solid #4b6584;
+            border-radius: 4px;
+            margin: 0.25rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            min-width: 2.5rem;
+        }
+        .keyboard-shortcut {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .key {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            margin-right: 0.5rem;
+            font-family: monospace;
+            font-weight: bold;
+            min-width: 1.5rem;
+            text-align: center;
+        }
+        .shortcut-description {
+            flex: 1;
+        }
+        .sidebar {
+            width: 300px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            background-color: rgba(0, 38, 84, 0.85);
+            backdrop-filter: blur(10px);
+            overflow-y: hidden;
+        }
+
+        /* Scrollable steps container */
+        .steps-container {
+            overflow-y: auto;
+            max-height: calc(100vh - 150px);
+            padding-right: 5px; /* Add some padding for the scrollbar */
+        }
+
+        /* Webkit scrollbar styling (Chrome, Safari, newer Edge) */
+        .steps-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .steps-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .steps-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .steps-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Firefox scrollbar styling */
+        .steps-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+        }
+
+        /* For Edge/IE */
+        .steps-container {
+            -ms-overflow-style: none;
+        }
+
+        @keyframes gentle-pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .animate-pulse {
+            animation: gentle-pulse 2s infinite;
+        }
+        
+        .alert-box {
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .alert-warning {
+            border-color: #f59e0b;
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+        
+        .alert-danger {
+            border-color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+        
+        .alert-info {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
     </style>
 </head>
 <body>
     <div class="background"></div>
     <div class="container">
         <div class="sidebar">
-            <h1 class="text-2xl font-bold mb-6 text-center">Getting Started</h1>
-            <div class="steps-container">
-                <div class="tutorial-step active" data-step="1">
-                    <h2>Step 1: File Setup</h2>
-                </div>
-                <div class="tutorial-step" data-step="2">
-                    <h2>Step 2: Basic Shapes</h2>
-                </div>
-                <div class="tutorial-step" data-step="3">
-                    <h2>Step 3: Selection & Manipulation</h2>
-                </div>
-                <div class="tutorial-step" data-step="4">
-                    <h2>Step 4: Stroke & Fill Settings</h2>
-                </div>
-            </div>
-            <div class="progress-container">
-                <div class="progress-text">Progress: <span id="progress-percentage">25%</span></div>
+            <h1 class="text-2xl font-bold mb-6 text-center">Adobe Illustrator Basics</h1>
+
+            <!-- Progress bar moved to top -->
+            <div class="progress-container mb-4">
+                <div class="progress-text">Progress: <span id="progress-percentage">20%</span></div>
                 <div class="progress-bar">
-                    <div class="progress" style="width: 25%;"></div>
+                    <div class="progress" style="width: 20%;"></div>
                 </div>
             </div>
+            <div class="steps-container">
+                <!-- Sidebar navigation steps -->
+                <div id="sidebar-steps">
+                    <!-- Steps will be generated here -->
+                </div>
+                <div class="mt-auto py-3 text-center text-xs opacity-70">
+                    Made by <span id="creator-name" class="text-blue-300 hover:text-blue-200 transition-colors duration-200 cursor-pointer">Buckley</span> with <span class="text-red-400">♥️</span>
+                </div>
+            </div>
+            
         </div>
         <div class="main-content">
             <div class="content-wrapper">
@@ -199,107 +414,503 @@
     </div>
 
     <script>
-        const images = {
-            1: "https://i.imgur.com/CvFWbm1.png",
-            2: "https://i.imgur.com/5GFBdYI.png",
-            3: "https://i.imgur.com/4XosVvv.png",
-            4: "https://i.imgur.com/gljFsDL.png"
+        // Tutorial Configuration
+        const tutorialConfig = {
+            title: "Adobe Illustrator Basics",
+            creatorName: "Buckley",
+            steps: [
+                {
+                    title: "Learning Intentions and Success Criteria",
+                    video: "",
+                    images: []
+                },
+                {
+                    title: "Step 1: File Setup",
+                    video: "https://i.imgur.com/fsy3w7O.mp4",
+                    images: [
+                        { src: "https://i.imgur.com/ayw6bjo.png", caption: "Open Adobe Illustrator. Click the blue 'New File' button." },
+                        { src: "https://i.imgur.com/Ga2XaNR.png", caption: "Ensure you change the following settings underlined in green." },
+                    ]
+                },
+                {
+                    title: "Step 2: Saving & Navigation",
+                    video: "https://i.imgur.com/gdmdcgM.mp4",
+                    images: [
+                        { src: "https://i.imgur.com/RaVutcE.png", caption: "Click 'File' at the top left -> 'Save'." },
+                        { src: "https://i.imgur.com/HQgFjzO.png", caption: "Click 'Save to Creative Cloud'." },
+                        { src: "https://i.imgur.com/HJNqN1U.png", caption: "Make sure you've named your file and click 'Save'." },
+                        { src: "https://i.imgur.com/It8bKYX.png", caption: "Now try practicing the navigation controls below. Press CTRL + 0 to reset your view!" },
+                    ]
+                },
+                {
+                    title: "Step 3: Basic Shapes and Selection Tools",
+                    video: "https://i.imgur.com/pWV9XkG.mp4",
+                    images: [
+                        { src: "https://i.imgur.com/FInOlHg.png", caption: "Click to expand your toolbar to see more options." },
+                        { src: "https://i.imgur.com/kHoluHx.png", caption: "Click the square tool or press M on your keyboard. Click once to set specific measurements, or click and drag to visually create a shape." },
+                        { src: "https://i.imgur.com/DzT2KfC.png", caption: "Click the black Selection tool or press V on your keyboard. Try dragging around your shape." },
+                        { src: "https://i.imgur.com/hyNnnlu.png", caption: "Click the white Direct Selection tool or press A on your keyboard. Double click your shape, and then drag a part of it to see what changes. You can drag edges, corners, and drag the dots near the corners to round shapes." },
+
+                    ]
+                },
+                {
+                    title: "Step 4: Stroke & Fill Settings",
+                    video: "https://i.imgur.com/UUzmy7U.mp4",
+                    images: [
+                        { src: "https://i.imgur.com/vk6pZ2w.png", caption: "Select your shape first. Then, on the side panel on the right, set fill to None (white with a red line through it), and Stroke to 0.003 pt." },
+                    ]
+                }
+            ]
         };
 
+        // Tutorial content for each step
         const stepContents = [
+            // Step 0: Learning Intentions and Success Criteria
             `<div class="space-y-6">
-                <img src="${images[1]}" alt="File setup illustration" class="w-full rounded-lg shadow-lg cursor-pointer">
-                <h3 class="text-2xl font-bold">Creating Your File</h3>
-                <div class="space-y-4">
-                    <p>1. Open Illustrator and create a new document</p>
-                    <p>2. Set the following parameters:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Color Mode: RGB</li>
-                        <li>Width: [TEMPLATE_WIDTH]</li>
-                        <li>Height: [TEMPLATE_HEIGHT]</li>
-                        <li>Units: Millimeters</li>
-                    </ul>
-                    <p class="mb-4">Make sure you've named your file using the format: "FirstName-Lastname-ClassNumber".</p>
-                    <p class="font-bold">EXAMPLE: Bob-Buckley-6A</p>
+                <h3 class="text-2xl font-bold mb-4">Learning Intentions and Success Criteria</h3>
+                <div class="intro-section p-6 rounded-lg mb-6" style="background: linear-gradient(135deg, rgba(41, 121, 255, 0.1), rgba(0, 38, 84, 0.2)); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+                    <div class="learning-goals mb-6">
+                        <p class="font-bold text-xl mb-2 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Learning Intentions:
+                        </p>
+                        <ul class="ml-8 space-y-2">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-1 mr-2 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                                Learn how to set up files in Adobe Illustrator
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-1 mr-2 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                                Create and manipulate basic shapes and get around the workspace
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-1 mr-2 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                                Apply correct stroke and fill settings for laser cutting and engraving
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="success-criteria">
+                        <p class="font-bold text-xl mb-2 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Success Criteria:
+                        </p>
+                        <ul class="ml-8">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-1 mr-2 text-green-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
+                                </svg>
+                                You can correctly set up and save a new document with proper dimensions and settings
+                            </li>
+                            
+                            
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-1 mr-2 text-green-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
+                                </svg>
+                                You can apply the correct stroke and fill settings to make shapes for laser cutting
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <div class="tip-title">Tutorial Overview</div>
+                    <p>This tutorial will guide you through the essential skills needed to create designs for laser cutting in Adobe Illustrator. You'll learn how to set up your document, create and manipulate shapes, and apply the correct settings for successful laser cutting and engraving.</p>
                 </div>
             </div>`,
+            
+            // Step 1: File Setup
             `<div class="space-y-6">
-                <img src="${images[2]}" alt="Basic shapes illustration" class="w-full rounded-lg shadow-lg cursor-pointer">
-                <h3 class="text-2xl font-bold">Start by Zooming In</h3>
-                <p class="mb-4">Start by using CTRL and the + or - buttons to zoom in and out.</p>
-                <h3 class="text-2xl font-bold">Working with Basic Shapes</h3>
-                <div class="space-y-4">
-                    <p>Access shape tools through the toolbar or press:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Rectangle (M)</li>
-                        <li>Ellipse (L)</li>
-                        <li>Right-click any shape tool to see variants</li>
-                    </ul>
-                    <p class="mb-4">You can click ONCE to set specific, exact size values for your shape.</p>
-                    <p class="mb-4">Otherwise, click and drag to make a specific shape without exact measurements.</p>
-                    <p>To round corners:</p>
-                    <p>Select a rectangle and drag the corner icons (see circled in image above).</p>
+                <h3 class="text-2xl font-bold mb-4">File Setup</h3>
+                
+                <div class="video-container">
+                    <video width="100%" controls autoplay loop muted playsinline>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-            </div>`,
-            `<div class="space-y-6">
-                <img src="${images[3]}" alt="Selection tools illustration" class="w-full rounded-lg shadow-lg cursor-pointer">
-                <h3 class="text-2xl font-bold">Selection & Manipulation</h3>
-                <div class="space-y-4">
-                    <p>Selection shortcuts:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Selection Tool (V): This tool is used for selecting and moving the ENTIRE object</li>
-                        <li>Direct Selection (A): This tool is used for selecting and moving SPECIFIC points (see image above for an example)</li>
-                        
-                    </ul>
-                    <p>Pro shortcuts:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                    <li>Hold Alt while dragging something to copy it</li>
-                    <li>Hold Shift while dragging things to keep things level</li>
-                    </ul>
+                
+                <div class="carousel step-carousel">
+                    <h3 class="text-xl font-bold text-center mb-2">Setting Up Your File</h3>
+                    
+                    <!-- Zoom reminder with subtle animation -->
+                    <div class="zoom-reminder flex items-center justify-center text-sm text-blue-200 mb-3 bg-blue-900 bg-opacity-20 py-1 px-3 rounded-full mx-auto w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        </svg>
+                        <span>Click any image to zoom in for a closer look</span>
+                    </div>
+                    
+                    <div class="carousel-controls">
+                        <button class="carousel-btn prev-btn">&#10094;</button>
+                        <button class="carousel-btn next-btn">&#10095;</button>
+                    </div>
+                    <div class="carousel-container" id="carousel-1">
+                        <!-- Carousel slides will be dynamically generated -->
+                    </div>
+                    <div class="carousel-indicators" id="carousel-indicators-1">
+                        <!-- Indicators will be dynamically generated -->
+                    </div>
                 </div>
-            </div>`,
-            `<div class="space-y-6">
-                <img src="${images[4]}" alt="Stroke and fill settings illustration" class="w-full rounded-lg shadow-lg cursor-pointer">
-                <p class="text-sm text-center italic">(In the screenshot example above, the settings are shown for ENGRAVING)</p>
-                <h3 class="text-2xl font-bold">Laser Cutting Settings</h3>
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
-    <p class="font-bold">IMPORTANT!</p>
-    <p>If these settings aren't used, your design won't cut properly.</p>
-</div>                <div class="space-y-4">
-                    <p>For <span class="font-bold">cutting</span> lines:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Stroke width needs to be set to: 0.001 pt</li>
-                        <li>Fill needs to be set to: No fill</li>
-                    </ul>
-                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded">
-    <p class="font-bold">Pro tip</p>
-    <p>It's normal to not see your thin cutting lines easily. Press CTRL + Y to see all your lines clearly.</p>
-</div>                    <p>For engraving:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Stroke: 1 pt</li>
-                        <li>Fill: Black fill</li>
-                    </ul>
-                    <img src="https://i.imgur.com/uFfu9wN.png" alt="Engraving settings example" class="w-full rounded-lg shadow-lg cursor-pointer mt-4">
+                
+                <div class="space-y-4 mt-6">
+                    <h4 class="font-bold text-xl">Creating a New Document:</h4>
+                    <ol class="list-decimal pl-5 space-y-3">
+                        <li>Open Adobe Illustrator</li>
+                        <li>Go to File > New (or press Ctrl+N)</li>
+                        <li>Set the following parameters:
+                            <ul class="list-disc pl-5 mt-2">
+                                <li>Colour Mode: RGB</li>
+                                <li>Width: 600mm</li>
+                                <li>Height: 300mm</li>
+                                <li>Units: Millimeters</li>
+                            </ul>
+                        </li>
+                        <li>Click "Create" to open your new document</li>
+                    </ol>
+                </div>
 
+                <div class="tip-box">
+                    <div class="tip-title">File Setup Tip</div>
+                    <p>Using the correct dimensions from the start will save you time later. For laser cutting projects, always set up your document in millimeters for precision cutting.</p>
+                </div>
+            </div>`,
+
+            // Step 2: Saving & Navigation
+            `<div class="space-y-6">
+                <h3 class="text-2xl font-bold mb-4">Saving & Navigation</h3>
+                
+                <div class="video-container">
+                    <video width="100%" controls autoplay loop muted playsinline>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                
+                <div class="carousel step-carousel">
+                    <h3 class="text-xl font-bold text-center mb-2">Saving Your Work & Navigating the Canvas</h3>
+                    
+                    <!-- Zoom reminder with subtle animation -->
+                    <div class="zoom-reminder flex items-center justify-center text-sm text-blue-200 mb-3 bg-blue-900 bg-opacity-20 py-1 px-3 rounded-full mx-auto w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        </svg>
+                        <span>Click any image to zoom in for a closer look</span>
+                    </div>
+                    
+                    <div class="carousel-controls">
+                        <button class="carousel-btn prev-btn">&#10094;</button>
+                        <button class="carousel-btn next-btn">&#10095;</button>
+                    </div>
+                    <div class="carousel-container" id="carousel-2">
+                        <!-- Carousel slides will be dynamically generated -->
+                    </div>
+                    <div class="carousel-indicators" id="carousel-indicators-2">
+                        <!-- Indicators will be dynamically generated -->
+                    </div>
+                </div>
+                
+                <div class="space-y-4 mt-6">
+                    <h4 class="font-bold text-xl">Saving Your File:</h4>
+                    <ol class="list-decimal pl-5 space-y-3">
+                        <li>Go to File > Save (or press Ctrl+S)</li>
+                        <li>Choose 'Save to Creative Cloud'</li>
+                        <li>Name your file with the format: "FirstName-Lastname-ClassNumber" if you haven't already (Example: Bob-Buckley-6A)</li>
+                        <li>Click "Save"</li>
+                        <li>Remember to save frequently as you work (Ctrl+S)</li>
+                        <li>Now try practicing some of the navigation controls below. Try zooming (hold ALT and zoom) and panning (hold space and click and drag) first.</li>
+                        <li>Remember you can always press CTRL + 0 to reset your view.</li>
+                    </ol>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <div class="bg-base-100 bg-opacity-20 p-4 rounded-lg">
+                        <h4 class="font-bold text-xl mb-3">Navigation Basics</h4>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Alt</span>
+                            <span class="shortcut-description">+ scroll wheel to zoom in and out</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Space</span>
+                            <span class="shortcut-description">+ left mouse button to pan around the document</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Middle Mouse</span>
+                            <span class="shortcut-description">Hold and drag to pan around the document</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Ctrl</span>
+                            <span class="key">+</span>
+                            <span class="shortcut-description">Zoom in</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Ctrl</span>
+                            <span class="key">-</span>
+                            <span class="shortcut-description">Zoom out</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Ctrl</span>
+                            <span class="key">0</span>
+                            <span class="shortcut-description">Fit artboard in window</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-base-100 bg-opacity-20 p-4 rounded-lg">
+                        <h4 class="font-bold text-xl mb-3">View Options</h4>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Ctrl</span>
+                            <span class="key">Y</span>
+                            <span class="shortcut-description">Toggle between Preview and Outline view</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Ctrl</span>
+                            <span class="key">R</span>
+                            <span class="shortcut-description">Show/hide rulers</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Ctrl</span>
+                            <span class="key">;</span>
+                            <span class="shortcut-description">Show/hide guides</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">\</span>
+                            <span class="shortcut-description">Show/hide grid</span>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+                <div class="alert-box alert-info mt-6">
+                    <p class="font-bold">Pro tip</p>
+                    <p>When you need to see fine details of your work, especially for technical drawings, toggle to Outline view using Ctrl+Y. This shows all paths regardless of stroke weight, making it easier to spot issues with your design.</p>
+                </div>
+            </div>`,
+            
+            // Step 3: Basic Shapes and Selection Tools (now step 3)
+            `<div class="space-y-6">
+                <h3 class="text-2xl font-bold">Basic Shapes and Selection Tools</h3>
+                
+                <div class="video-container">
+                    <video width="100%" controls autoplay loop muted playsinline>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                
+                <div class="carousel step-carousel">
+                    <h3 class="text-xl font-bold text-center mb-2">Working with Basic Shapes</h3>
+                    
+                    <!-- Zoom reminder with subtle animation -->
+                    <div class="zoom-reminder flex items-center justify-center text-sm text-blue-200 mb-3 bg-blue-900 bg-opacity-20 py-1 px-3 rounded-full mx-auto w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        </svg>
+                        <span>Click any image to zoom in for a closer look</span>
+                    </div>
+                    
+                    <div class="carousel-controls">
+                        <button class="carousel-btn prev-btn">&#10094;</button>
+                        <button class="carousel-btn next-btn">&#10095;</button>
+                    </div>
+                    <div class="carousel-container" id="carousel-3">
+                        <!-- Carousel slides will be dynamically generated -->
+                    </div>
+                    <div class="carousel-indicators" id="carousel-indicators-3">
+                        <!-- Indicators will be dynamically generated -->
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">                    
+                    <div class="bg-base-100 bg-opacity-20 p-4 rounded-lg">
+                        <h4 class="font-bold text-xl mb-3">Shape Tools</h4>
+                        <div class="keyboard-shortcut">
+                            <span class="key">M</span>
+                            <span class="shortcut-description">Rectangle Tool</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">L</span>
+                            <span class="shortcut-description">Ellipse Tool</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">P</span>
+                            <span class="shortcut-description">Pen Tool</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">/</span>
+                            <span class="shortcut-description">Line Tool</span>
+                        </div>
+                        <p class="mt-2 text-sm">Right-click on any shape tool to see other shape variants</p>
+                    </div>
+                    
+                    <div class="bg-base-100 bg-opacity-20 p-4 rounded-lg">
+                        <h4 class="font-bold text-xl mb-3">Selection Tools</h4>
+                        <div class="keyboard-shortcut">
+                            <span class="key">V</span>
+                            <span class="shortcut-description">Selection Tool (selects entire objects)</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">A</span>
+                            <span class="shortcut-description">Direct Selection Tool (selects points/anchors)</span>
+                        </div>
+                        <div class="keyboard-shortcut">
+                            <span class="key">Shift</span>
+                            <span class="shortcut-description">+ click to select multiple objects</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <div class="tip-title">Selection Tip</div>
+                    <p>Understanding the difference between the Selection Tool (V) and Direct Selection Tool (A) is crucial. The regular Selection Tool works with whole objects, while the Direct Selection Tool gives you control over specific points and segments, which is perfect for detailed adjustments.</p>
+                </div>
+                
+                <div class="space-y-4 mt-6">
+                    <h4 class="font-bold text-xl">Creating and Selecting Shapes:</h4>
+                    <ol class="list-decimal pl-5 space-y-3">
+                        <li>Choose a shape tool from the toolbar (or use the keyboard shortcuts)</li>
+                        <li>Click once on the artboard to set exact dimensions in a dialog box</li>
+                        <li>Or click and drag to create a shape by hand</li>
+                        <li>Hold Shift while dragging to create perfectly proportioned shapes (perfect circles, squares)</li>
+                        <li>Select the black Selection tool or press V and try dragging around your object to move it</li>
+                        <li>Select the white Direct Selection tool or press A. Double click your shape, and then try dragging edges, corners, or the dots to experiment with changing the shape itself</li>
+                    </ol>
+                </div>
+                
+                <div class="tip-box">
+                    <div class="tip-title">Shape Creation Tip</div>
+                    <p>When creating shapes for technical designs, it's often better to click once and enter exact dimensions rather than dragging. This gives you more precise control over your design elements.</p>
+                </div>
+
+                
+            </div>`,
+            
+            // Step 4: Stroke & Fill Settings (now step 4)
+            `<div class="space-y-6">
+                <h3 class="text-2xl font-bold">Stroke & Fill Settings</h3>
+                
+                <div class="video-container">
+                    <video width="100%" controls autoplay loop muted playsinline>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                
+                <div class="carousel step-carousel">
+                    <h3 class="text-xl font-bold text-center mb-2">Laser Cutting Settings</h3>
+                    
+                    <!-- Zoom reminder with subtle animation -->
+                    <div class="zoom-reminder flex items-center justify-center text-sm text-blue-200 mb-3 bg-blue-900 bg-opacity-20 py-1 px-3 rounded-full mx-auto w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        </svg>
+                        <span>Click any image to zoom in for a closer look</span>
+                    </div>
+                    
+                    <div class="carousel-controls">
+                        <button class="carousel-btn prev-btn">&#10094;</button>
+                        <button class="carousel-btn next-btn">&#10095;</button>
+                    </div>
+                    <div class="carousel-container" id="carousel-4">
+                        <!-- Carousel slides will be dynamically generated -->
+                    </div>
+                    <div class="carousel-indicators" id="carousel-indicators-4">
+                        <!-- Indicators will be dynamically generated -->
+                    </div>
+                </div>
+                
+                <div class="alert-box alert-danger">
+                    <p class="font-bold">IMPORTANT!</p>
+                    <p>If these settings aren't used correctly, your design won't cut properly on the laser cutter.</p>
+                </div>
+                
+                <div class="space-y-4 mt-6">
+                    <h4 class="font-bold text-xl">Laser Cutting Settings:</h4>
+                    <ol class="list-decimal pl-5 space-y-3">
+                        <li>For <strong>cutting lines</strong> (where you want the laser to cut through the material):
+                            <ul class="list-disc pl-5 mt-2">
+                                <li>Fill: No fill</li>
+                                <li>Stroke width: 0.003 pt</li>
+                            </ul>
+                        </li>
+                        <li>For <strong>engraving</strong> (where you want the laser to mark but not cut through):
+                            <div class="alert-box alert-danger">
+                    <p class="font-bold">IMPORTANT!</p>
+                    <p>ALWAYS check with your teacher before trying to engrave shapes. For engraving images, check out the specific image tracing tutorial.</p>
+                </div>
+                            <ul class="list-disc pl-5 mt-2">
+                                <li>Stroke: 1 pt black</li>
+                                <li>Fill: Black fill</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="alert-box alert-info">
+                    <p class="font-bold">Pro tip</p>
+                    <p>It's normal not to see your thin cutting lines easily. Press CTRL + Y to enter Outline View, which shows all your lines clearly regardless of thickness.</p>
+                </div>
+                
+                <div class="space-y-4 mt-6">
+                    <h4 class="font-bold text-xl">Accessing Stroke and Fill Settings:</h4>
+                    <ol class="list-decimal pl-5 space-y-3">
+                        <li>Select your object with the Selection Tool (V)</li>
+                        <li>Open the Stroke panel (Window > Stroke) to adjust stroke weight</li>
+                        <li>Use the Color panel (Window > Color) to set your stroke and fill colors</li>
+                        <li>You can also use the Properties panel for quick access to most settings</li>
+                        <li>To remove a fill or stroke, click the "None" option (white square with red diagonal line)</li>
+                    </ol>
+                </div>
+                
+                <div class="tip-box">
+                    <div class="tip-title">Laser Cutting Tip</div>
+                    <p>Always double-check your stroke and fill settings before sending your design to the laser cutter. It's good practice to create a small test piece that includes both cutting and engraving to verify your settings are correct before cutting your full design.</p>
                 </div>
             </div>`
         ];
 
+        // Initialize UI
+        document.title = tutorialConfig.title;
+        document.querySelector('.sidebar h1').textContent = tutorialConfig.title;
+        document.getElementById('creator-name').textContent = tutorialConfig.creatorName;
+
+        // Generate sidebar steps
+        const sidebarSteps = document.getElementById('sidebar-steps');
+        tutorialConfig.steps.forEach((step, index) => {
+            const stepElement = document.createElement('div');
+            stepElement.className = `tutorial-step ${index === 0 ? 'active' : ''}`;
+            stepElement.dataset.step = index.toString();
+            stepElement.innerHTML = `<h2>${step.title}</h2>`;
+            sidebarSteps.appendChild(stepElement);
+        });
+
+        // Set up the step navigation and content
         const steps = document.querySelectorAll('.tutorial-step');
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
         const stepContent = document.getElementById('step-content');
         const progressBar = document.querySelector('.progress');
         const progressPercentage = document.getElementById('progress-percentage');
-        let currentStep = 1;
+        let currentStep = 0;
 
         // Image modal functionality
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
         let isZoomed = false;
 
+        // Improved image click handler with event delegation
         document.addEventListener('click', function(e) {
-            if (e.target.matches('.step-content img')) {
+            if (e.target.matches('.carousel-slide img') || e.target.matches('.step-content > img')) {
                 modal.style.display = 'block';
                 modalImg.src = e.target.src;
             }
@@ -320,46 +931,199 @@
             isZoomed = !isZoomed;
         });
 
+        // Function to populate a carousel with images
+        function populateCarousel(stepNumber) {
+            if (stepNumber >= tutorialConfig.steps.length) return;
+            
+            const images = tutorialConfig.steps[stepNumber].images;
+            if (!images || images.length === 0) return;
+            
+            const container = document.getElementById(`carousel-${stepNumber}`);
+            if (!container) return;
+            
+            const indicators = document.getElementById(`carousel-indicators-${stepNumber}`);
+            if (!indicators) return;
+            
+            // Clear existing content
+            container.innerHTML = '';
+            indicators.innerHTML = '';
+            
+            // Add slides
+            images.forEach((image, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `
+                    <img src="${image.src}" alt="${image.caption || `Image ${index + 1}`}" class="cursor-pointer">
+                    <p>${image.caption || ''}</p>
+                `;
+                container.appendChild(slide);
+                
+                // Add indicator
+                const indicator = document.createElement('div');
+                indicator.className = `carousel-indicator ${index === 0 ? 'active' : ''}`;
+                indicator.dataset.index = index.toString();
+                indicators.appendChild(indicator);
+            });
+        }
+
+        // Carousel functionality
+        function initCarousel(stepNumber) {
+            const container = document.getElementById(`carousel-${stepNumber}`);
+            if (!container) return;
+            
+            const indicators = document.getElementById(`carousel-indicators-${stepNumber}`);
+            if (!indicators) return;
+            
+            const slides = container.querySelectorAll('.carousel-slide');
+            if (slides.length === 0) return;
+            
+            let currentIndex = 0;
+            
+            // Setup indicators
+            indicators.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    goToSlide(index);
+                });
+            });
+            
+            // Setup prev/next buttons
+            const prevBtn = container.parentElement.querySelector('.prev-btn');
+            const nextBtn = container.parentElement.querySelector('.next-btn');
+            
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    goToSlide(currentIndex - 1);
+                } else {
+                    goToSlide(slides.length - 1);
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < slides.length - 1) {
+                    goToSlide(currentIndex + 1);
+                } else {
+                    goToSlide(0);
+                }
+            });
+            
+            function goToSlide(index) {
+                container.scrollLeft = container.clientWidth * index;
+                currentIndex = index;
+                
+                // Update indicators
+                indicators.querySelectorAll('.carousel-indicator').forEach((indicator, i) => {
+                    indicator.classList.toggle('active', i === index);
+                });
+            }
+            
+            // Hide carousel controls if only one slide
+            if (slides.length <= 1) {
+                const controls = container.parentElement.querySelector('.carousel-controls');
+                if (controls) controls.style.display = 'none';
+                indicators.style.display = 'none';
+            }
+        }
+
         // Tutorial navigation
         function updateButtons() {
-            prevButton.disabled = currentStep === 1;
-            nextButton.disabled = currentStep === steps.length;
-            nextButton.textContent = currentStep === steps.length ? 'Finish' : 'Next';
+            prevButton.disabled = currentStep === 0;
+            
+            // Check if we're on the last step
+            if (currentStep === steps.length - 1) {
+                // Hide the next button on the last step instead of showing "Finish"
+                nextButton.style.display = 'none';
+            } else {
+                // Otherwise show the button
+                nextButton.style.display = 'block';
+                nextButton.textContent = 'Next';
+            }
         }
 
         function updateProgress() {
-            const progress = (currentStep / steps.length) * 100;
+            const progress = ((currentStep + 1) / steps.length) * 100;
             progressBar.style.width = `${progress}%`;
             progressPercentage.textContent = `${Math.round(progress)}%`;
         }
 
         function showStep(step) {
             steps.forEach(s => s.classList.remove('active'));
-            steps[step - 1].classList.add('active');
+            steps[step].classList.add('active');
             currentStep = step;
             updateButtons();
             updateProgress();
-            stepContent.innerHTML = stepContents[step - 1];
+            
+            // If we have content for this step, use it
+            if (step < stepContents.length) {
+                stepContent.innerHTML = stepContents[step];
+                
+                // Replace video URL if available
+                if (tutorialConfig.steps[step] && tutorialConfig.steps[step].video) {
+                    const videoElement = stepContent.querySelector('video source');
+                    if (videoElement) {
+                        videoElement.src = tutorialConfig.steps[step].video;
+                        videoElement.parentElement.load();
+                    }
+                }
+                
+                // Populate carousel with images
+                populateCarousel(step);
+            }
+            
+            // Scroll the main-content div to the top
+            document.querySelector('.main-content').scrollTop = 0;
+            
+            // Initialize the carousel for this step
+            setTimeout(() => {
+                initCarousel(step);
+            }, 100);
         }
 
         steps.forEach((step, index) => {
-            step.addEventListener('click', () => showStep(index + 1));
+            step.addEventListener('click', () => showStep(index));
         });
 
         prevButton.addEventListener('click', () => {
-            if (currentStep > 1) showStep(currentStep - 1);
+            if (currentStep > 0) showStep(currentStep - 1);
         });
 
         nextButton.addEventListener('click', () => {
-            if (currentStep < steps.length) {
+            if (currentStep < steps.length - 1) {
                 showStep(currentStep + 1);
-            } else {
-                alert('Tutorial completed!');
             }
         });
 
+        // Setup creator name with confetti effects
+        document.getElementById('creator-name').addEventListener('click', function(e) {
+            // Fire confetti
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.8 },
+                colors: ['#FFD700', '#87CEEB', '#57708e', '#002654']
+            });
+            
+            // Fire another burst of confetti after a short delay for more effect
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0.1, y: 0.8 },
+                    colors: ['#FFD700', '#57708e', '#002654']
+                });
+                
+                confetti({
+                    particleCount: 50,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 0.9, y: 0.8 },
+                    colors: ['#87CEEB', '#57708e', '#002654']
+                });
+            }, 250);
+        });
+
         // Initialize first step
-        showStep(1);
+        showStep(0);
     </script>
 </body>
 </html>
