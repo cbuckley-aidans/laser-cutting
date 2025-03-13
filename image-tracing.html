@@ -772,10 +772,10 @@
         // Video sources for steps that have videos
         // Leave empty string "" for steps without videos
         const videos = {
-            1: "",
-            2: "",
-            3: "",
-            4: "",
+            1: "https://i.imgur.com/UBddKIJ.mp4", // Copying images
+            2: "", // No video for this step
+            3: "https://i.imgur.com/ZPZKvjJ.mp4", // Hitting the image trace button
+            4: "https://i.imgur.com/GMpa1p7.mp4", // Cleaning up image trace with expand
             // Add more videos as needed
         };
 
@@ -939,7 +939,14 @@
             </div>`,
             
             // Step 1: Finding Images
-            `<div class="text-center p-5">
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="${videos[1]}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="text-center p-5">
                 <img src="https://i.imgur.com/2myDdQy.png" alt="Google Images interface" class="cursor-pointer mx-auto mb-4 rounded-lg shadow-lg">
                 <div class="alert-box alert-info mt-4">
                     <p class="font-bold">Finding Good Images</p>
@@ -982,7 +989,14 @@
             </div>`,
             
             // Step 3: Image Trace
-            `<div class="text-center p-5">
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="${videos[3]}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="text-center p-5">
                 <img src="https://i.imgur.com/O7OyGz7.png" alt="Image trace panel" class="cursor-pointer mx-auto mb-4 rounded-lg shadow-lg">
                 <div class="alert-box alert-info mt-4">
                     <p class="font-bold">Image Trace Panel</p>
@@ -1005,8 +1019,15 @@
             </div>`,
             
             // Step 4: Refinement
-            `<div class="text-center p-5">
-                <img src="https://i.imgur.com/ai2HyRs.png" alt="Refinement options" class="cursor-pointer mx-auto mb-4 rounded-lg shadow-lg">
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="${videos[4]}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="text-center p-5">
+                <img src="https://i.imgur.com/2ogVBya.png" alt="Refinement options" class="cursor-pointer mx-auto mb-4 rounded-lg shadow-lg">
                 <div class="control-item mt-4">
                     <div class="control-icon">
                         <i class="fas fa-expand-arrows-alt"></i>
