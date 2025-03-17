@@ -4,749 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adobe Illustrator Basics Tutorial</title>
-    <!-- REQUIRED EXTERNAL RESOURCES -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css">
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        /* Header styling */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            background-color: white;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .logo {
-            height: 40px;
-            margin-right: 1rem;
-        }
-
-        .nav-item {
-            margin: 0 1rem;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .right-nav {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-        }
-
-        .language-select {
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-left: 1rem;
-        }
-
-        /* Main container with three panels */
-        .main-container {
-            display: flex;
-            height: 100vh;
-            width: 100%;
-        }
-
-        /* Left sidebar navigation panel */
-        .nav-panel {
-            width: 75px;
-            min-width: 75px;
-            background-color: white;
-            border-right: 1px solid #e5e5e5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .step-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            border: 2px solid transparent;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .step-icon:hover, .step-icon.active {
-            border-color: #0066cc;
-            background-color: rgba(0, 102, 204, 0.1);
-        }
-
-        .step-tooltip {
-            position: absolute;
-            left: 60px;
-            background-color: #333;
-            color: white;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-            z-index: 10;
-        }
-
-        .step-icon:hover .step-tooltip {
-            opacity: 1;
-        }
-
-        /* Middle instruction panel */
-        .instruction-panel {
-            width: 450px;
-            min-width: 450px;
-            max-width: 450px;
-            background-color: white;
-            border-right: 1px solid #e5e5e5;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .panel-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .step-content-instructions {
-            margin-top: 1rem;
-        }
-
-        /* Main content area */
-        .content-display {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-            background-color: white;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-            background-color: #f0f7ff;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            border: 1px solid #cce5ff;
-        }
-
-        .content-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0066cc;
-        }
-
-        .content-actions {
-            display: flex;
-        }
-
-        .action-button {
-            margin-left: 0.5rem;
-            padding: 0.75rem 2rem;
-            border-radius: 6px;
-            border: none;
-            background-color: #0066cc;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.2s ease;
-        }
-        
-        .action-button:hover {
-            background-color: #0055aa;
-        }
-
-        .tab-content {
-            padding: 1rem;
-            min-height: 400px;
-        }
-
-        /* Step content styling - Apply consistent sizing and spacing */
-        .step-instructions h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-        
-        .step-instructions p {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-        
-        .step-instructions h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: #0066cc;
-        }
-        
-        .steps-list {
-            list-style-type: decimal;
-            padding-left: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .steps-list li {
-            margin-bottom: 0.75rem;
-            line-height: 1.5;
-        }
-        
-        .steps-list ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .steps-list ul li {
-            margin-bottom: 0.5rem;
-        }
-
-        .step-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .step-description {
-            margin-bottom: 1rem;
-        }
-
-        .step-instruction {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 0.5rem;
-        }
-
-        .step-bullet {
-            color: #0066cc;
-            margin-right: 0.5rem;
-            font-weight: bold;
-        }
-
-        /* Media containers */
-        .video-container {
-            width: 90%;
-            max-width: 800px;
-            margin: 0 auto 1.5rem;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .video-container video {
-            width: 100%;
-            display: block;
-        }
-
-        /* Carousel with fixed sizing */
-        .carousel {
-            width: 90%;
-            max-width: 800px;
-            position: relative;
-            margin: 2rem auto;
-            padding: 1rem;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border: 1px solid #e5e5e5;
-        }
-
-        .carousel-container {
-            display: flex;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            width: 100%;
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .carousel-slide img {
-            max-height: 280px;
-            max-width: 90%;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            position: relative;
-        }
-
-        .carousel-slide img:hover {
-            transform: scale(1.05);
-        }
-
-        .carousel-slide img::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .carousel-slide img:hover::after {
-            opacity: 1;
-        }
-
-        .carousel-slide p {
-            margin-top: 1rem;
-            text-align: center;
-        }
-
-        .carousel-controls {
-            display: flex;
-            justify-content: space-between;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100%;
-            padding: 0 1rem;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .carousel-btn {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            pointer-events: auto;
-        }
-
-        .carousel-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 1rem;
-        }
-
-        .carousel-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #ccc;
-            cursor: pointer;
-        }
-
-        .carousel-indicator.active {
-            background-color: #0066cc;
-        }
-
-        .tip-box {
-            background-color: #f0f7ff;
-            border-left: 4px solid #0066cc;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .tip-title {
-            font-weight: 700;
-            color: #0066cc;
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .alert-box {
-            border-radius: 4px;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-left: 4px solid;
-        }
-
-        .alert-info {
-            background-color: #e6f7ff;
-            border-color: #1890ff;
-        }
-
-        .alert-warning {
-            background-color: #fffbe6;
-            border-color: #faad14;
-        }
-
-        .alert-danger {
-            background-color: #fff2f0;
-            border-color: #ff4d4f;
-        }
-
-        .steps-list {
-            list-style-type: decimal;
-            padding-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .steps-list li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Image modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-content {
-            max-width: 90%;
-            max-height: 90vh;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 4px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            animation: zoomIn 0.3s ease;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: white;
-            font-size: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .modal-close:hover {
-            color: #0066cc;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes zoomIn {
-            from { transform: translate(-50%, -50%) scale(0.9); }
-            to { transform: translate(-50%, -50%) scale(1); }
-        }
-
-        /* Wave styling */
-        .wave-divider {
-            margin: 0.5rem 0;
-            height: 20px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%230099ff' fill-opacity='1' d='M0,192L40,213.3C80,235,160,277,240,272C320,267,400,213,480,202.7C560,192,640,224,720,229.3C800,235,880,213,960,181.3C1040,149,1120,107,1200,101.3C1280,96,1360,128,1400,144L1440,160L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
-        /* Navigation buttons with blue styling */
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            padding: 0 1rem;
-        }
-
-        .nav-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            min-width: 120px;
-            justify-content: center;
-        }
-        
-        .nav-button:hover:not(:disabled) {
-            background-color: #0055aa;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        
-        .nav-button i {
-            margin: 0 8px;
-        }
-
-        /* Progress indicator */
-        .progress-container {
-            margin-top: 1rem;
-        }
-
-        .progress-text {
-            font-size: 0.875rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background-color: #eee;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background-color: #0066cc;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
-        }
-
-        #creator-name {
-            color: #0066cc;
-            cursor: pointer;
-        }
-
-        .instruction-content {
-            background-color: #e6f7ff;
-            border-radius: 8px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .instruction-arrow {
-            color: #0099ff;
-            margin-right: 0.75rem;
-            font-size: 1.25rem;
-        }
-
-        /* Click-to-zoom hint */
-        .image-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .zoom-hint {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .carousel-slide:hover .zoom-hint {
-            opacity: 1;
-        }
-
-        /* Keyboard keys styling */
-        .kbd {
-            display: inline-block;
-            padding: 4px 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            line-height: 1;
-            color: #333;
-            background-color: #f7f7f7;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
-            margin: 0 2px;
-            text-align: center;
-            min-width: 20px;
-            vertical-align: middle;
-        }
-
-        .kbd-combo {
-            display: inline-flex;
-            align-items: center;
-            margin: 6px 0;
-        }
-
-        .kbd-plus {
-            margin: 0 4px;
-            color: #666;
-            font-weight: bold;
-        }
-
-        .control-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding: 10px;
-            border-radius: 6px;
-            background-color: #f5f7fa;
-            border-left: 3px solid #0066cc;
-        }
-
-        .control-icon {
-            font-size: 1.5rem;
-            margin-right: 15px;
-            color: #0066cc;
-            width: 40px;
-            text-align: center;
-        }
-
-        .control-text {
-            flex: 1;
-        }
-
-        .shortcut-category {
-            margin-bottom: 20px;
-            background-color: #f5f7fa;
-            border-radius: 8px;
-            padding: 15px;
-            border-left: 3px solid #0066cc;
-        }
-
-        .shortcut-title {
-            font-weight: 700;
-            color: #0066cc;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            font-size: 1.1rem;
-        }
-
-        .shortcut-title i {
-            margin-right: 10px;
-            font-size: 1.25rem;
-        }
-
-        .shortcut-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-        }
-
-        .shortcut-item {
-            padding: 8px;
-            border-radius: 4px;
-            background-color: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .shortcut-action {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        /* Custom styles for keyboard shortcuts */
-        .keyboard-shortcut {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-
-        .key {
-            display: inline-block;
-            background-color: #f5f5f5;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 0.25rem 0.5rem;
-            margin-right: 0.5rem;
-            font-family: monospace;
-            font-weight: bold;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            min-width: 1.5rem;
-            text-align: center;
-        }
-
-        .shortcut-description {
-            flex: 1;
-        }
-    </style>
 </head>
 <body>
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Left Panel - Step Icons Navigation -->
-        <div class="nav-panel">
-            <!-- STEP ICONS: This section is populated dynamically by JavaScript based on your step content -->
-            <div class="step-icon active" data-step="0">
+    <div class="tutorial-container">
+        <!-- Left Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-logo">ADOBE<br>ILLUSTRATOR<br>BASICS</div>
+            <div class="step-button active" data-step="0" data-tooltip="Learning Intentions and Success Criteria">
                 <i class="fas fa-list-ol"></i>
-                <div class="step-tooltip">Introduction</div>
             </div>
-            <!-- Additional steps will be created dynamically -->
+            <div class="step-button" data-step="1" data-tooltip="File Setup">
+                <span>1</span>
+            </div>
+            <div class="step-button" data-step="2" data-tooltip="Saving & Navigation">
+                <span>2</span>
+            </div>
+            <div class="step-button" data-step="3" data-tooltip="Basic Shapes and Selection Tools">
+                <span>3</span>
+            </div>
+            <div class="step-button" data-step="4" data-tooltip="Stroke & Fill Settings">
+                <span>4</span>
+            </div>
         </div>
 
-        <!-- Middle Panel - Text Instructions -->
-        <div class="instruction-panel">
-            <div id="current-step-title" class="text-2xl font-bold mb-4 text-blue-800">Introduction</div>
+        <!-- Middle Instructions Panel -->
+        <div class="instructions-panel">
+            <h1 id="current-step-title">Learning Intentions and Success Criteria</h1>
             
-            <div class="wave-divider"></div>
-            
-            <div class="step-content-instructions step-instructions" id="step-instructions">
+            <div id="step-instructions">
                 <!-- Will be populated by JavaScript -->
             </div>
 
@@ -765,243 +56,232 @@
             </div>
 
             <div class="footer">
-                Made by <span id="creator-name">Buckley</span> with ♥️
+                Made with <span style="color: var(--accent-color);">♥</span> by <span id="creator-name">Buckley</span>
             </div>
         </div>
 
-        <!-- Main Content Area - Media Display -->
+        <!-- Right Content Display Area -->
         <div class="content-display">
-            <div class="content-header">
-                <div class="content-title">Adobe Illustrator Basics</div>
-            </div>
-
-            <div class="tab-content" id="media-content">
-                <!-- Will be populated by JavaScript -->
+            <div class="card">
+                <h2 id="content-title">Learning Intentions and Success Criteria</h2>
+                <div id="media-content">
+                    <!-- Will be populated by JavaScript -->
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Image Modal -->
+    <!-- Modal for viewing images -->
     <div id="imageModal" class="modal">
         <span class="modal-close">&times;</span>
         <img id="modalImage" class="modal-content">
     </div>
 
     <script>
-        /********************************************
-         * TUTORIAL CONFIGURATION
-         * Edit these variables to customize your tutorial
-         ********************************************/
-        
-        // Main tutorial title that appears in the header
-        const tutorialTitle = "Adobe Illustrator Basics";
-        
-        // Your name to appear in the footer
-        const creatorName = "Buckley";
-        
-        // Video sources for steps that have videos
-        // Leave empty string "" for steps without videos
-        const videos = {
-            1: "https://i.imgur.com/fsy3w7O.mp4",
-            2: "https://i.imgur.com/gdmdcgM.mp4",
-            3: "https://i.imgur.com/pWV9XkG.mp4",
-            4: "https://i.imgur.com/UUzmy7U.mp4",
-            // Add more videos as needed
-        };
-
-        // Step titles for each step
+        // Tutorial content configuration
+        // Define your step titles
         const stepTitles = [
             "Learning Intentions and Success Criteria",
             "Step 1: File Setup",
             "Step 2: Saving & Navigation",
             "Step 3: Basic Shapes and Selection Tools",
-            "Step 4: Stroke & Fill Settings",
-            // Add more step titles as needed
+            "Step 4: Stroke & Fill Settings"
         ];
 
-        // Tutorial content - split into instructions (middle panel) and media (right panel)
+        // Define your step instructions (middle panel content)
         const stepInstructions = [
             // Step 0: Introduction
-            `<h3 class="text-xl font-bold mb-4">Learning Intentions and Success Criteria</h3>
+            `<h3>Learning Intentions and Success Criteria</h3>
             
-            <div class="mb-4">
-                <p class="font-bold mb-2">Learning Intentions:</p>
-                <ul class="list-disc pl-5 space-y-2">
+            <div class="card">
+                <p><strong>Learning Intentions:</strong></p>
+                <ol class="steps-list">
                     <li>Learn how to set up files in Adobe Illustrator</li>
                     <li>Create and manipulate basic shapes and get around the workspace</li>
                     <li>Apply correct stroke and fill settings for laser cutting and engraving</li>
-                </ul>
-            </div>
+                </ol>
             
-            <div>
-                <p class="font-bold mb-2">Success Criteria:</p>
-                <ul class="list-disc pl-5">
+                <p><strong>Success Criteria:</strong></p>
+                <ol class="steps-list">
                     <li>You can correctly set up and save a new document with proper dimensions and settings</li>
                     <li>You can apply the correct stroke and fill settings to make shapes for laser cutting</li>
-                </ul>
+                </ol>
             </div>
 
-            <div class="tip-box mt-4">
+            <div class="tip-box">
                 <div class="tip-title">Tutorial Overview</div>
                 <p>This tutorial will guide you through the essential skills needed to create designs for laser cutting in Adobe Illustrator. You'll learn how to set up your document, create and manipulate shapes, and apply the correct settings for successful laser cutting and engraving.</p>
             </div>`,
             
-            // Step 1: File Setup
-            `<h3 class="text-xl font-bold mb-4">File Setup</h3>
-            <p class="mb-4">In this step, you'll learn how to create a new document with the correct settings for laser cutting projects.</p>
+            // Step 1
+            `<h3>File Setup</h3>
+            <p>In this step, you'll learn how to create a new document with the correct settings for laser cutting projects.</p>
             
-            <h4 class="font-bold mb-2">Creating a New Document:</h4>
-            <ol class="steps-list">
-                <li>Open Adobe Illustrator</li>
-                <li>Go to File > New (or press Ctrl+N)</li>
-                <li>Set the following parameters:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Colour Mode: RGB</li>
-                        <li>Width: 600mm</li>
-                        <li>Height: 300mm</li>
-                        <li>Units: Millimeters</li>
-                    </ul>
-                </li>
-                <li>Click "Create" to open your new document</li>
-            </ol>
+            <div class="card">
+                <h4>Creating a New Document:</h4>
+                <ol class="steps-list">
+                    <li>Open Adobe Illustrator</li>
+                    <li>Go to File > New (or press Ctrl+N)</li>
+                    <li>Set the following parameters:
+                        <ul>
+                            <li>Colour Mode: RGB</li>
+                            <li>Width: 600mm</li>
+                            <li>Height: 300mm</li>
+                            <li>Units: Millimeters</li>
+                        </ul>
+                    </li>
+                    <li>Click "Create" to open your new document</li>
+                </ol>
+            </div>
             
             <div class="tip-box">
                 <div class="tip-title">File Setup Tip</div>
                 <p>Using the correct dimensions from the start will save you time later. For laser cutting projects, always set up your document in millimeters for precision cutting.</p>
             </div>`,
             
-            // Step 2: Saving & Navigation
-            `<h3 class="text-xl font-bold mb-4">Saving & Navigation</h3>
-            <p class="mb-4">In this step, you'll learn how to save your work properly and navigate around your document efficiently.</p>
+            // Step 2
+            `<h3>Saving & Navigation</h3>
+            <p>In this step, you'll learn how to save your work properly and navigate around your document efficiently.</p>
             
-            <h4 class="font-bold mb-2">Saving Your File:</h4>
-            <ol class="steps-list">
-                <li>Go to File > Save (or press Ctrl+S)</li>
-                <li>Choose 'Save to Creative Cloud'</li>
-                <li>Name your file with the format: "FirstName-Lastname-ClassNumber" if you haven't already (Example: Bob-Buckley-6A)</li>
-                <li>Click "Save"</li>
-                <li>Remember to save frequently as you work (Ctrl+S)</li>
-            </ol>
+            <div class="card">
+                <h4>Saving Your File:</h4>
+                <ol class="steps-list">
+                    <li>Go to File > Save (or press Ctrl+S)</li>
+                    <li>Choose 'Save to Creative Cloud'</li>
+                    <li>Name your file with the format: "FirstName-Lastname-ClassNumber" if you haven't already (Example: Bob-Buckley-6A)</li>
+                    <li>Click "Save"</li>
+                    <li>Remember to save frequently as you work (Ctrl+S)</li>
+                </ol>
+            </div>
 
-            <h4 class="font-bold mb-2">Navigation Controls:</h4>
-            <ul class="list-disc pl-5 space-y-2">
-                <li><span class="kbd">Alt</span> + scroll wheel to zoom in and out</li>
-                <li><span class="kbd">Space</span> + left mouse button to pan around the document</li>
-                <li>Middle Mouse button to pan around the document</li>
-                <li><span class="kbd">Ctrl</span> + <span class="kbd">+</span> to zoom in</li>
-                <li><span class="kbd">Ctrl</span> + <span class="kbd">-</span> to zoom out</li>
-                <li><span class="kbd">Ctrl</span> + <span class="kbd">0</span> to fit artboard in window</li>
-                <li><span class="kbd">Ctrl</span> + <span class="kbd">Y</span> to toggle between Preview and Outline view</li>
-                <li><span class="kbd">Ctrl</span> + <span class="kbd">R</span> to show/hide rulers</li>
-            </ul>
+            <div class="card">
+                <h4>Navigation Controls:</h4>
+                <ul class="steps-list">
+                    <li><span class="kbd">Alt</span> + scroll wheel to zoom in and out</li>
+                    <li><span class="kbd">Space</span> + left mouse button to pan around the document</li>
+                    <li>Middle Mouse button to pan around the document</li>
+                    <li><span class="kbd">Ctrl</span> + <span class="kbd">+</span> to zoom in</li>
+                    <li><span class="kbd">Ctrl</span> + <span class="kbd">-</span> to zoom out</li>
+                    <li><span class="kbd">Ctrl</span> + <span class="kbd">0</span> to fit artboard in window</li>
+                    <li><span class="kbd">Ctrl</span> + <span class="kbd">Y</span> to toggle between Preview and Outline view</li>
+                    <li><span class="kbd">Ctrl</span> + <span class="kbd">R</span> to show/hide rulers</li>
+                </ul>
+            </div>
             
             <div class="alert-box alert-info">
-                <p class="font-bold">Pro tip</p>
+                <p><strong>Pro tip</strong></p>
                 <p>When you need to see fine details of your work, especially for technical drawings, toggle to Outline view using Ctrl+Y. This shows all paths regardless of stroke weight, making it easier to spot issues with your design.</p>
             </div>`,
             
-            // Step 3: Basic Shapes and Selection Tools
-            `<h3 class="text-xl font-bold mb-4">Basic Shapes and Selection Tools</h3>
-            <p class="mb-4">In this step, you'll learn to create and manipulate basic shapes using Illustrator's shape and selection tools.</p>
+            // Step 3
+            `<h3>Basic Shapes and Selection Tools</h3>
+            <p>In this step, you'll learn to create and manipulate basic shapes using Illustrator's shape and selection tools.</p>
             
-            <h4 class="font-bold mb-2">Shape Tools:</h4>
-            <ul class="list-disc pl-5 space-y-2">
-                <li><span class="kbd">M</span> - Rectangle Tool</li>
-                <li><span class="kbd">L</span> - Ellipse Tool</li>
-                <li><span class="kbd">P</span> - Pen Tool</li>
-                <li><span class="kbd">/</span> - Line Tool</li>
-            </ul>
+            <div class="card">
+                <h4>Shape Tools:</h4>
+                <ul class="steps-list">
+                    <li><span class="kbd">M</span> - Rectangle Tool</li>
+                    <li><span class="kbd">L</span> - Ellipse Tool</li>
+                    <li><span class="kbd">P</span> - Pen Tool</li>
+                    <li><span class="kbd">/</span> - Line Tool</li>
+                </ul>
+            </div>
 
-            <h4 class="font-bold mb-2 mt-4">Selection Tools:</h4>
-            <ul class="list-disc pl-5 space-y-2">
-                <li><span class="kbd">V</span> - Selection Tool (selects entire objects)</li>
-                <li><span class="kbd">A</span> - Direct Selection Tool (selects points/anchors)</li>
-                <li><span class="kbd">Shift</span> + click to select multiple objects</li>
-            </ul>
+            <div class="card">
+                <h4>Selection Tools:</h4>
+                <ul class="steps-list">
+                    <li><span class="kbd">V</span> - Selection Tool (selects entire objects)</li>
+                    <li><span class="kbd">A</span> - Direct Selection Tool (selects points/anchors)</li>
+                    <li><span class="kbd">Shift</span> + click to select multiple objects</li>
+                </ul>
+            </div>
             
-            <h4 class="font-bold mb-2 mt-4">Creating and Selecting Shapes:</h4>
-            <ol class="steps-list">
-                <li>Choose a shape tool from the toolbar (or use the keyboard shortcuts)</li>
-                <li>Click once on the artboard to set exact dimensions in a dialog box</li>
-                <li>Or click and drag to create a shape by hand</li>
-                <li>Hold Shift while dragging to create perfectly proportioned shapes (perfect circles, squares)</li>
-                <li>Select the black Selection tool or press V and try dragging around your object to move it</li>
-                <li>Select the white Direct Selection tool or press A. Double click your shape, and then try dragging edges, corners, or the dots to experiment with changing the shape itself</li>
-            </ol>
+            <div class="card">
+                <h4>Creating and Selecting Shapes:</h4>
+                <ol class="steps-list">
+                    <li>Choose a shape tool from the toolbar (or use the keyboard shortcuts)</li>
+                    <li>Click once on the artboard to set exact dimensions in a dialog box</li>
+                    <li>Or click and drag to create a shape by hand</li>
+                    <li>Hold Shift while dragging to create perfectly proportioned shapes (perfect circles, squares)</li>
+                    <li>Select the black Selection tool or press V and try dragging around your object to move it</li>
+                    <li>Select the white Direct Selection tool or press A. Double click your shape, and then try dragging edges, corners, or the dots to experiment with changing the shape itself</li>
+                </ol>
+            </div>
             
             <div class="tip-box">
                 <div class="tip-title">Selection Tip</div>
                 <p>Understanding the difference between the Selection Tool (V) and Direct Selection Tool (A) is crucial. The regular Selection Tool works with whole objects, while the Direct Selection Tool gives you control over specific points and segments, which is perfect for detailed adjustments.</p>
             </div>`,
             
-            // Step 4: Stroke & Fill Settings
-            `<h3 class="text-xl font-bold mb-4">Stroke & Fill Settings</h3>
-            <p class="mb-4">In this step, you'll learn the correct stroke and fill settings to prepare your designs for laser cutting and engraving.</p>
+            // Step 4
+            `<h3>Stroke & Fill Settings</h3>
+            <p>In this step, you'll learn the correct stroke and fill settings to prepare your designs for laser cutting and engraving.</p>
             
-            <div class="alert-box alert-danger">
-                <p class="font-bold">IMPORTANT!</p>
+            <div class="alert-box alert-warning">
+                <p><strong>IMPORTANT!</strong></p>
                 <p>If these settings aren't used correctly, your design won't cut properly on the laser cutter.</p>
             </div>
             
-            <h4 class="font-bold mb-2">Laser Cutting Settings:</h4>
-            <ol class="steps-list">
-                <li>For <strong>cutting lines</strong> (where you want the laser to cut through the material):
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Fill: No fill</li>
-                        <li>Stroke width: 0.003 pt</li>
-                    </ul>
-                </li>
-                <li>For <strong>engraving</strong> (where you want the laser to mark but not cut through):
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Stroke: 1 pt black</li>
-                        <li>Fill: Black fill</li>
-                    </ul>
-                </li>
-            </ol>
+            <div class="card">
+                <h4>Laser Cutting Settings:</h4>
+                <ol class="steps-list">
+                    <li>For <strong>cutting lines</strong> (where you want the laser to cut through the material):
+                        <ul>
+                            <li>Fill: No fill</li>
+                            <li>Stroke width: 0.003 pt</li>
+                        </ul>
+                    </li>
+                    <li>For <strong>engraving</strong> (where you want the laser to mark but not cut through):
+                        <ul>
+                            <li>Stroke: 1 pt black</li>
+                            <li>Fill: Black fill</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
 
             <div class="alert-box alert-warning">
-                <p class="font-bold">IMPORTANT!</p>
+                <p><strong>IMPORTANT!</strong></p>
                 <p>ALWAYS check with your teacher before trying to engrave shapes. For engraving images, check out the specific image tracing tutorial.</p>
             </div>
             
-            <h4 class="font-bold mb-2 mt-4">Accessing Stroke and Fill Settings:</h4>
-            <ol class="steps-list">
-                <li>Select your object with the Selection Tool (V)</li>
-                <li>Open the Stroke panel (Window > Stroke) to adjust stroke weight</li>
-                <li>Use the Color panel (Window > Color) to set your stroke and fill colors</li>
-                <li>You can also use the Properties panel for quick access to most settings</li>
-                <li>To remove a fill or stroke, click the "None" option (white square with red diagonal line)</li>
-            </ol>
+            <div class="card">
+                <h4>Accessing Stroke and Fill Settings:</h4>
+                <ol class="steps-list">
+                    <li>Select your object with the Selection Tool (V)</li>
+                    <li>Open the Stroke panel (Window > Stroke) to adjust stroke weight</li>
+                    <li>Use the Color panel (Window > Color) to set your stroke and fill colors</li>
+                    <li>You can also use the Properties panel for quick access to most settings</li>
+                    <li>To remove a fill or stroke, click the "None" option (white square with red diagonal line)</li>
+                </ol>
+            </div>
             
             <div class="alert-box alert-info">
-                <p class="font-bold">Pro tip</p>
+                <p><strong>Pro tip</strong></p>
                 <p>It's normal not to see your thin cutting lines easily. Press CTRL + Y to enter Outline View, which shows all your lines clearly regardless of thickness.</p>
-            </div>`,
-            
-            // Add more steps as needed
+            </div>`
         ];
 
+        // Define your media content (right panel)
         const stepMedia = [
             // Step 0: Introduction
-            `<div class="intro-section p-6 rounded-lg" style="background: linear-gradient(135deg, rgba(41, 121, 255, 0.1), rgba(0, 38, 84, 0.2)); border: 1px solid rgba(0, 102, 204, 0.2);">
-                <div class="alert-box alert-info">
-                    <p class="font-bold">Tutorial Overview</p>
-                    <p>This tutorial will guide you through the basics of Adobe Illustrator for laser cutting projects. By the end, you'll be able to set up files correctly, create basic shapes, and apply the proper settings for laser cutting and engraving.</p>
-                </div>
+            `<div class="alert-box alert-info">
+                <p><strong>Tutorial Overview</strong></p>
+                <p>This tutorial will guide you through the basics of Adobe Illustrator for laser cutting projects. By the end, you'll be able to set up files correctly, create basic shapes, and apply the proper settings for laser cutting and engraving.</p>
+            </div>
 
-                <div class="alert-box alert-warning mt-4">
-                    <p class="font-bold"><i class="fas fa-info-circle"></i> How to use this tutorial</p>
-                    <p class="mb-4 mt-4">Click the button below to learn how to navigate this tutorial.</p>
-                    <button id="startWalkthrough" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
-                        <i class="fas fa-walking mr-2"></i> Start Interactive Tour
-                    </button>
-                </div>
+            <div class="alert-box alert-warning">
+                <p><strong><i class="fas fa-info-circle"></i> How to use this resource</strong></p>
+                <p>Click the button below to learn how to navigate the page.</p>
+                <button id="startWalkthrough" class="nav-button">
+                    <i class="fas fa-walking"></i> Start Interactive Tour
+                </button>
             </div>`,
             
-            // Step 1: File Setup
+            // Step 1
             `<div class="video-container">
                 <video width="100%" controls autoplay loop muted playsinline>
-                    <source src="${videos[1]}" type="video/mp4">
+                    <source src="https://i.imgur.com/fsy3w7O.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -1011,7 +291,7 @@
                     <button class="carousel-btn prev-btn">&#10094;</button>
                     <button class="carousel-btn next-btn">&#10095;</button>
                 </div>
-                <div class="carousel-container" id="carousel-1">
+                <div class="carousel-container" id="carousel-example">
                     <div class="carousel-slide">
                         <div class="image-container">
                             <img src="https://i.imgur.com/ayw6bjo.png" alt="Open Adobe Illustrator" class="cursor-pointer">
@@ -1027,16 +307,16 @@
                         <p>Ensure you change the following settings underlined in green.</p>
                     </div>
                 </div>
-                <div class="carousel-indicators" id="carousel-indicators-1">
+                <div class="carousel-indicators" id="carousel-indicators-example">
                     <div class="carousel-indicator active" data-index="0"></div>
                     <div class="carousel-indicator" data-index="1"></div>
                 </div>
             </div>`,
             
-            // Step 2: Saving & Navigation
+            // Step 2
             `<div class="video-container">
                 <video width="100%" controls autoplay loop muted playsinline>
-                    <source src="${videos[2]}" type="video/mp4">
+                    <source src="https://i.imgur.com/gdmdcgM.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -1046,7 +326,7 @@
                     <button class="carousel-btn prev-btn">&#10094;</button>
                     <button class="carousel-btn next-btn">&#10095;</button>
                 </div>
-                <div class="carousel-container" id="carousel-2">
+                <div class="carousel-container" id="carousel-example">
                     <div class="carousel-slide">
                         <div class="image-container">
                             <img src="https://i.imgur.com/RaVutcE.png" alt="Save file step 1" class="cursor-pointer">
@@ -1076,7 +356,7 @@
                         <p>Now try practicing the navigation controls. Press CTRL + 0 to reset your view!</p>
                     </div>
                 </div>
-                <div class="carousel-indicators" id="carousel-indicators-2">
+                <div class="carousel-indicators" id="carousel-indicators-example">
                     <div class="carousel-indicator active" data-index="0"></div>
                     <div class="carousel-indicator" data-index="1"></div>
                     <div class="carousel-indicator" data-index="2"></div>
@@ -1084,7 +364,7 @@
                 </div>
             </div>
 
-            <div class="shortcut-category mt-6">
+            <div class="shortcut-category">
                 <div class="shortcut-title">
                     <i class="fas fa-keyboard"></i> Essential Keyboard Shortcuts
                 </div>
@@ -1122,10 +402,10 @@
                 </div>
             </div>`,
             
-            // Step 3: Basic Shapes and Selection Tools
+            // Step 3
             `<div class="video-container">
                 <video width="100%" controls autoplay loop muted playsinline>
-                    <source src="${videos[3]}" type="video/mp4">
+                    <source src="https://i.imgur.com/pWV9XkG.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -1135,7 +415,7 @@
                     <button class="carousel-btn prev-btn">&#10094;</button>
                     <button class="carousel-btn next-btn">&#10095;</button>
                 </div>
-                <div class="carousel-container" id="carousel-3">
+                <div class="carousel-container" id="carousel-example">
                     <div class="carousel-slide">
                         <div class="image-container">
                             <img src="https://i.imgur.com/FInOlHg.png" alt="Expand toolbar" class="cursor-pointer">
@@ -1165,7 +445,7 @@
                         <p>Click the white Direct Selection tool or press A on your keyboard. Double click your shape, and then drag a part of it to see what changes.</p>
                     </div>
                 </div>
-                <div class="carousel-indicators" id="carousel-indicators-3">
+                <div class="carousel-indicators" id="carousel-indicators-example">
                     <div class="carousel-indicator active" data-index="0"></div>
                     <div class="carousel-indicator" data-index="1"></div>
                     <div class="carousel-indicator" data-index="2"></div>
@@ -1173,7 +453,7 @@
                 </div>
             </div>
 
-            <div class="shortcut-category mt-6">
+            <div class="shortcut-category">
                 <div class="shortcut-title">
                     <i class="fas fa-shapes"></i> Shape & Selection Tools
                 </div>
@@ -1205,10 +485,10 @@
                 </div>
             </div>`,
             
-            // Step 4: Stroke & Fill Settings
+            // Step 4
             `<div class="video-container">
                 <video width="100%" controls autoplay loop muted playsinline>
-                    <source src="${videos[4]}" type="video/mp4">
+                    <source src="https://i.imgur.com/UUzmy7U.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -1218,7 +498,7 @@
                     <button class="carousel-btn prev-btn">&#10094;</button>
                     <button class="carousel-btn next-btn">&#10095;</button>
                 </div>
-                <div class="carousel-container" id="carousel-4">
+                <div class="carousel-container" id="carousel-example">
                     <div class="carousel-slide">
                         <div class="image-container">
                             <img src="https://i.imgur.com/vk6pZ2w.png" alt="Stroke and Fill Settings" class="cursor-pointer">
@@ -1227,39 +507,31 @@
                         <p>Select your shape first. Then, on the side panel on the right, set fill to None (white with a red line through it), and Stroke to 0.003 pt.</p>
                     </div>
                 </div>
-                <div class="carousel-indicators" id="carousel-indicators-4">
+                <div class="carousel-indicators" id="carousel-indicators-example">
                     <div class="carousel-indicator active" data-index="0"></div>
                 </div>
             </div>
 
-            <div class="alert-box alert-danger mt-6">
-                <p class="font-bold text-xl">Laser Cutting Requirements</p>
-                <ul class="list-disc pl-5 mt-2">
+            <div class="alert-box alert-warning">
+                <p><strong>Laser Cutting Requirements</strong></p>
+                <ul class="steps-list">
                     <li><strong>For Cutting:</strong> No fill, 0.003 pt black stroke</li>
                     <li><strong>For Engraving:</strong> Black fill, 1 pt stroke (check with teacher first)</li>
                 </ul>
-                <p class="mt-2">These settings are crucial for the laser cutter to properly recognize what to cut and what to engrave.</p>
-            </div>`,
-            
-            // Add more step media as needed
+                <p>These settings are crucial for the laser cutter to properly recognize what to cut and what to engrave.</p>
+            </div>`
         ];
 
-        /*************************************************
-         * SYSTEM CODE - No need to modify below this line
-         * unless you want to add new functionality
-         *************************************************/
-        
         // Current step tracking
         let currentStep = 0;
         const totalSteps = stepInstructions.length;
 
         // DOM Elements
-        const contentTitle = document.querySelector('.content-title');
-        const creatorNameEl = document.getElementById('creator-name');
-        const stepIcons = document.querySelectorAll('.step-icon');
+        const stepButtons = document.querySelectorAll('.step-button');
         const stepTitleEl = document.getElementById('current-step-title');
         const instructionsPanel = document.getElementById('step-instructions');
         const mediaContent = document.getElementById('media-content');
+        const contentTitle = document.getElementById('content-title');
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
         const progressBar = document.querySelector('.progress');
@@ -1270,57 +542,16 @@
         const modalImg = document.getElementById('modalImage');
         const modalClose = document.querySelector('.modal-close');
 
-        // Initialize page with content
-        function initializePage() {
-            // Set tutorial title and creator name
-            document.title = tutorialTitle;
-            contentTitle.textContent = tutorialTitle;
-            creatorNameEl.textContent = creatorName;
-            
-            // Create step icons
-            const navPanel = document.querySelector('.nav-panel');
-            navPanel.innerHTML = ''; // Clear any existing icons
-            
-            // Add Introduction icon
-            const introIcon = document.createElement('div');
-            introIcon.className = 'step-icon active';
-            introIcon.dataset.step = 0;
-            introIcon.innerHTML = `
-                <i class="fas fa-list-ol"></i>
-                <div class="step-tooltip">Introduction</div>
-            `;
-            navPanel.appendChild(introIcon);
-            
-            // Add numbered step icons
-            for (let i = 1; i < stepTitles.length; i++) {
-                const stepIcon = document.createElement('div');
-                stepIcon.className = 'step-icon';
-                stepIcon.dataset.step = i;
-                stepIcon.innerHTML = `
-                    <span>${i}</span>
-                    <div class="step-tooltip">${stepTitles[i].split(':')[1] || stepTitles[i]}</div>
-                `;
-                navPanel.appendChild(stepIcon);
-            }
-            
-            // Add event listeners to step icons
-            document.querySelectorAll('.step-icon').forEach((icon, index) => {
-                icon.addEventListener('click', () => showStep(index));
-            });
-            
-            // Show first step
-            showStep(0);
-        }
-
         // Initialize the tutorial
         function showStep(step) {
-            // Update active step icon
-            document.querySelectorAll('.step-icon').forEach((icon, index) => {
-                icon.classList.toggle('active', index === step);
+            // Update active step button
+            stepButtons.forEach((button, index) => {
+                button.classList.toggle('active', index === step);
             });
 
             // Update step title
             stepTitleEl.textContent = stepTitles[step];
+            contentTitle.textContent = stepTitles[step];
 
             // Update content
             instructionsPanel.innerHTML = stepInstructions[step];
@@ -1328,7 +559,7 @@
 
             // Update navigation buttons
             prevButton.disabled = step === 0;
-            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'block';
+            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'flex';
             
             // Update progress
             const progress = Math.round(((step + 1) / totalSteps) * 100);
@@ -1409,7 +640,60 @@
             });
         }
 
-        // Event Listeners for navigation buttons
+        // Simple tooltip implementation
+        function setupTooltips() {
+            // Remove any existing tooltips
+            const existingTooltips = document.querySelectorAll('.tooltip');
+            existingTooltips.forEach(t => t.remove());
+            
+            // Create new tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+            
+            // Add event listeners to all step buttons
+            const stepButtons = document.querySelectorAll('.step-button');
+            stepButtons.forEach(button => {
+                const tooltipText = button.getAttribute('data-tooltip');
+                if (!tooltipText) return;
+                
+                // On mouse enter
+                button.addEventListener('mouseenter', () => {
+                    // Set tooltip text
+                    tooltip.textContent = tooltipText;
+                    
+                    // Position tooltip based on viewport width
+                    const rect = button.getBoundingClientRect();
+                    if (window.innerWidth <= 1024) {
+                        // Position below on mobile
+                        tooltip.className = 'tooltip bottom';
+                        tooltip.style.top = `${rect.bottom + 10}px`;
+                        tooltip.style.left = `${rect.left + rect.width/2}px`;
+                        tooltip.style.transform = 'translateX(-50%)';
+                    } else {
+                        // Position to the right on desktop
+                        tooltip.className = 'tooltip right';
+                        tooltip.style.top = `${rect.top + rect.height/2}px`;
+                        tooltip.style.left = `${rect.right + 10}px`;
+                        tooltip.style.transform = 'translateY(-50%)';
+                    }
+                    
+                    // Make tooltip visible
+                    tooltip.style.opacity = '1';
+                });
+                
+                // On mouse leave
+                button.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        // Event Listeners
+        stepButtons.forEach((button, index) => {
+            button.addEventListener('click', () => showStep(index));
+        });
+
         prevButton.addEventListener('click', () => {
             if (currentStep > 0) showStep(currentStep - 1);
         });
@@ -1420,15 +704,13 @@
 
         // Image modal functionality
         document.addEventListener('click', (e) => {
-            // Check if the clicked element is an image inside a carousel slide or anywhere in the content
-            if (e.target.tagName === 'IMG') {
+            if (e.target.tagName === 'IMG' && e.target.parentElement.classList.contains('image-container')) {
                 modal.style.display = 'block';
                 modalImg.src = e.target.src;
                 modalImg.alt = e.target.alt;
             }
         });
 
-        // Close the modal when clicking on the X or anywhere on the modal
         modalClose.addEventListener('click', () => {
             modal.style.display = 'none';
         });
@@ -1439,7 +721,7 @@
             }
         });
 
-        // Also close modal with Escape key
+        // Close modal with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.style.display === 'block') {
                 modal.style.display = 'none';
@@ -1452,31 +734,30 @@
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.8 },
-                colors: ['#FFD700', '#87CEEB', '#57708e', '#002654']
+                colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
             });
         });
-        
-        // Walkthrough functionality using intro.js
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.id === 'startWalkthrough') {
-                // Initialize intro.js
+
+        // Initialize introjs walkthrough
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'startWalkthrough' || e.target.parentElement.id === 'startWalkthrough') {
                 const intro = introJs();
                 
                 intro.setOptions({
                     steps: [
                         {
-                            element: document.querySelector('.nav-panel'),
+                            element: document.querySelector('.sidebar'),
                             intro: 'Use these numbered icons to navigate between different steps of the tutorial. Click on any number to jump directly to that step.',
                             position: 'right'
                         },
                         {
-                            element: document.querySelector('.instruction-panel'),
+                            element: document.querySelector('.instructions-panel'),
                             intro: 'Read the step-by-step instructions in this middle panel. These detailed instructions will guide you through each part of the tutorial.',
                             position: 'right'
                         },
                         {
                             element: document.querySelector('.content-display'),
-                            intro: 'View videos, images, and examples in this panel. Click on any image to zoom in for a closer look.',
+                            intro: 'View demonstration videos and images that show exactly how to perform each action.',
                             position: 'left'
                         },
                         {
@@ -1504,15 +785,29 @@
                         particleCount: 100,
                         spread: 70,
                         origin: { y: 0.6 },
-                        colors: ['#0066cc', '#87CEEB', '#57708e', '#002654']
+                        colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
                     });
-                    showStep(0);
                 });
             }
         });
 
-        // Initialize the tutorial
-        initializePage();
+        // Initialize with first step and set up tooltips
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(0);
+            setupTooltips();
+            
+            // Update tooltips on window resize
+            window.addEventListener('resize', () => {
+                setupTooltips();
+            });
+            
+            // Update tooltips whenever a step button is clicked
+            document.querySelectorAll('.step-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    setTimeout(setupTooltips, 100);
+                });
+            });
+        });
     </script>
 </body>
 </html>
