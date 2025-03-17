@@ -4,65 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laser Cutting Tutorials</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
-        body, html {
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f7f7f7;
+            --accent-bg: #f0f0f0;
+            --accent-color: #002654;
+            --active-color: #002654;
+            --outline-color: #191919;
+            --text-color: #191919;
+            --shadow-sm: 0 0.15em 0 var(--outline-color);
+            --shadow-md: 0 0.25em 0 var(--outline-color);
+            --border-radius: 0.6em;
+            --transition-time: 0.15s;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
         }
-        
-        .background {
-            position: fixed;
-            top: 0;
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            letter-spacing: -0.01em;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: var(--secondary-bg);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border: 3px solid var(--secondary-bg);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--active-color);
+            transform: scale(1.05);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            display: inline-block;
+            padding-bottom: 8px;
+        }
+
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #002654, #57708e);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            z-index: -1;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 1px;
         }
-        
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
+
         .container {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             padding: 2rem;
         }
-        
-        .title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
+
+        .title-container {
+            margin: 2rem 0 3rem 0;
             text-align: center;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
-        
+
+        /* Search Container */
         .search-container {
             width: 100%;
             max-width: 600px;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
         }
-        
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: transform var(--transition-time), box-shadow var(--transition-time);
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-input:focus {
+            outline: none;
+            transform: translateY(-0.15em);
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--outline-color);
+        }
+
+        /* Cards Container */
         .cards-container {
             display: flex;
             flex-wrap: wrap;
@@ -70,34 +140,32 @@
             gap: 2rem;
             max-width: 1200px;
         }
-        
+
+        /* Card Styling */
         .card {
-            width: 240px;
-            height: 320px;
-            background-color: rgba(87, 112, 142, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+            width: 260px;
+            height: 340px;
+            background-color: var(--primary-bg);
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            transition: all 0.3s ease;
+            transition: transform var(--transition-time), box-shadow var(--transition-time);
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
             position: relative;
             overflow: hidden;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            opacity: 1;
-            transform: scale(1);
         }
-        
+
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-            background-color: rgba(87, 112, 142, 0.4);
+            transform: translateY(-0.25em);
+            box-shadow: var(--shadow-md);
         }
-        
+
         .card:before {
             content: '';
             position: absolute;
@@ -105,106 +173,128 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: var(--accent-color);
-            border-radius: 5px 5px 0 0;
+            background-color: var(--card-accent);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
-        
+
         .card-icon {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background-color: var(--accent-color);
+            background-color: var(--card-accent);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 1.5rem;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 1;
-            transition: all 0.3s ease;
+            transition: all var(--transition-time);
         }
-        
+
         .card:hover .card-icon {
             transform: scale(1.1);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
         }
-        
+
         .card-icon i {
             font-size: 2.5rem;
             color: white;
         }
-        
+
         .card-title {
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
             text-align: center;
-            color: white;
+            color: var(--text-color);
         }
-        
+
         .card-description {
             font-size: 0.875rem;
             text-align: center;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-color);
             line-height: 1.5;
         }
-        
+
         .card-getting-started {
-            --accent-color: #ffd861;
+            --card-accent: #FFA500;
         }
-        
+
         .card-image-tracing {
-            --accent-color: #B8F9D3;
+            --card-accent: #32CD32;
         }
-        
+
         .card-box-joints {
-            --accent-color: #FF9B9B;
+            --card-accent: #FF6347;
         }
-        
+
         .card-mortise-tenon {
-            --accent-color: #A7C7E7;
+            --card-accent: #1E90FF;
         }
-        
+
         .card-status {
             position: absolute;
             top: 1rem;
             right: 1rem;
             padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
+            border-radius: 0.5rem;
             font-size: 0.75rem;
             font-weight: 600;
-            background-color: rgba(0, 0, 0, 0.2);
         }
-        
+
         .status-ready {
-            background-color: rgba(16, 185, 129, 0.2);
+            background-color: rgba(16, 185, 129, 0.1);
             color: #10B981;
+            border: 1px solid #10B981;
         }
-        
+
         .status-coming {
-            background-color: rgba(245, 158, 11, 0.2);
+            background-color: rgba(245, 158, 11, 0.1);
             color: #F59E0B;
+            border: 1px solid #F59E0B;
         }
-        
+
+        /* Footer */
         .footer {
             margin-top: 3rem;
+            padding-top: 1rem;
             text-align: center;
             font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-color);
+            border-top: 1px solid var(--outline-color);
+            width: 100%;
+            max-width: 1200px;
         }
-        
+
         .footer span {
+            color: var(--accent-color);
+            font-weight: 600;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: all var(--transition-time);
+            display: inline-block;
         }
-        
+
         .footer span:hover {
-            color: white;
+            transform: scale(1.1);
         }
-        
+
+        /* No Results Message */
+        .no-results {
+            background-color: var(--secondary-bg);
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem auto;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            max-width: 600px;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .cards-container {
                 flex-direction: column;
+                align-items: center;
                 gap: 1.5rem;
             }
             
@@ -212,10 +302,10 @@
                 width: 90%;
                 max-width: 320px;
                 height: auto;
-                min-height: 260px;
+                min-height: 300px;
             }
             
-            .title {
+            h1 {
                 font-size: 2rem;
                 margin-bottom: 2rem;
             }
@@ -223,18 +313,14 @@
     </style>
 </head>
 <body>
-    <div class="background"></div>
-    
     <div class="container">
-        <h1 class="title">Laser Cutting Tutorials</h1>
+        <div class="title-container">
+            <h1>Laser Cutting Tutorials</h1>
+        </div>
         
         <div class="search-container">
-            <div class="relative flex items-center max-w-md mx-auto mb-8">
-                <input type="text" id="searchInput" placeholder="Search tutorials..." class="w-full py-3 pl-12 pr-4 text-gray-800 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <div class="absolute left-3">
-                    <i class="fas fa-search text-gray-400"></i>
-                </div>
-            </div>
+            <input type="text" id="searchInput" placeholder="Search tutorials..." class="search-input">
+            <i class="fas fa-search search-icon"></i>
         </div>
         
         <div class="cards-container">
@@ -271,6 +357,8 @@
                 <p class="card-description">An alternative to the box joint for 90 degree joints.</p>
             </a>
         </div>
+
+        
     </div>
     
     <script>
@@ -292,11 +380,11 @@
                         card.style.display = '';
                         setTimeout(() => {
                             card.style.opacity = '1';
-                            card.style.transform = 'scale(1)';
+                            card.style.transform = 'translateY(0)';
                         }, 10);
                     } else {
                         card.style.opacity = '0';
-                        card.style.transform = 'scale(0.8)';
+                        card.style.transform = 'translateY(-10px)';
                         setTimeout(() => {
                             card.style.display = 'none';
                         }, 300);
@@ -311,7 +399,7 @@
                     if (!noResultsMessage) {
                         const message = document.createElement('div');
                         message.id = 'no-results-message';
-                        message.className = 'text-center my-8 text-white bg-opacity-50 bg-gray-800 p-4 rounded';
+                        message.className = 'no-results';
                         message.innerHTML = 'No matching tutorials found. Try a different search term.';
                         document.querySelector('.cards-container').before(message);
                     }
@@ -321,34 +409,14 @@
             });
         });
         
-        // Setup creator name with confetti effects
-        document.getElementById('creator-name')?.addEventListener('click', function(e) {
-            // Fire confetti
+        // Creator name with confetti effect
+        document.getElementById('creator-name').addEventListener('click', function() {
             confetti({
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.8 },
-                colors: ['#FFD700', '#87CEEB', '#57708e', '#002654']
+                colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
             });
-            
-            // Fire another burst of confetti after a short delay for more effect
-            setTimeout(() => {
-                confetti({
-                    particleCount: 50,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0.1, y: 0.8 },
-                    colors: ['#FFD700', '#57708e', '#002654']
-                });
-                
-                confetti({
-                    particleCount: 50,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 0.9, y: 0.8 },
-                    colors: ['#87CEEB', '#57708e', '#002654']
-                });
-            }, 250);
         });
     </script>
 </body>
