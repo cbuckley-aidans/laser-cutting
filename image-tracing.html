@@ -4,719 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Tracing Tutorial</title>
-    <!-- REQUIRED EXTERNAL RESOURCES -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css">
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        /* Header styling */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            background-color: white;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .logo {
-            height: 40px;
-            margin-right: 1rem;
-        }
-
-        .nav-item {
-            margin: 0 1rem;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .right-nav {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-        }
-
-        .language-select {
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-left: 1rem;
-        }
-
-        /* Main container with three panels */
-        .main-container {
-            display: flex;
-            height: 100vh;
-            width: 100%;
-        }
-
-        /* Left sidebar navigation panel */
-        .nav-panel {
-            width: 75px;
-            min-width: 75px;
-            background-color: white;
-            border-right: 1px solid #e5e5e5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .step-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            border: 2px solid transparent;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .step-icon:hover, .step-icon.active {
-            border-color: #0066cc;
-            background-color: rgba(0, 102, 204, 0.1);
-        }
-
-        .step-tooltip {
-            position: absolute;
-            left: 60px;
-            background-color: #333;
-            color: white;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-            z-index: 10;
-        }
-
-        .step-icon:hover .step-tooltip {
-            opacity: 1;
-        }
-
-        /* Middle instruction panel */
-        .instruction-panel {
-            width: 450px;
-            min-width: 450px;
-            max-width: 450px;
-            background-color: white;
-            border-right: 1px solid #e5e5e5;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .panel-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .step-content-instructions {
-            margin-top: 1rem;
-        }
-
-        /* Main content area */
-        .content-display {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-            background-color: white;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-            background-color: #f0f7ff;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            border: 1px solid #cce5ff;
-        }
-
-        .content-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0066cc;
-        }
-
-        .content-actions {
-            display: flex;
-        }
-
-        .action-button {
-            margin-left: 0.5rem;
-            padding: 0.75rem 2rem;
-            border-radius: 6px;
-            border: none;
-            background-color: #0066cc;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.2s ease;
-        }
-        
-        .action-button:hover {
-            background-color: #0055aa;
-        }
-
-        .tab-content {
-            padding: 1rem;
-            min-height: 400px;
-        }
-
-        /* Step content styling - Apply consistent sizing and spacing */
-        .step-instructions h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-        
-        .step-instructions p {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-        
-        .step-instructions h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: #0066cc;
-        }
-        
-        .steps-list {
-            list-style-type: decimal;
-            padding-left: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .steps-list li {
-            margin-bottom: 0.75rem;
-            line-height: 1.5;
-        }
-        
-        .steps-list ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .steps-list ul li {
-            margin-bottom: 0.5rem;
-        }
-
-        .step-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .step-description {
-            margin-bottom: 1rem;
-        }
-
-        .step-instruction {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 0.5rem;
-        }
-
-        .step-bullet {
-            color: #0066cc;
-            margin-right: 0.5rem;
-            font-weight: bold;
-        }
-
-        /* Media containers */
-        .video-container {
-            width: 90%;
-            max-width: 800px;
-            margin: 0 auto 1.5rem;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .video-container video {
-            width: 100%;
-            display: block;
-        }
-
-        /* Carousel with fixed sizing */
-        .carousel {
-            width: 90%;
-            max-width: 800px;
-            position: relative;
-            margin: 2rem auto;
-            padding: 1rem;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border: 1px solid #e5e5e5;
-        }
-
-        .carousel-container {
-            display: flex;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            width: 100%;
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .carousel-slide img {
-            max-height: 280px;
-            max-width: 90%;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            position: relative;
-        }
-
-        .carousel-slide img:hover {
-            transform: scale(1.05);
-        }
-
-        .carousel-slide img::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .carousel-slide img:hover::after {
-            opacity: 1;
-        }
-
-        .carousel-slide p {
-            margin-top: 1rem;
-            text-align: center;
-        }
-
-        .carousel-controls {
-            display: flex;
-            justify-content: space-between;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100%;
-            padding: 0 1rem;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .carousel-btn {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            pointer-events: auto;
-        }
-
-        .carousel-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 1rem;
-        }
-
-        .carousel-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #ccc;
-            cursor: pointer;
-        }
-
-        .carousel-indicator.active {
-            background-color: #0066cc;
-        }
-
-        .tip-box {
-            background-color: #f0f7ff;
-            border-left: 4px solid #0066cc;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .tip-title {
-            font-weight: 700;
-            color: #0066cc;
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .alert-box {
-            border-radius: 4px;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-left: 4px solid;
-        }
-
-        .alert-info {
-            background-color: #e6f7ff;
-            border-color: #1890ff;
-        }
-
-        .alert-warning {
-            background-color: #fffbe6;
-            border-color: #faad14;
-        }
-
-        .steps-list {
-            list-style-type: decimal;
-            padding-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .steps-list li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Image modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-content {
-            max-width: 90%;
-            max-height: 90vh;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 4px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            animation: zoomIn 0.3s ease;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: white;
-            font-size: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .modal-close:hover {
-            color: #0066cc;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes zoomIn {
-            from { transform: translate(-50%, -50%) scale(0.9); }
-            to { transform: translate(-50%, -50%) scale(1); }
-        }
-
-        /* Wave styling */
-        .wave-divider {
-            margin: 0.5rem 0;
-            height: 20px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%230099ff' fill-opacity='1' d='M0,192L40,213.3C80,235,160,277,240,272C320,267,400,213,480,202.7C560,192,640,224,720,229.3C800,235,880,213,960,181.3C1040,149,1120,107,1200,101.3C1280,96,1360,128,1400,144L1440,160L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
-        /* Navigation buttons with blue styling */
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            padding: 0 1rem;
-        }
-
-        .nav-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            min-width: 120px;
-            justify-content: center;
-        }
-        
-        .nav-button:hover:not(:disabled) {
-            background-color: #0055aa;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        
-        .nav-button i {
-            margin: 0 8px;
-        }
-
-        /* Progress indicator */
-        .progress-container {
-            margin-top: 1rem;
-        }
-
-        .progress-text {
-            font-size: 0.875rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background-color: #eee;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background-color: #0066cc;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
-        }
-
-        #creator-name {
-            color: #0066cc;
-            cursor: pointer;
-        }
-
-        .instruction-content {
-            background-color: #e6f7ff;
-            border-radius: 8px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .instruction-arrow {
-            color: #0099ff;
-            margin-right: 0.75rem;
-            font-size: 1.25rem;
-        }
-
-        /* Click-to-zoom hint */
-        .image-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .zoom-hint {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .carousel-slide:hover .zoom-hint {
-            opacity: 1;
-        }
-
-        /* Keyboard keys styling */
-        .kbd {
-            display: inline-block;
-            padding: 4px 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            line-height: 1;
-            color: #333;
-            background-color: #f7f7f7;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
-            margin: 0 2px;
-            text-align: center;
-            min-width: 20px;
-            vertical-align: middle;
-        }
-
-        .kbd-combo {
-            display: inline-flex;
-            align-items: center;
-            margin: 6px 0;
-        }
-
-        .kbd-plus {
-            margin: 0 4px;
-            color: #666;
-            font-weight: bold;
-        }
-
-        .control-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding: 10px;
-            border-radius: 6px;
-            background-color: #f5f7fa;
-            border-left: 3px solid #0066cc;
-        }
-
-        .control-icon {
-            font-size: 1.5rem;
-            margin-right: 15px;
-            color: #0066cc;
-            width: 40px;
-            text-align: center;
-        }
-
-        .control-text {
-            flex: 1;
-        }
-
-        .shortcut-category {
-            margin-bottom: 20px;
-            background-color: #f5f7fa;
-            border-radius: 8px;
-            padding: 15px;
-            border-left: 3px solid #0066cc;
-        }
-
-        .shortcut-title {
-            font-weight: 700;
-            color: #0066cc;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            font-size: 1.1rem;
-        }
-
-        .shortcut-title i {
-            margin-right: 10px;
-            font-size: 1.25rem;
-        }
-
-        .shortcut-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-        }
-
-        .shortcut-item {
-            padding: 8px;
-            border-radius: 4px;
-            background-color: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .shortcut-action {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 5px;
-        }
-    </style>
 </head>
 <body>
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Left Panel - Step Icons Navigation -->
-        <div class="nav-panel">
-            <!-- STEP ICONS: This section is populated dynamically by JavaScript based on your step content -->
-            <div class="step-icon active" data-step="0">
+    <div class="tutorial-container">
+        <!-- Left Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-logo">IMAGE<br>TRACING</div>
+            <div class="step-button active" data-step="0" data-tooltip="Introduction">
                 <i class="fas fa-list-ol"></i>
-                <div class="step-tooltip">Introduction</div>
             </div>
-            <!-- Additional steps will be created dynamically -->
+            <div class="step-button" data-step="1" data-tooltip="Finding Images">
+                <span>1</span>
+            </div>
+            <div class="step-button" data-step="2" data-tooltip="Image Placement">
+                <span>2</span>
+            </div>
+            <div class="step-button" data-step="3" data-tooltip="Image Trace">
+                <span>3</span>
+            </div>
+            <div class="step-button" data-step="4" data-tooltip="Refinement">
+                <span>4</span>
+            </div>
         </div>
 
-        <!-- Middle Panel - Text Instructions -->
-        <div class="instruction-panel">
-            <div id="current-step-title" class="text-2xl font-bold mb-4 text-blue-800">Introduction</div>
+        <!-- Middle Instructions Panel -->
+        <div class="instructions-panel">
+            <h1 id="current-step-title">Introduction</h1>
             
-            <div class="wave-divider"></div>
-            
-            <div class="step-content-instructions step-instructions" id="step-instructions">
+            <div id="step-instructions">
                 <!-- Will be populated by JavaScript -->
             </div>
 
@@ -735,207 +56,196 @@
             </div>
 
             <div class="footer">
-                Made by <span id="creator-name">Buckley</span> with ♥️
+                Made with <span style="color: var(--accent-color);">♥</span> by <span id="creator-name">Buckley</span>
             </div>
         </div>
 
-        <!-- Main Content Area - Media Display -->
+        <!-- Right Content Display Area -->
         <div class="content-display">
-            <div class="content-header">
-                <div class="content-title">Image Tracing Tutorial</div>
-            </div>
-
-            <div class="tab-content" id="media-content">
-                <!-- Will be populated by JavaScript -->
+            <div class="card">
+                <h2 id="content-title">Image Tracing Tutorial</h2>
+                <div id="media-content">
+                    <!-- Will be populated by JavaScript -->
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Image Modal -->
+    <!-- Modal for viewing images -->
     <div id="imageModal" class="modal">
         <span class="modal-close">&times;</span>
         <img id="modalImage" class="modal-content">
     </div>
 
     <script>
-        /********************************************
-         * TUTORIAL CONFIGURATION
-         * Edit these variables to customize your tutorial
-         ********************************************/
-        
-        // Main tutorial title that appears in the header
-        const tutorialTitle = "Image Tracing Tutorial";
-        
-        // Your name to appear in the footer
-        const creatorName = "Buckley";
-        
         // Video sources for steps that have videos
-        // Leave empty string "" for steps without videos
         const videos = {
             1: "https://i.imgur.com/UBddKIJ.mp4", // Copying images
             2: "", // No video for this step
             3: "https://i.imgur.com/ZPZKvjJ.mp4", // Hitting the image trace button
             4: "https://i.imgur.com/GMpa1p7.mp4", // Cleaning up image trace with expand
-            // Add more videos as needed
         };
 
-        // Step titles for each step
+        // Tutorial content configuration
+        // Define your step titles
         const stepTitles = [
             "Introduction",
             "Step 1: Finding Images",
             "Step 2: Image Placement",
             "Step 3: Image Trace",
-            "Step 4: Refinement",
-            // Add more step titles as needed
+            "Step 4: Refinement"
         ];
 
-        // Tutorial content - split into instructions (middle panel) and media (right panel)
+        // Define your step instructions (middle panel content)
         const stepInstructions = [
             // Step 0: Introduction
-            `<h3 class="text-xl font-bold mb-4">Image Tracing Tutorial</h3>
+            `<h3>Image Tracing Tutorial</h3>
             
-            <div class="mb-4">
-                <p class="font-bold mb-2">Learning Intentions:</p>
-                <ul class="list-disc pl-5 space-y-2">
+            <div class="card">
+                <p><strong>Learning Intentions:</strong></p>
+                <ol class="steps-list">
                     <li>Learn how to find suitable images for tracing</li>
                     <li>Understand how to properly place images in Illustrator</li>
                     <li>Master using the Image Trace feature</li>
                     <li>Learn to refine and adjust trace settings for best results</li>
-                </ul>
-            </div>
+                </ol>
             
-            <div>
-                <p class="font-bold mb-2">Success Criteria:</p>
-                <ul class="list-disc pl-5">
+                <p><strong>Success Criteria:</strong></p>
+                <ol class="steps-list">
                     <li>Successfully trace an image with clean, usable vector results</li>
                     <li>Apply appropriate trace settings for different image types</li>
                     <li>Export a finished vector trace for use in other projects</li>
-                </ul>
+                </ol>
             </div>`,
             
             // Step 1: Finding Images
-            `<h3 class="text-xl font-bold mb-4">Step 1: Finding Images</h3>
-            <p class="mb-4">Before you can trace an image, you need to find a suitable one. The quality and clarity of your source image will greatly affect your tracing results.</p>
+            `<h3>Step 1: Finding Images</h3>
+            <p>Before you can trace an image, you need to find a suitable one. The quality and clarity of your source image will greatly affect your tracing results.</p>
             
-            <h4 class="font-bold mb-2">How to Find and Copy Images:</h4>
-            <ol class="steps-list">
-                <li>Go to Google Images and search for your desired image</li>
-                <li>Look for high-resolution images with clear edges</li>
-                <li>To copy the image:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Right-click on the image</li>
-                        <li>Select 'Copy image'</li>
-                    </ul>
-                </li>
-                <li>Alternatively, you can save the image to your computer by selecting 'Save image as'</li>
-            </ol>`,
+            <div class="card">
+                <h4>How to Find and Copy Images:</h4>
+                <ol class="steps-list">
+                    <li>Go to Google Images and search for your desired image</li>
+                    <li>Look for high-resolution images with clear edges</li>
+                    <li>To copy the image:
+                        <ul>
+                            <li>Right-click on the image</li>
+                            <li>Select 'Copy image'</li>
+                        </ul>
+                    </li>
+                    <li>Alternatively, you can save the image to your computer by selecting 'Save image as'</li>
+                </ol>
+            </div>`,
             
             // Step 2: Image Placement
-            `<h3 class="text-xl font-bold mb-4">Step 2: Image Placement</h3>
-            <p class="mb-4">Once you have your image, you need to place it properly in Illustrator to prepare for tracing.</p>
+            `<h3>Step 2: Image Placement</h3>
+            <p>Once you have your image, you need to place it properly in Illustrator to prepare for tracing.</p>
             
-            <h4 class="font-bold mb-2">Placing Your Image in Illustrator:</h4>
-            <ol class="steps-list">
-                <li>Open Adobe Illustrator and create a new document</li>
-                <li>Paste your copied image:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Press <span class="kbd">Ctrl</span><span class="kbd-plus">+</span><span class="kbd">V</span>.</li>
-                        <li>Or use File > Place if you saved the image to your computer</li>
-                    </ul>
-                </li>
-                <li>Select the image using the Selection Tool (V)</li>
-                <li>Resize the image as needed:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Hold <span class="kbd">Shift</span> while dragging corner handles to maintain proportions</li>
-                        <li>Make sure the image is large enough to see details clearly</li>
-                    </ul>
-                </li>
-            </ol>`,
+            <div class="card">
+                <h4>Placing Your Image in Illustrator:</h4>
+                <ol class="steps-list">
+                    <li>Open Adobe Illustrator and create a new document</li>
+                    <li>Paste your copied image:
+                        <ul>
+                            <li>Press <span class="kbd">Ctrl</span><span class="kbd-plus">+</span><span class="kbd">V</span></li>
+                            <li>Or use File > Place if you saved the image to your computer</li>
+                        </ul>
+                    </li>
+                    <li>Select the image using the Selection Tool (V)</li>
+                    <li>Resize the image as needed:
+                        <ul>
+                            <li>Hold <span class="kbd">Shift</span> while dragging corner handles to maintain proportions</li>
+                            <li>Make sure the image is large enough to see details clearly</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>`,
             
             // Step 3: Image Trace
-            `<h3 class="text-xl font-bold mb-4">Step 3: Image Trace</h3>
-            <p class="mb-4">Now that your image is placed, you can use Illustrator's Image Trace feature to convert it to vector format.</p>
+            `<h3>Step 3: Image Trace</h3>
+            <p>Now that your image is placed, you can use Illustrator's Image Trace feature to convert it to vector format.</p>
             
-            <h4 class="font-bold mb-2">Using Image Trace:</h4>
-            <ol class="steps-list">
-                <li>Make sure your image is selected using the Selection Tool (V)</li>
-                <li>Access Image Trace:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Click on the "Image Trace" button in the control panel</li>
-                        <li>Or select Object > Image Trace > Make from the menu</li>
-                        <li>Or use the Image Trace panel (Window > Image Trace)</li>
-                    </ul>
-                </li>
-                <li>Choose a preset that best matches your image:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>For photographs: High Fidelity Photo or Low Fidelity Photo</li>
-                        <li>For logos or simple images: 3 Colors, 6 Colors, or 16 Colors</li>
-                        <li>For black and white illustrations: Black and White</li>
-                    </ul>
-                </li>
-            </ol>
+            <div class="card">
+                <h4>Using Image Trace:</h4>
+                <ol class="steps-list">
+                    <li>Make sure your image is selected using the Selection Tool (V)</li>
+                    <li>Access Image Trace:
+                        <ul>
+                            <li>Click on the "Image Trace" button in the control panel</li>
+                            <li>Or select Object > Image Trace > Make from the menu</li>
+                            <li>Or use the Image Trace panel (Window > Image Trace)</li>
+                        </ul>
+                    </li>
+                    <li>Choose a preset that best matches your image:
+                        <ul>
+                            <li>For photographs: High Fidelity Photo or Low Fidelity Photo</li>
+                            <li>For logos or simple images: 3 Colors, 6 Colors, or 16 Colors</li>
+                            <li>For black and white illustrations: Black and White</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
             
-            <div class="alert-box alert-warning">
-                <p class="font-bold">Important Note</p>
+            <div class="tip-box">
+                <div class="tip-title">Important Note</div>
                 <p>Image tracing can take some time, depending on the complexity of the picture, so save your work before you hit the trace button, and be patient!</p>
             </div>`,
             
             // Step 4: Refinement
-            `<h3 class="text-xl font-bold mb-4">Step 4: Refinement</h3>
-            <p class="mb-4">After the initial trace, you'll likely need to refine the results to get exactly what you want.</p>
+            `<h3>Step 4: Refinement</h3>
+            <p>After the initial trace, you'll likely need to refine the results to get exactly what you want.</p>
             
-            <h4 class="font-bold mb-2">Refining Your Trace:</h4>
-            <ol class="steps-list">
-                <li>Open the Image Trace panel (Window > Image Trace) if it's not already open</li>
-                <li>Adjust trace settings:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Paths: Controls how closely the vector paths follow the pixel edges</li>
-                        <li>Corners: Adjusts the appearance of corner points</li>
-                        <li>Noise: Determines the smallest area to be traced</li>
-                    </ul>
-                </li>
-                <li>Expand the trace:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Click the "Expand" button in the control panel</li>
-                        <li>Or select Object > Image Trace > Expand</li>
-                    </ul>
-                </li>
-                <li>Fine-tune with direct selection:
-                    <ul class="list-disc pl-5 mt-2">
-                        <li>Use the Direct Selection Tool (A) to select and adjust individual points</li>
-                        <li>Use the Smooth Tool to reduce excess anchor points</li>
-                    </ul>
-                </li>
-            </ol>
+            <div class="card">
+                <h4>Refining Your Trace:</h4>
+                <ol class="steps-list">
+                    <li>Open the Image Trace panel (Window > Image Trace) if it's not already open</li>
+                    <li>Adjust trace settings:
+                        <ul>
+                            <li>Paths: Controls how closely the vector paths follow the pixel edges</li>
+                            <li>Corners: Adjusts the appearance of corner points</li>
+                            <li>Noise: Determines the smallest area to be traced</li>
+                        </ul>
+                    </li>
+                    <li>Expand the trace:
+                        <ul>
+                            <li>Click the "Expand" button in the control panel</li>
+                            <li>Or select Object > Image Trace > Expand</li>
+                        </ul>
+                    </li>
+                    <li>Fine-tune with direct selection:
+                        <ul>
+                            <li>Use the Direct Selection Tool (A) to select and adjust individual points</li>
+                            <li>Use the Smooth Tool to reduce excess anchor points</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
             
             <div class="tip-box">
                 <div class="tip-title">Pro Tip</div>
                 <p>After expanding your trace, you can use Illustrator's Pathfinder tools to combine, subtract, or intersect shapes for even more control over your final vector.</p>
             </div>
             
-            <div class="alert-box alert-info">
-                <p class="font-bold">Reminder</p>
+            <div class="tip-box">
+                <div class="tip-title">Reminder</div>
                 <p>Make sure you are saving your document regularly. Image tracing a complex image can be processor-intensive and may cause the application to become unresponsive.</p>
-            </div>`,
-            
-            // Add more steps as needed
+            </div>`
         ];
 
+        // Define your media content (right panel)
         const stepMedia = [
             // Step 0: Introduction
-            `<div class="intro-section p-6 rounded-lg" style="background: linear-gradient(135deg, rgba(41, 121, 255, 0.1), rgba(0, 38, 84, 0.2)); border: 1px solid rgba(0, 102, 204, 0.2);">
-                <div class="alert-box alert-info">
-                    <p class="font-bold">Tutorial Overview</p>
-                    <p>This tutorial will walk you through the process of tracing images in Adobe Illustrator to create clean, scalable vector graphics from raster images. Whether you're working with photographs, logos, or illustrations, image tracing is a powerful technique for creating professional vector artwork.</p>
-                </div>
+            `<div class="alert-box alert-info">
+                <p><strong>Tutorial Overview</strong></p>
+                <p>This tutorial will walk you through the process of tracing images in Adobe Illustrator to create clean, scalable vector graphics from raster images. Whether you're working with photographs, logos, or illustrations, image tracing is a powerful technique for creating professional vector artwork.</p>
+            </div>
 
-                <div class="alert-box alert-warning mt-4">
-                    <p class="font-bold"><i class="fas fa-info-circle"></i> How to use this tutorial</p>
-                    <p class="mb-4 mt-4">Click the button below to learn how to navigate this tutorial.</p>
-                    <button id="startWalkthrough" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
-                        <i class="fas fa-walking mr-2"></i> Start Interactive Tour
-                    </button>
-                </div>
+            <div class="alert-box alert-warning">
+                <p><strong><i class="fas fa-info-circle"></i> How to use this resource</strong></p>
+                <p>Click the button below to learn how to navigate the page.</p>
+                <button id="startWalkthrough" class="nav-button">
+                    <i class="fas fa-walking"></i> Start Interactive Tour
+                </button>
             </div>`,
             
             // Step 1: Finding Images
@@ -946,44 +256,55 @@
                 </video>
             </div>
             
-            <div class="text-center p-5">
-                <img src="https://i.imgur.com/2myDdQy.png" alt="Google Images interface" class="cursor-pointer mx-auto mb-4 rounded-lg shadow-lg">
-                <div class="alert-box alert-info mt-4">
-                    <p class="font-bold">Finding Good Images</p>
-                    <p>When searching for images to trace, look for high-resolution options with clean edges and good contrast between elements.</p>
+            <div class="carousel">
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn">&#10094;</button>
+                    <button class="carousel-btn next-btn">&#10095;</button>
+                </div>
+                <div class="carousel-container" id="carousel-step1">
+                    <div class="carousel-slide">
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/2myDdQy.png" alt="Google Images interface" class="cursor-pointer">
+                            <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to zoom</div>
+                        </div>
+                        <p>Finding good images: look for high-resolution options with clean edges and good contrast.</p>
+                    </div>
+                </div>
+                <div class="carousel-indicators" id="carousel-indicators-step1">
+                    <div class="carousel-indicator active" data-index="0"></div>
                 </div>
             </div>`,
             
             // Step 2: Image Placement
-            `<div class="text-center p-5">
-                <img src="https://i.imgur.com/PeHqzeg.png" alt="Illustrator placement" class="cursor-pointer mx-auto mb-4 rounded-lg shadow-lg">
-                <div class="shortcut-category">
-                    <div class="shortcut-title">
-                        <i class="fas fa-keyboard"></i> Keyboard Shortcuts
+            `<div class="image-container" style="text-align: center; margin-bottom: 20px;">
+                <img src="https://i.imgur.com/PeHqzeg.png" alt="Illustrator placement" class="cursor-pointer" style="max-width: 100%; height: auto; border-radius: 8px;">
+                <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to zoom</div>
+            </div>
+            
+            <div class="card">
+                <h4>Keyboard Shortcuts</h4>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div style="text-align: center;">
+                        <div class="kbd-combo">
+                            <span class="kbd">Ctrl</span>
+                            <span class="kbd-plus">+</span>
+                            <span class="kbd">V</span>
+                        </div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Paste</div>
                     </div>
-                    <div class="shortcut-grid">
-                        <div class="shortcut-item">
-                            <div class="kbd-combo">
-                                <span class="kbd">Ctrl</span>
-                                <span class="kbd-plus">+</span>
-                                <span class="kbd">V</span>
-                            </div>
-                            <div class="shortcut-action">Paste</div>
+                    <div style="text-align: center;">
+                        <div class="kbd-combo">
+                            <span class="kbd">V</span>
                         </div>
-                        <div class="shortcut-item">
-                            <div class="kbd-combo">
-                                <span class="kbd">V</span>
-                            </div>
-                            <div class="shortcut-action">Selection Tool</div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Selection Tool</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="kbd-combo">
+                            <span class="kbd">Shift</span>
+                            <span class="kbd-plus">+</span>
+                            <span class="kbd">Drag</span>
                         </div>
-                        <div class="shortcut-item">
-                            <div class="kbd-combo">
-                                <span class="kbd">Shift</span>
-                                <span class="kbd-plus">+</span>
-                                <span class="kbd">Drag</span>
-                            </div>
-                            <div class="shortcut-action">Proportional Resize</div>
-                        </div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Proportional Resize</div>
                     </div>
                 </div>
             </div>`,
@@ -996,26 +317,33 @@
                 </video>
             </div>
             
-            <div class="text-center p-5">
-                <img src="https://i.imgur.com/O7OyGz7.png" alt="Image trace panel" class="cursor-pointer mx-auto mb-4 rounded-lg shadow-lg">
-                <div class="alert-box alert-info mt-4">
-                    <p class="font-bold">Image Trace Panel</p>
-                    <p>The Image Trace panel gives you access to all the tracing controls. The preset dropdown provides quick starting points for different image types.</p>
+            <div class="carousel">
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn">&#10094;</button>
+                    <button class="carousel-btn next-btn">&#10095;</button>
                 </div>
-                <div class="control-item mt-4">
-                    <div class="control-icon">
-                        <i class="fas fa-sliders-h"></i>
-                    </div>
-                    <div class="control-text">
-                        <h4 class="font-bold mb-2">Trace Presets</h4>
-                        <p>Different presets work better for different types of images:</p>
-                        <ul class="list-disc pl-5 mt-2">
-                            <li>Photos: High Fidelity Photo</li>
-                            <li>Logos: 3 Colors, 6 Colors</li>
-                            <li>Line Art: Black and White</li>
-                        </ul>
+                <div class="carousel-container" id="carousel-step3">
+                    <div class="carousel-slide">
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/O7OyGz7.png" alt="Image trace panel" class="cursor-pointer">
+                            <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to zoom</div>
+                        </div>
+                        <p>The Image Trace panel gives you access to all the tracing controls. The preset dropdown provides quick starting points for different image types.</p>
                     </div>
                 </div>
+                <div class="carousel-indicators" id="carousel-indicators-step3">
+                    <div class="carousel-indicator active" data-index="0"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h4>Trace Presets</h4>
+                <p>Different presets work better for different types of images:</p>
+                <ul style="list-style-type: disc; padding-left: 20px;">
+                    <li>Photos: High Fidelity Photo</li>
+                    <li>Logos: 3 Colors, 6 Colors</li>
+                    <li>Line Art: Black and White</li>
+                </ul>
             </div>`,
             
             // Step 4: Refinement
@@ -1026,63 +354,60 @@
                 </video>
             </div>
             
-            <div class="text-center p-5">
-                <img src="https://i.imgur.com/2ogVBya.png" alt="Refinement options" class="cursor-pointer mx-auto mb-4 rounded-lg shadow-lg">
-                <div class="control-item mt-4">
-                    <div class="control-icon">
-                        <i class="fas fa-expand-arrows-alt"></i>
-                    </div>
-                    <div class="control-text">
-                        <h4 class="font-bold mb-2">Expand Button</h4>
+            <div class="carousel">
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn">&#10094;</button>
+                    <button class="carousel-btn next-btn">&#10095;</button>
+                </div>
+                <div class="carousel-container" id="carousel-step4">
+                    <div class="carousel-slide">
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/2ogVBya.png" alt="Refinement options" class="cursor-pointer">
+                            <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to zoom</div>
+                        </div>
                         <p>After you're happy with your trace, click the "Expand" button to convert the trace object into editable vector paths.</p>
                     </div>
                 </div>
-                <div class="shortcut-category mt-4">
-                    <div class="shortcut-title">
-                        <i class="fas fa-edit"></i> Editing Tools
+                <div class="carousel-indicators" id="carousel-indicators-step4">
+                    <div class="carousel-indicator active" data-index="0"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h4>Editing Tools</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div style="text-align: center;">
+                        <div class="kbd-combo">
+                            <span class="kbd">A</span>
+                        </div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Direct Selection</div>
                     </div>
-                    <div class="shortcut-grid">
-                        <div class="shortcut-item">
-                            <div class="kbd-combo">
-                                <span class="kbd">A</span>
-                            </div>
-                            <div class="shortcut-action">Direct Selection</div>
+                    <div style="text-align: center;">
+                        <div class="kbd-combo">
+                            <span class="kbd">-</span>
                         </div>
-                        <div class="shortcut-item">
-                            <div class="kbd-combo">
-                                <span class="kbd">-</span>
-                            </div>
-                            <div class="shortcut-action">Delete Anchor Point</div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Delete Anchor Point</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="kbd-combo">
+                            <span class="kbd">+</span>
                         </div>
-                        <div class="shortcut-item">
-                            <div class="kbd-combo">
-                                <span class="kbd">+</span>
-                            </div>
-                            <div class="shortcut-action">Add Anchor Point</div>
-                        </div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Add Anchor Point</div>
                     </div>
                 </div>
-            </div>`,
-            
-            // Add more step media as needed
+            </div>`
         ];
 
-        /*************************************************
-         * SYSTEM CODE - No need to modify below this line
-         * unless you want to add new functionality
-         *************************************************/
-        
         // Current step tracking
         let currentStep = 0;
         const totalSteps = stepInstructions.length;
 
         // DOM Elements
-        const contentTitle = document.querySelector('.content-title');
-        const creatorNameEl = document.getElementById('creator-name');
-        const stepIcons = document.querySelectorAll('.step-icon');
+        const stepButtons = document.querySelectorAll('.step-button');
         const stepTitleEl = document.getElementById('current-step-title');
         const instructionsPanel = document.getElementById('step-instructions');
         const mediaContent = document.getElementById('media-content');
+        const contentTitle = document.getElementById('content-title');
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
         const progressBar = document.querySelector('.progress');
@@ -1093,57 +418,16 @@
         const modalImg = document.getElementById('modalImage');
         const modalClose = document.querySelector('.modal-close');
 
-        // Initialize page with content
-        function initializePage() {
-            // Set tutorial title and creator name
-            document.title = tutorialTitle;
-            contentTitle.textContent = tutorialTitle;
-            creatorNameEl.textContent = creatorName;
-            
-            // Create step icons
-            const navPanel = document.querySelector('.nav-panel');
-            navPanel.innerHTML = ''; // Clear any existing icons
-            
-            // Add Introduction icon
-            const introIcon = document.createElement('div');
-            introIcon.className = 'step-icon active';
-            introIcon.dataset.step = 0;
-            introIcon.innerHTML = `
-                <i class="fas fa-list-ol"></i>
-                <div class="step-tooltip">Introduction</div>
-            `;
-            navPanel.appendChild(introIcon);
-            
-            // Add numbered step icons
-            for (let i = 1; i < stepTitles.length; i++) {
-                const stepIcon = document.createElement('div');
-                stepIcon.className = 'step-icon';
-                stepIcon.dataset.step = i;
-                stepIcon.innerHTML = `
-                    <span>${i}</span>
-                    <div class="step-tooltip">${stepTitles[i].split(':')[1] || stepTitles[i]}</div>
-                `;
-                navPanel.appendChild(stepIcon);
-            }
-            
-            // Add event listeners to step icons
-            document.querySelectorAll('.step-icon').forEach((icon, index) => {
-                icon.addEventListener('click', () => showStep(index));
-            });
-            
-            // Show first step
-            showStep(0);
-        }
-
         // Initialize the tutorial
         function showStep(step) {
-            // Update active step icon
-            document.querySelectorAll('.step-icon').forEach((icon, index) => {
-                icon.classList.toggle('active', index === step);
+            // Update active step button
+            stepButtons.forEach((button, index) => {
+                button.classList.toggle('active', index === step);
             });
 
             // Update step title
             stepTitleEl.textContent = stepTitles[step];
+            contentTitle.textContent = stepTitles[step];
 
             // Update content
             instructionsPanel.innerHTML = stepInstructions[step];
@@ -1151,7 +435,7 @@
 
             // Update navigation buttons
             prevButton.disabled = step === 0;
-            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'block';
+            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'flex';
             
             // Update progress
             const progress = Math.round(((step + 1) / totalSteps) * 100);
@@ -1232,7 +516,60 @@
             });
         }
 
-        // Event Listeners for navigation buttons
+        // Simple tooltip implementation
+        function setupTooltips() {
+            // Remove any existing tooltips
+            const existingTooltips = document.querySelectorAll('.tooltip');
+            existingTooltips.forEach(t => t.remove());
+            
+            // Create new tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+            
+            // Add event listeners to all step buttons
+            const stepButtons = document.querySelectorAll('.step-button');
+            stepButtons.forEach(button => {
+                const tooltipText = button.getAttribute('data-tooltip');
+                if (!tooltipText) return;
+                
+                // On mouse enter
+                button.addEventListener('mouseenter', () => {
+                    // Set tooltip text
+                    tooltip.textContent = tooltipText;
+                    
+                    // Position tooltip based on viewport width
+                    const rect = button.getBoundingClientRect();
+                    if (window.innerWidth <= 1024) {
+                        // Position below on mobile
+                        tooltip.className = 'tooltip bottom';
+                        tooltip.style.top = `${rect.bottom + 10}px`;
+                        tooltip.style.left = `${rect.left + rect.width/2}px`;
+                        tooltip.style.transform = 'translateX(-50%)';
+                    } else {
+                        // Position to the right on desktop
+                        tooltip.className = 'tooltip right';
+                        tooltip.style.top = `${rect.top + rect.height/2}px`;
+                        tooltip.style.left = `${rect.right + 10}px`;
+                        tooltip.style.transform = 'translateY(-50%)';
+                    }
+                    
+                    // Make tooltip visible
+                    tooltip.style.opacity = '1';
+                });
+                
+                // On mouse leave
+                button.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        // Event Listeners
+        stepButtons.forEach((button, index) => {
+            button.addEventListener('click', () => showStep(index));
+        });
+
         prevButton.addEventListener('click', () => {
             if (currentStep > 0) showStep(currentStep - 1);
         });
@@ -1243,15 +580,13 @@
 
         // Image modal functionality
         document.addEventListener('click', (e) => {
-            // Check if the clicked element is an image inside a carousel slide or anywhere in the content
-            if (e.target.tagName === 'IMG') {
+            if (e.target.tagName === 'IMG' && e.target.classList.contains('cursor-pointer')) {
                 modal.style.display = 'block';
                 modalImg.src = e.target.src;
                 modalImg.alt = e.target.alt;
             }
         });
 
-        // Close the modal when clicking on the X or anywhere on the modal
         modalClose.addEventListener('click', () => {
             modal.style.display = 'none';
         });
@@ -1262,7 +597,7 @@
             }
         });
 
-        // Also close modal with Escape key
+        // Close modal with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.style.display === 'block') {
                 modal.style.display = 'none';
@@ -1275,31 +610,30 @@
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.8 },
-                colors: ['#FFD700', '#87CEEB', '#57708e', '#002654']
+                colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
             });
         });
-        
-        // Walkthrough functionality using intro.js
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.id === 'startWalkthrough') {
-                // Initialize intro.js
+
+        // Initialize introjs walkthrough
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'startWalkthrough' || e.target.parentElement.id === 'startWalkthrough') {
                 const intro = introJs();
                 
                 intro.setOptions({
                     steps: [
                         {
-                            element: document.querySelector('.nav-panel'),
+                            element: document.querySelector('.sidebar'),
                             intro: 'Use these numbered icons to navigate between different steps of the tutorial. Click on any number to jump directly to that step.',
                             position: 'right'
                         },
                         {
-                            element: document.querySelector('.instruction-panel'),
-                            intro: 'Read the step-by-step instructions in this middle panel. These detailed instructions will guide you through each part of the tracing process.',
+                            element: document.querySelector('.instructions-panel'),
+                            intro: 'Read the step-by-step instructions in this middle panel. These detailed instructions will guide you through each part of the tutorial.',
                             position: 'right'
                         },
                         {
                             element: document.querySelector('.content-display'),
-                            intro: 'View demonstrations and visual examples in this panel. Images can be clicked to enlarge them for better viewing.',
+                            intro: 'View demonstration videos and images that show exactly how to perform each action.',
                             position: 'left'
                         },
                         {
@@ -1327,15 +661,29 @@
                         particleCount: 100,
                         spread: 70,
                         origin: { y: 0.6 },
-                        colors: ['#0066cc', '#87CEEB', '#57708e', '#002654']
+                        colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
                     });
-                    showStep(0);
                 });
             }
         });
 
-        // Initialize the tutorial
-        initializePage();
+        // Initialize with first step and set up tooltips
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(0);
+            setupTooltips();
+            
+            // Update tooltips on window resize
+            window.addEventListener('resize', () => {
+                setupTooltips();
+            });
+            
+            // Update tooltips whenever a step button is clicked
+            document.querySelectorAll('.step-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    setTimeout(setupTooltips, 100);
+                });
+            });
+        });
     </script>
 </body>
 </html>
