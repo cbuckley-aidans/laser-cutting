@@ -22,6 +22,9 @@
             <div class="step-button" data-step="1" data-tooltip="Alignment">
                 <span>1</span>
             </div>
+            <div class="step-button" data-step="2" data-tooltip="Shape Operations">
+                <span>2</span>
+            </div>
         </div>
 
         <!-- Middle Instructions Panel -->
@@ -35,14 +38,14 @@
                 <div class="card">
                     <p><strong>Learning Intentions:</strong></p>
                     <ol class="steps-list">
-                        <li>Understand Adobe Illustrator's alignment tools</li>
                         <li>Learn how to efficiently align objects both vertically and horizontally</li>
-                        <li>Master the use of the Properties Inspector for alignment</li>
+                        <li>Master shape operations: Unite, Minus, and Exclude</li>
                     </ol>
                 
                     <p><strong>Success Criteria:</strong></p>
                     <ol class="steps-list">
                         <li>Successfully align multiple objects using Illustrator's alignment tools</li>
+                        <li>Successfully create complex shapes by combining simpler shapes using Unite, Minus, and Exclude operations</li>
                     </ol>
                 </div>
             </div>
@@ -100,7 +103,8 @@
         // Define your step titles
         const stepTitles = [
             "Introduction",
-            "Aligning Objects"
+            "Aligning Objects",
+            "Uniting, Minusing, Excluding"
         ];
 
         // Define your step instructions (middle panel content)
@@ -111,14 +115,14 @@
             <div class="card">
                 <p><strong>Learning Intentions:</strong></p>
                 <ol class="steps-list">
-                    <li>Understand Adobe Illustrator's alignment tools</li>
                     <li>Learn how to efficiently align objects both vertically and horizontally</li>
-                    <li>Master the use of the Properties Inspector for alignment</li>
+                    <li>Master shape operations: Unite, Minus, and Exclude</li>
                 </ol>
             
                 <p><strong>Success Criteria:</strong></p>
                 <ol class="steps-list">
                     <li>Successfully align multiple objects using Illustrator's alignment tools</li>
+                    <li>Successfully create complex shapes by combining simpler shapes using Unite, Minus, and Exclude operations</li>
                 </ol>
             </div>`,
             
@@ -134,9 +138,27 @@
                     <li>Find the Align section in the Properties panel</li>
                     <li>Choose the alignment option you want to use. Try them out if you are unsure.</li>
                 </ol>
-            </div>
-
-            `
+            </div>`,
+            
+            // Step 2
+            `<h3>Shape Operations: Unite, Minus, and Exclude</h3>
+            <p>These powerful shape operations allow you to create complex shapes by combining simpler ones in different ways.</p>
+            
+            <div class="card">
+                <h4>How to Use Shape Operations:</h4>
+                <ol class="steps-list">
+                    <li>Create and position two or more shapes that overlap</li>
+                    <li>Select all the shapes you want to combine using <span class="kbd">Shift</span>+click</li>
+                    <li>In the Properties panel, find the Shape Operations section</li>
+                    <li>Click on one of the following options:
+                        <ul>
+                            <li><strong>Unite</strong>: Combines all selected shapes into one single shape</li>
+                            <li><strong>Minus</strong>: Subtracts the frontmost shape from the shapes behind it</li>
+                            <li><strong>Exclude</strong>: Creates a shape from the areas where the selected shapes don't overlap</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>`
         ];
 
         // Define your media content (right panel)
@@ -144,7 +166,7 @@
             // Step 0: Introduction
             `<div class="alert-box alert-info">
                 <p><strong>Tutorial Overview</strong></p>
-                        <p>Welcome to Illustrator Tips and Tricks! This page has lots of smaller techniques you can use to make your designs better and more efficient. Hover over the steps to find what you're interested in.</p>
+                <p>Welcome to Illustrator Tips and Tricks! This page has lots of smaller techniques you can use to make your designs better and more efficient. Hover over the steps to find what you're interested in.</p>
             </div>
 
             <div class="alert-box alert-warning">
@@ -170,6 +192,25 @@
                 <p>2. Then align the objects vertically along their centers</p>
                 
                 <p>Notice how the objects snap into perfect alignment with each other?</p>
+            </div>`,
+            
+            // Step 2
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/7tEBuhS.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What's happening in this video:</strong></p>
+                <p>In this demonstration, I'm showing three different shape operations using a name tag and a circular shape:</p>
+                
+                <p>1. <strong>Unite</strong>: First, I select both shapes and use Unite to combine them into a single shape</p>
+                <p>2. <strong>Minus</strong>: Next, I show how Minus removes the circular shape from the name tag</p>
+                <p>3. <strong>Exclude</strong>: Finally, I demonstrate how Exclude keeps only the areas where the shapes don't overlap</p>
+                
+                <p>Notice how each operation creates distinctly different results from the same starting shapes!</p>
             </div>`
         ];
 
@@ -217,7 +258,127 @@
             progressBar.style.width = `${progress}%`;
             progressPercentage.textContent = `${progress}%`;
             
+            // Initialize carousels if present
+            initCarousels();
+            
             currentStep = step;
+        }
+
+        // Initialize all carousels on the page
+        function initCarousels() {
+            // Find all carousel elements in the current step
+            document.querySelectorAll('.carousel').forEach((carouselElement) => {
+                const carouselContainer = carouselElement.querySelector('.carousel-container');
+                if (!carouselContainer) return;
+                
+                const slides = carouselContainer.querySelectorAll('.carousel-slide');
+                if (slides.length <= 1) return;
+                
+                // Get carousel controls
+                const prevBtn = carouselElement.querySelector('.prev-btn');
+                const nextBtn = carouselElement.querySelector('.next-btn');
+                const indicators = carouselElement.querySelector('.carousel-indicators');
+                
+                if (!prevBtn || !nextBtn || !indicators) return;
+                
+                // Clear existing indicators and recreate them
+                indicators.innerHTML = '';
+                slides.forEach((_, i) => {
+                    const indicator = document.createElement('div');
+                    indicator.className = `carousel-indicator ${i === 0 ? 'active' : ''}`;
+                    indicator.dataset.index = i;
+                    indicator.addEventListener('click', () => {
+                        scrollToSlide(carouselContainer, indicators, i);
+                    });
+                    indicators.appendChild(indicator);
+                });
+                
+                // Track the current slide for this carousel
+                carouselContainer.dataset.currentSlide = '0';
+                
+                // Add click handlers to navigation buttons
+                prevBtn.onclick = function() {
+                    const currentSlide = parseInt(carouselContainer.dataset.currentSlide || '0');
+                    const newSlide = (currentSlide - 1 + slides.length) % slides.length;
+                    scrollToSlide(carouselContainer, indicators, newSlide);
+                    carouselContainer.dataset.currentSlide = newSlide.toString();
+                };
+                
+                nextBtn.onclick = function() {
+                    const currentSlide = parseInt(carouselContainer.dataset.currentSlide || '0');
+                    const newSlide = (currentSlide + 1) % slides.length;
+                    scrollToSlide(carouselContainer, indicators, newSlide);
+                    carouselContainer.dataset.currentSlide = newSlide.toString();
+                };
+            });
+        }
+
+        // Scroll carousel to specific slide
+        function scrollToSlide(carousel, indicators, index) {
+            // Calculate the scroll position
+            const slideWidth = carousel.clientWidth;
+            const scrollPosition = slideWidth * index;
+            
+            // Animate the scroll
+            carousel.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+            
+            // Update indicators
+            const allIndicators = indicators.querySelectorAll('.carousel-indicator');
+            allIndicators.forEach((ind, i) => {
+                ind.classList.toggle('active', i === index);
+            });
+        }
+
+        // Simple tooltip implementation
+        function setupTooltips() {
+            // Remove any existing tooltips
+            const existingTooltips = document.querySelectorAll('.tooltip');
+            existingTooltips.forEach(t => t.remove());
+            
+            // Create new tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+            
+            // Add event listeners to all step buttons
+            const stepButtons = document.querySelectorAll('.step-button');
+            stepButtons.forEach(button => {
+                const tooltipText = button.getAttribute('data-tooltip');
+                if (!tooltipText) return;
+                
+                // On mouse enter
+                button.addEventListener('mouseenter', () => {
+                    // Set tooltip text
+                    tooltip.textContent = tooltipText;
+                    
+                    // Position tooltip based on viewport width
+                    const rect = button.getBoundingClientRect();
+                    if (window.innerWidth <= 1024) {
+                        // Position below on mobile
+                        tooltip.className = 'tooltip bottom';
+                        tooltip.style.top = `${rect.bottom + 10}px`;
+                        tooltip.style.left = `${rect.left + rect.width/2}px`;
+                        tooltip.style.transform = 'translateX(-50%)';
+                    } else {
+                        // Position to the right on desktop
+                        tooltip.className = 'tooltip right';
+                        tooltip.style.top = `${rect.top + rect.height/2}px`;
+                        tooltip.style.left = `${rect.right + 10}px`;
+                        tooltip.style.transform = 'translateY(-50%)';
+                    }
+                    
+                    // Make tooltip visible
+                    tooltip.style.opacity = '1';
+                });
+                
+                // On mouse leave
+                button.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
         }
 
         // Event Listeners
@@ -321,55 +482,6 @@
                 });
             }
         });
-
-        // Simple tooltip implementation
-        function setupTooltips() {
-            // Remove any existing tooltips
-            const existingTooltips = document.querySelectorAll('.tooltip');
-            existingTooltips.forEach(t => t.remove());
-            
-            // Create new tooltip element
-            const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            document.body.appendChild(tooltip);
-            
-            // Add event listeners to all step buttons
-            const stepButtons = document.querySelectorAll('.step-button');
-            stepButtons.forEach(button => {
-                const tooltipText = button.getAttribute('data-tooltip');
-                if (!tooltipText) return;
-                
-                // On mouse enter
-                button.addEventListener('mouseenter', () => {
-                    // Set tooltip text
-                    tooltip.textContent = tooltipText;
-                    
-                    // Position tooltip based on viewport width
-                    const rect = button.getBoundingClientRect();
-                    if (window.innerWidth <= 1024) {
-                        // Position below on mobile
-                        tooltip.className = 'tooltip bottom';
-                        tooltip.style.top = `${rect.bottom + 10}px`;
-                        tooltip.style.left = `${rect.left + rect.width/2}px`;
-                        tooltip.style.transform = 'translateX(-50%)';
-                    } else {
-                        // Position to the right on desktop
-                        tooltip.className = 'tooltip right';
-                        tooltip.style.top = `${rect.top + rect.height/2}px`;
-                        tooltip.style.left = `${rect.right + 10}px`;
-                        tooltip.style.transform = 'translateY(-50%)';
-                    }
-                    
-                    // Make tooltip visible
-                    tooltip.style.opacity = '1';
-                });
-                
-                // On mouse leave
-                button.addEventListener('mouseleave', () => {
-                    tooltip.style.opacity = '0';
-                });
-            });
-        }
 
         // Initialize with first step and set up tooltips
         document.addEventListener('DOMContentLoaded', () => {
