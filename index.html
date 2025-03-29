@@ -224,6 +224,10 @@
             --card-accent: #32CD32;
         }
 
+        .card-tips-tricks {
+            --card-accent: #9370DB;
+        }
+
         .card-box-joints {
             --card-accent: #FF6347;
         }
@@ -252,6 +256,13 @@
             background-color: rgba(245, 158, 11, 0.1);
             color: #F59E0B;
             border: 1px solid #F59E0B;
+        }
+
+        /* Disabled card */
+        .card-disabled {
+            cursor: not-allowed;
+            opacity: 0.85;
+            pointer-events: none;
         }
 
         /* Footer */
@@ -340,22 +351,31 @@
                 <p class="card-description">Turn images into vector graphics for engraving onto your designs.</p>
             </a>
             
-            <a href="box-joints.html" class="card card-box-joints">
+            <a href="tips-and-tricks.html" class="card card-tips-tricks">
+                <div class="card-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h2 class="card-title">Tips and Tricks</h2>
+                <p class="card-description">Essential techniques and shortcuts to improve your workflow and designs.</p>
+            </a>
+            
+            <div class="card card-box-joints card-disabled">
+                <div class="card-status status-coming">Coming Soon</div>
                 <div class="card-icon">
                     <i class="fas fa-box"></i>
                 </div>
                 <h2 class="card-title">Box Joints</h2>
                 <p class="card-description">Create precise finger joints for box connections.</p>
-            </a>
+            </div>
             
-            <a href="mortise-and-tenon-joints.html" class="card card-mortise-tenon">
+            <div class="card card-mortise-tenon card-disabled">
                 <div class="card-status status-coming">Coming Soon</div>
                 <div class="card-icon">
                     <i class="fas fa-key"></i>
                 </div>
                 <h2 class="card-title">Mortise & Tenon</h2>
                 <p class="card-description">An alternative to the box joint for 90 degree joints.</p>
-            </a>
+            </div>
         </div>
 
         
