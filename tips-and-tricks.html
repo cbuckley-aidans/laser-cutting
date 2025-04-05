@@ -25,6 +25,9 @@
             <div class="step-button" data-step="2" data-tooltip="Shape Operations">
                 <span>2</span>
             </div>
+            <div class="step-button" data-step="3" data-tooltip="Measuring">
+                <span>3</span>
+            </div>
         </div>
 
         <!-- Middle Instructions Panel -->
@@ -40,12 +43,14 @@
                     <ol class="steps-list">
                         <li>Learn how to efficiently align objects both vertically and horizontally</li>
                         <li>Master shape operations: Unite, Minus, and Exclude</li>
+                        <li>Learn how to use the measuring tool to get precise measurements</li>
                     </ol>
                 
                     <p><strong>Success Criteria:</strong></p>
                     <ol class="steps-list">
                         <li>Successfully align multiple objects using Illustrator's alignment tools</li>
                         <li>Successfully create complex shapes by combining simpler shapes using Unite, Minus, and Exclude operations</li>
+                        <li>Successfully measure objects and distances using the measuring tool</li>
                     </ol>
                 </div>
             </div>
@@ -104,7 +109,8 @@
         const stepTitles = [
             "Introduction",
             "Aligning Objects",
-            "Uniting, Minusing, Excluding"
+            "Uniting, Minusing, Excluding",
+            "Measuring Objects"
         ];
 
         // Define your step instructions (middle panel content)
@@ -117,12 +123,14 @@
                 <ol class="steps-list">
                     <li>Learn how to efficiently align objects both vertically and horizontally</li>
                     <li>Master shape operations: Unite, Minus, and Exclude</li>
+                    <li>Learn how to use the measuring tool to get precise measurements</li>
                 </ol>
             
                 <p><strong>Success Criteria:</strong></p>
                 <ol class="steps-list">
                     <li>Successfully align multiple objects using Illustrator's alignment tools</li>
                     <li>Successfully create complex shapes by combining simpler shapes using Unite, Minus, and Exclude operations</li>
+                    <li>Successfully measure objects and distances using the measuring tool</li>
                 </ol>
             </div>`,
             
@@ -158,6 +166,34 @@
                         </ul>
                     </li>
                 </ol>
+            </div>`,
+            
+            // Step 3 - Measuring
+            `<h3>Using the Measuring Tool</h3>
+            <p>The measuring tool allows you to precisely measure distances, angles, and objects in your designs.</p>
+            
+            <div class="card">
+                <h4>How to Use the Measuring Tool:</h4>
+                <ol class="steps-list">
+                    <li>First, add the measuring tool to your toolbar for easy access:
+                        <ul>
+                            <li>Click on the three dots (•••) in the left toolbar to open the edit toolbar menu</li>
+                            <li>Scroll to the "Modify" section to find the measuring tool</li>
+                            <li>Click and hold, then drag it into your toolbar for quick access</li>
+                        </ul>
+                    </li>
+                    <li>Select the measuring tool from your toolbar</li>
+                    <li>Click on one edge or point where you want to start your measurement</li>
+                    <li>Hold <span class="kbd">Shift</span> to constrain the line to be perfectly horizontal, vertical, or at 45° angles</li>
+                    <li>Click on the ending point to complete the measurement</li>
+                    <li>The measurement (in your document's units) will be displayed on screen</li>
+                    <li>Click once more to place and visually display the measurement</li>
+                </ol>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong><i class="fas fa-lightbulb"></i> Pro Tip:</strong></p>
+                <p>The measurement tool saves you time when trying to create perfectly sized objects or when aligning elements at specific distances from each other.</p>
             </div>`
         ];
 
@@ -211,6 +247,29 @@
                 <p>3. <strong>Exclude</strong>: Finally, I demonstrate how Exclude keeps only the areas where the shapes don't overlap</p>
                 
                 <p>Notice how each operation creates distinctly different results from the same starting shapes!</p>
+            </div>`,
+            
+            // Step 3 - Measuring
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/Mn71zUU.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What's happening in this video:</strong></p>
+                <p>In this demonstration, I'm showing how to use the measuring tool in Illustrator:</p>
+                
+                <p>1. First, I click on the three dots to open the edit toolbar menu on the left sidebar</p>
+                <p>2. I scroll to the "Modify" section to find the measuring tool</p>
+                <p>3. I click and hold down my mouse to drag it into the sidebar so I can access it easily in the future</p>
+                <p>4. With the measuring tool selected, I click one edge of a rectangle</p>
+                <p>5. I hold down <span class="kbd">Shift</span> to keep the measuring line perfectly straight</p>
+                <p>6. I click the other edge to lock the measurement in place</p>
+                <p>7. I click once more to visually display the measurement</p>
+                
+                <p>This tool is perfect for precise design work when measurements matter!</p>
             </div>`
         ];
 
