@@ -367,14 +367,13 @@
                 <p class="card-description">Essential techniques and shortcuts to improve your workflow and designs.</p>
             </a>
             
-            <div class="card card-box-joints card-disabled">
-                <div class="card-status status-coming">Coming Soon</div>
+            <a href="box-joints.html" class="card card-box-joints">
                 <div class="card-icon">
                     <i class="fas fa-box"></i>
                 </div>
                 <h2 class="card-title">Box Joints</h2>
                 <p class="card-description">Create precise finger joints for box connections.</p>
-            </div>
+            </a>
             
             <div class="card card-mortise-tenon card-disabled">
                 <div class="card-status status-coming">Coming Soon</div>
@@ -438,7 +437,7 @@
         });
         
         // Creator name with confetti effect
-        document.getElementById('creator-name').addEventListener('click', function() {
+        document.getElementById('creator-name')?.addEventListener('click', function() {
             confetti({
                 particleCount: 100,
                 spread: 70,
