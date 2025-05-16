@@ -3,385 +3,496 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creating Box Joints</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Favicon Icons -->
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="manifest" href="site.webmanifest">
-    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            color: #ffffff;
-            overflow: hidden;
-            height: 100vh;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            cursor: zoom-out;
-        }
-        .modal-content {
-            max-width: 90%;
-            max-height: 90vh;
-            margin: auto;
-            display: block;
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: zoom-in;
-        }
-        .modal.zoomed .modal-content {
-            max-width: none;
-            max-height: none;
-            cursor: zoom-out;
-        }
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #002654, #57708e);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            z-index: -1;
-        }
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .container {
-            display: flex;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 300px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem;
-            background-color: rgba(0, 38, 84, 0.85);
-            backdrop-filter: blur(10px);
-        }
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-y: auto;
-            padding: 2rem;
-        }
-        .content-wrapper {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .tutorial-step {
-            background-color: rgba(87, 112, 142, 0.2);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .tutorial-step:hover {
-            transform: translateY(-5px);
-            background-color: rgba(87, 112, 142, 0.4);
-        }
-        .tutorial-step.active {
-            background-color: rgba(87, 112, 142, 0.6);
-        }
-        .step-content {
-            background-color: rgba(87, 112, 142, 0.1);
-            border-radius: 10px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            width: 100%;
-        }
-        .navigation {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            width: 100%;
-            margin-top: auto;
-        }
-        .nav-button {
-            background-color: #57708e;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .nav-button:hover {
-            background-color: #002654;
-        }
-        .nav-button:disabled {
-            background-color: #57708e;
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .progress-container {
-            margin-top: auto;
-            width: 100%;
-            padding: 1rem;
-        }
-        .progress-text {
-            text-align: center;
-            margin-bottom: 0.5rem;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .progress {
-            height: 100%;
-            background-color: #57708e;
-            transition: width 0.3s ease;
-        }
-    </style>
+    <title>Laser Cutting Box Design Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css">
+    <!-- Using default color scheme from styles.css -->
 </head>
 <body>
-    <div class="background"></div>
-    <div class="container">
+    <div class="tutorial-container">
+        <!-- Left Sidebar Navigation -->
         <div class="sidebar">
-            <h1 class="text-2xl font-bold mb-6 text-center">Box Joint Tutorial</h1>
-            <div class="steps-container">
-                <div class="tutorial-step active" data-step="1">
-                    <h2>Step 1: Base Shape</h2>
-                </div>
-                <div class="tutorial-step" data-step="2">
-                    <h2>Step 2: Making Teeth</h2>
-                </div>
-                <div class="tutorial-step" data-step="3">
-                    <h2>Step 3: Excluding and Uniting</h2>
-                </div>
+            <div class="sidebar-logo">LASER CUT<br>BOX DESIGN</div>
+            <div class="step-button active" data-step="0" data-tooltip="Introduction">
+                <i class="fas fa-list-ol"></i>
             </div>
-            <div class="progress-container">
-                <div class="progress-text">Progress: <span id="progress-percentage">33%</span></div>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 33%;"></div>
-                </div>
+            <div class="step-button" data-step="1" data-tooltip="Basic Configuration">
+                <span>1</span>
+            </div>
+            <div class="step-button" data-step="2" data-tooltip="Export Settings">
+                <span>2</span>
             </div>
         </div>
-        <div class="main-content">
-            <div class="content-wrapper">
-                <div class="step-content" id="step-content"></div>
-                <div class="navigation">
-                    <button id="prevButton" class="nav-button" disabled>Previous</button>
-                    <button id="nextButton" class="nav-button">Next</button>
+
+        <!-- Middle Instructions Panel -->
+        <div class="instructions-panel">
+            <h1 id="current-step-title">Introduction</h1>
+            
+            <div id="step-instructions">
+                <!-- Will be populated by JavaScript -->
+                <h3>Learning Intentions and Success Criteria</h3>
+                
+                <div class="card">
+                    <p><strong>Learning Intentions:</strong></p>
+                    <ol class="steps-list">
+                        <li>Learn how to use makercase.com to design finger joint boxes</li>
+                        <li>Understand the configuration options for laser-cut designs</li>
+                        <li>Prepare vector files for laser cutting</li>
+                    </ol>
+                
+                    <p><strong>Success Criteria:</strong></p>
+                    <ol class="steps-list">
+                        <li>Create a custom-sized box design with finger joints</li>
+                        <li>Configure the design with appropriate settings for laser cutting</li>
+                        <li>Export the design as an SVG file ready for cutting</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation">
+                <button id="prevButton" class="nav-button" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                <button id="nextButton" class="nav-button">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-text">Progress: <span id="progress-percentage">0%</span></div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="footer">
+                Made with <span style="color: var(--accent-color);">♥</span> by                 <span id="creator-name">Buckley</span>
+            </div>
+        </div>
+
+        <!-- Right Content Display Area -->
+        <div class="content-display">
+            <div class="card">
+                <h2 id="content-title">Introduction</h2>
+                <div id="media-content">
+                    <!-- Will be populated by JavaScript -->
+                    <div class="alert-box alert-info">
+                        <p><strong>Tutorial Overview</strong></p>
+                        <p>In this tutorial, you'll learn how to create custom box designs with finger joints using MakerCase, an online tool that generates box designs for laser cutting. By the end of this tutorial, you'll be able to create, configure, and export box designs ready for laser cutting.</p>
+                    </div>
+
+                    <div class="alert-box alert-warning">
+                        <p><strong><i class="fas fa-info-circle"></i> How to use this resource</strong></p>
+                        <p>Click the button below to learn how to navigate this tutorial.</p>
+                        <button id="startWalkthrough" class="nav-button">
+                            <i class="fas fa-walking"></i> Start Interactive Tour
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal for viewing images -->
     <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
         <img id="modalImage" class="modal-content">
     </div>
 
     <script>
-        const images = {
-            1: "https://i.imgur.com/boVnNNi.png",
-            2: "https://i.imgur.com/v4mVzHC.png",
-            3: "/api/placeholder/800/600"
-        };
+        // Tutorial content configuration
+        // Define your step titles
+        const stepTitles = [
+            "Introduction",
+            "Basic Box Configuration",
+            "Export Settings"
+        ];
 
-        const stepContents = [
-            `<div class="space-y-6">
-                <h3 class="text-2xl font-bold">What We Are Creating</h3>
-                <p>We are aiming to create this kind of wood joint:</p>
-                <img src="https://cuttingedgeinc.ca/wp-content/uploads/2024/05/Pros-and-cons-of-box-joint-drawer-boxes-2.jpg">
-                <p>Here's what this will look like on Illustrator when we laser cut the pieces:</p>
-                <img src="https://i.imgur.com/YJBqJMt.png">
-                <p class="text-sm italic text-center">Note that this doesn't include the bottom piece.</p>
-                <h3 class="text-2xl font-bold">Creating the Base Rectangle</h3>
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
-                    <p class="font-bold">IMPORTANT!</p>
-                    <p>Set stroke to 0.001pt and fill to none before starting</p>
-                </div>
-                <div class="space-y-4">
-                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded">
-                        <p class="font-bold">First: Set Keyboard Increment</p>
-                        <p>1. Ensure nothing is selected</p>
-                        <p>2. Look at Properties panel (right side)</p>
-                        <p>3. Set "Keyboard Increment" to desired spacing in mm</p>
-                    </div>
-                    <p>Create your base rectangle:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Press M for Rectangle Tool</li>
-                        <li>Create your main rectangle by clicking once with the rectangle tool.</li>
-                        <li>Enter your width and height. Make sure it is in mm and not points!</li>
-                    </ul>
-                </div>
-                <img src="${images[1]}" alt="Base shape creation" class="w-full rounded-lg shadow-lg cursor-pointer">
-
+        // Define your step instructions (middle panel content)
+        const stepInstructions = [
+            // Step 0: Introduction
+            `<h3>Introduction to MakerCase Box Design</h3>
+            
+            
+            
+            <div class="alert-box alert-info">
+                <p><strong>Website URL:</strong></p>
+                <p><a href="https://en.makercase.com/#/basicbox" target="_blank">https://en.makercase.com/#/basicbox</a></p>
             </div>`,
-
-            `<div class="space-y-6">
-                <h3 class="text-2xl font-bold">Creating Joint Teeth</h3>
-                <div class="space-y-4">
-                    <p>Create individual teeth:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Press M for Rectangle Tool</li>
-                        <li>Create the first tooth. Make sure you are happy with the size. We only need to make it once, as we are going to duplicate it.</li>
-                        <li>Get the first tooth in position near the corner of your design.</li>
-                    </ul>
-                    <img src="${images[2]}" alt="Creating teeth illustration" class="w-full rounded-lg shadow-lg cursor-pointer">
-                    <p class="text-sm italic mb-4 text-center">Note: My lines are 0.001pts here, but I have used CTRL + Y to visualise them better.</p>
-
-                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
-                        <p class="font-bold">Precise Duplication</p>
-                        <p>1. Select your tooth</p>
-                        <p>2. Press ALT + Arrow Key in the direction you want to duplicate (e.g. right arrow key)</p>
-                        <p>3. Keep pressing to create more teeth at same spacing</p>
-                        <p>4. If you're not happy with the spacing, delete them and increase the increment size again like in step 1.</p>
-                    </div>
-                    <img src="https://i.imgur.com/cnxA4X7.png">
-                    <p class="text-sm italic mb-4 text-center">In this example, I used 15mm increments. I have also slightly centered things by dragging all the teeth and holding shift.</p>
-                </div>
+            
+            // Step 1: Basic Box Configuration
+            `<h3>Basic Box Configuration</h3>
+            <p>In this step, you'll learn how to set up the basic parameters for your box design.</p>
+            
+            <div class="card">
+                <h4>Configuration Steps:</h4>
+                <ol class="steps-list">
+                    <li>Set the <strong>Units</strong> to "Millimeters" by clicking on the "Millimeters" button in the Units section.</li>
+                    <li>Enter your desired box dimensions in the Width, Height, and Depth fields.</li>
+                    <li>Select whether these are <strong>inside</strong> or <strong>outside</strong> dimensions. For this tutorial, select "Outside".</li>
+                    <li>Set the <strong>Material Thickness</strong> to "3mm" from the dropdown menu.</li>
+                </ol>
+            </div>
+            
+            <div class="alert-box alert-warning">
+                <p><strong><i class="fas fa-exclamation-triangle"></i> Important Note:</strong></p>
+                <p>3mm is the default thickness for acrylic and plywood in this tutorial. Some acrylic sheets are thinner than this, so make sure you measure your material if you are unsure.</p>
+            </div>
+            
+            <div class="card">
+                <h4>Configuration Steps (continued):</h4>
+                <ol class="steps-list" start="5">
+                    <li>Choose between an <strong>Open</strong> or <strong>Closed</strong> box design. For this tutorial, select "Open".</li>
+                    <li>For <strong>Edge Joints</strong>, select "Finger" to create finger joints for assembly.</li>
+                    <li>Adjust the <strong>Finger Size</strong> using the slider if needed. The default value (20.625) works well for most applications.</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title"><i class="fas fa-lightbulb"></i> Tips</div>
+                <p>The finger joint size is automatically calculated based on your box dimensions, but you can manually adjust it if needed. Smaller fingers make for a more precise fit but may be more fragile, while larger fingers are stronger but may not look as refined.</p>
             </div>`,
-
-            `<div class="space-y-6">
-                <div class="space-y-4">
-                    <h3 class="text-2xl font-bold">To Exclude (Cut Out):</h3>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Select all teeth + base rectangle</li>
-                        <li>With everything selected, click the exclude button.</li>
-                    </ul>
-                    <img src="https://i.imgur.com/ekELUkT.png">
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded">
-                        <p class="font-bold">Quick Tip</p>
-                        <p class="mb-4">If this, or the next step don't work, it means your shapes aren't lined up perfectly, or your teeth and main shape have different stroke sizes.</p>
-                        <p class="mb-4">Make sure everything is touching and they are right on the edge. You can hold down shift while dragging things and you can check to see if a purple line appears - this means your lines are connecting.</p>
-                    </div>
-                    <h3 class="text-2xl font-bold">Preparing the other join</h3>
-                        <p>Before moving to the next shape:</p>
-                        <ol class="list-decimal pl-5 space-y-1 mt-2">
-                            <li>Select your completed shape</li>
-                            <li>Press CTRL + C to copy</li>
-                            <li>Press CTRL + V to paste</li>
-                            <li>Move the copy to the side</li>
-                            <li>Move your teeth up so they are overlapping the edge of the line (see image below).</li>
-                        </ol>
-                        <p>This will save you a tonne of time in making your connecting joints.</p>
-                    <img src="https://i.imgur.com/jmEV09S.png">
-                    <h3 class="text-2xl font-bold">To Unite (Join Together):</h3>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Select all teeth + base rectangle</li>
-                        <li>With everything selected, click the unite button.</li>
-                    </ul>
-                    <img src="https://i.imgur.com/UnxAGkl.png">
-                    <h3 class="text-2xl font-bold">Check for Alignment</h3>
-                    <p class="mb-4">Before you cut, you need to check if your shapes line up when you try to put them together.</p>
-                    <p class="mb-4">If they don't there is something wrong with your joints and they won't glue correctly. Try the above steps again.</p>
-                    <img src="https://i.imgur.com/mcEuDuW.png">
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded">
-                        <p class="font-bold">Quick Tip</p>
-                        <p class="mb-4">Don't forget you can always CTRL + Z to undo things, and ALT + Arrow Key to duplicate things as many times as you need.</p>
-                    </div>
-                    <h3 class="text-2xl font-bold">Completed Example</h3>
-                    <img src="https://i.imgur.com/YJBqJMt.png">
-                    <p class="text-sm italic text-center">Remember that you will need multiple walls and joins on each side. Here's an complete 4 wall example.</p>
-                </div>
+            
+            // Step 2: Export Settings (formerly Advanced Options Configuration)
+            `<h3>Export Settings</h3>
+            <p>Now that you've set up the basic parameters for your box, let's configure some export settings to customize your design.</p>
+            
+            <div class="card">
+                <h4>Export Configuration Steps:</h4>
+                <ol class="steps-list">
+                    <li>Click on the <strong>Labels and Spacing</strong> tab at the top of the options panel.</li>
+                    <li>For <strong>Panel Labels</strong>, select "Disabled" to remove text labels from your design.</li>
+                    <li>For <strong>Panel Layout</strong>, choose "Combine" to arrange panels in an optimized layout.</li>
+                    <li>Click on the <strong>Line Formatting</strong> tab to access line customization options.</li>
+                    <li>Set the <strong>Cut Line Width</strong> to exactly 0.0009. This will be 0.003pts in Illustrator, which is what the laser cutter needs to read.</li>
+                    <li>Once all settings are configured, click the <strong>Download SVG</strong> button to save your design.</li>
+                </ol>
             </div>`
         ];
 
-        const steps = document.querySelectorAll('.tutorial-step');
+        // Define your media content (right panel)
+        const stepMedia = [
+            // Step 0: Introduction
+            `<div class="alert-box alert-info">
+                <p><strong>MakerCase Tutorial</strong></p>
+                <p>MakerCase is a free, web-based application that generates box designs for laser cutting. It automatically calculates finger joints and provides a variety of customization options to suit your project needs.</p>
+            </div>
+
+            <div class="alert-box alert-warning">
+                <p><strong><i class="fas fa-info-circle"></i> How to use this resource</strong></p>
+                <p>Click the button below to learn how to navigate the page.</p>
+                <button id="startWalkthrough" class="nav-button">
+                    <i class="fas fa-walking"></i> Start Interactive Tour
+                </button>
+            </div>`,
+            
+            // Step 1: Basic Box Configuration
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/g2G31TB.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p style="text-align: center; margin-top: 15px;">Basic Box Configuration Video Tutorial</p>
+            </div>`,
+            
+            // Step 2: Export Settings (formerly Advanced Options Configuration)
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/dinMoGs.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p style="text-align: center; margin-top: 15px;">Export Settings Video Tutorial</p>
+            </div>`
+        ];
+
+        // Current step tracking
+        let currentStep = 0;
+        const totalSteps = stepInstructions.length;
+
+        // DOM Elements
+        const stepButtons = document.querySelectorAll('.step-button');
+        const stepTitleEl = document.getElementById('current-step-title');
+        const instructionsPanel = document.getElementById('step-instructions');
+        const mediaContent = document.getElementById('media-content');
+        const contentTitle = document.getElementById('content-title');
         const prevButton = document.getElementById('prevButton');
         const nextButton = document.getElementById('nextButton');
-        const stepContent = document.getElementById('step-content');
         const progressBar = document.querySelector('.progress');
         const progressPercentage = document.getElementById('progress-percentage');
-        let currentStep = 1;
 
+        // Image modal
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
-        let isZoomed = false;
+        const modalClose = document.querySelector('.modal-close');
 
-        document.addEventListener('click', function(e) {
-            if (e.target.matches('.step-content img')) {
+        // Initialize the tutorial
+        function showStep(step) {
+            // Update active step button
+            stepButtons.forEach((button, index) => {
+                button.classList.toggle('active', index === step);
+            });
+
+            // Update step title
+            stepTitleEl.textContent = stepTitles[step];
+            contentTitle.textContent = stepTitles[step];
+
+            // Update content
+            instructionsPanel.innerHTML = stepInstructions[step];
+            mediaContent.innerHTML = stepMedia[step];
+
+            // Update navigation buttons
+            prevButton.disabled = step === 0;
+            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'flex';
+            
+            // Update progress
+            const progress = Math.round(((step + 1) / totalSteps) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${progress}%`;
+            
+            // Initialize carousels if present
+            initCarousels();
+            
+            currentStep = step;
+        }
+
+        // Initialize all carousels on the page
+        function initCarousels() {
+            // Find all carousel elements in the current step
+            document.querySelectorAll('.carousel').forEach((carouselElement) => {
+                const carouselContainer = carouselElement.querySelector('.carousel-container');
+                if (!carouselContainer) return;
+                
+                const slides = carouselContainer.querySelectorAll('.carousel-slide');
+                if (slides.length <= 1) return;
+                
+                // Get carousel controls
+                const prevBtn = carouselElement.querySelector('.prev-btn');
+                const nextBtn = carouselElement.querySelector('.next-btn');
+                const indicators = carouselElement.querySelector('.carousel-indicators');
+                
+                if (!prevBtn || !nextBtn || !indicators) return;
+                
+                // Clear existing indicators and recreate them
+                indicators.innerHTML = '';
+                slides.forEach((_, i) => {
+                    const indicator = document.createElement('div');
+                    indicator.className = `carousel-indicator ${i === 0 ? 'active' : ''}`;
+                    indicator.dataset.index = i;
+                    indicator.addEventListener('click', () => {
+                        scrollToSlide(carouselContainer, indicators, i);
+                    });
+                    indicators.appendChild(indicator);
+                });
+                
+                // Track the current slide for this carousel
+                carouselContainer.dataset.currentSlide = '0';
+                
+                // Add click handlers to navigation buttons
+                prevBtn.onclick = function() {
+                    const currentSlide = parseInt(carouselContainer.dataset.currentSlide || '0');
+                    const newSlide = (currentSlide - 1 + slides.length) % slides.length;
+                    scrollToSlide(carouselContainer, indicators, newSlide);
+                    carouselContainer.dataset.currentSlide = newSlide.toString();
+                };
+                
+                nextBtn.onclick = function() {
+                    const currentSlide = parseInt(carouselContainer.dataset.currentSlide || '0');
+                    const newSlide = (currentSlide + 1) % slides.length;
+                    scrollToSlide(carouselContainer, indicators, newSlide);
+                    carouselContainer.dataset.currentSlide = newSlide.toString();
+                };
+            });
+        }
+
+        // Scroll carousel to specific slide
+        function scrollToSlide(carousel, indicators, index) {
+            // Calculate the scroll position
+            const slideWidth = carousel.clientWidth;
+            const scrollPosition = slideWidth * index;
+            
+            // Animate the scroll
+            carousel.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+            
+            // Update indicators
+            const allIndicators = indicators.querySelectorAll('.carousel-indicator');
+            allIndicators.forEach((ind, i) => {
+                ind.classList.toggle('active', i === index);
+            });
+        }
+
+        // Simple tooltip implementation
+        function setupTooltips() {
+            // Remove any existing tooltips
+            const existingTooltips = document.querySelectorAll('.tooltip');
+            existingTooltips.forEach(t => t.remove());
+            
+            // Create new tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+            
+            // Add event listeners to all step buttons
+            const stepButtons = document.querySelectorAll('.step-button');
+            stepButtons.forEach(button => {
+                const tooltipText = button.getAttribute('data-tooltip');
+                if (!tooltipText) return;
+                
+                // On mouse enter
+                button.addEventListener('mouseenter', () => {
+                    // Set tooltip text
+                    tooltip.textContent = tooltipText;
+                    
+                    // Position tooltip based on viewport width
+                    const rect = button.getBoundingClientRect();
+                    if (window.innerWidth <= 1024) {
+                        // Position below on mobile
+                        tooltip.className = 'tooltip bottom';
+                        tooltip.style.top = `${rect.bottom + 10}px`;
+                        tooltip.style.left = `${rect.left + rect.width/2}px`;
+                        tooltip.style.transform = 'translateX(-50%)';
+                    } else {
+                        // Position to the right on desktop
+                        tooltip.className = 'tooltip right';
+                        tooltip.style.top = `${rect.top + rect.height/2}px`;
+                        tooltip.style.left = `${rect.right + 10}px`;
+                        tooltip.style.transform = 'translateY(-50%)';
+                    }
+                    
+                    // Make tooltip visible
+                    tooltip.style.opacity = '1';
+                });
+                
+                // On mouse leave
+                button.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        // Event Listeners
+        stepButtons.forEach((button, index) => {
+            button.addEventListener('click', () => showStep(index));
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 0) showStep(currentStep - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentStep < totalSteps - 1) showStep(currentStep + 1);
+        });
+
+        // Image modal functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG' && e.target.parentElement.classList.contains('image-container')) {
                 modal.style.display = 'block';
                 modalImg.src = e.target.src;
+                modalImg.alt = e.target.alt;
             }
         });
 
-        modal.addEventListener('click', function() {
-            if (isZoomed) {
-                modal.classList.remove('zoomed');
-                isZoomed = false;
-            } else {
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
                 modal.style.display = 'none';
             }
         });
 
-        modalImg.addEventListener('click', function(e) {
-            e.stopPropagation();
-            modal.classList.toggle('zoomed');
-            isZoomed = !isZoomed;
-        });
-
-        function updateButtons() {
-            prevButton.disabled = currentStep === 1;
-            nextButton.disabled = currentStep === steps.length;
-            nextButton.textContent = currentStep === steps.length ? 'Finish' : 'Next';
-        }
-
-        function updateProgress() {
-            const progress = (currentStep / steps.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressPercentage.textContent = `${Math.round(progress)}%`;
-        }
-
-        function showStep(step) {
-            steps.forEach(s => s.classList.remove('active'));
-            steps[step - 1].classList.add('active');
-            currentStep = step;
-            updateButtons();
-            updateProgress();
-            stepContent.innerHTML = stepContents[step - 1];
-        }
-
-        steps.forEach((step, index) => {
-            step.addEventListener('click', () => showStep(index + 1));
-        });
-
-        prevButton.addEventListener('click', () => {
-            if (currentStep > 1) showStep(currentStep - 1);
-        });
-
-        nextButton.addEventListener('click', () => {
-            if (currentStep < steps.length) {
-                showStep(currentStep + 1);
-            } else {
-                alert('Tutorial completed!');
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
             }
         });
 
-        showStep(1);
+        // Creator name with confetti
+        document.getElementById('creator-name').addEventListener('click', () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.8 },
+                colors: ['#e63946', '#f7f7f7', '#f0f0f0', '#191919']
+            });
+        });
+
+        // Initialize introjs walkthrough
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'startWalkthrough' || e.target.parentElement.id === 'startWalkthrough') {
+                const intro = introJs();
+                
+                intro.setOptions({
+                    steps: [
+                        {
+                            element: document.querySelector('.sidebar'),
+                            intro: 'Use these numbered icons to navigate between different steps of the tutorial. Click on any number to jump directly to that step.',
+                            position: 'right'
+                        },
+                        {
+                            element: document.querySelector('.instructions-panel'),
+                            intro: 'Read the step-by-step instructions in this middle panel. These detailed instructions will guide you through each part of the tutorial.',
+                            position: 'right'
+                        },
+                        {
+                            element: document.querySelector('.content-display'),
+                            intro: 'View demonstration videos that show exactly how to perform each action in the MakerCase interface.',
+                            position: 'left'
+                        },
+                        {
+                            element: document.querySelector('.navigation'),
+                            intro: 'Use these buttons to move forward and backward through the tutorial steps.',
+                            position: 'top'
+                        },
+                        {
+                            element: document.getElementById('current-step-title'),
+                            intro: 'This shows which step you are currently viewing. Always check this to know where you are in the tutorial.',
+                            position: 'bottom'
+                        }
+                    ],
+                    showBullets: true,
+                    showProgress: true,
+                    disableInteraction: false,
+                    doneLabel: 'Got it!'
+                });
+                
+                intro.start();
+                
+                // After tour completes, show a success message
+                intro.oncomplete(function() {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#e63946', '#f7f7f7', '#f0f0f0', '#191919']
+                    });
+                });
+            }
+        });
+
+        // Initialize with first step and set up tooltips
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(0);
+            setupTooltips();
+            
+            // Update tooltips on window resize
+            window.addEventListener('resize', () => {
+                setupTooltips();
+            });
+            
+            // Update tooltips whenever a step button is clicked
+            document.querySelectorAll('.step-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    setTimeout(setupTooltips, 100);
+                });
+            });
+        });
     </script>
 </body>
 </html>
