@@ -152,7 +152,7 @@
             </div>
             <div class="tip-box">
                 <div class="tip-title"><i class="fas fa-lightbulb"></i> Tips</div>
-                <p>The finger joint size is automatically calculated based on your box dimensions, but you can manually adjust it if needed. Smaller fingers make for a more precise fit but may be more fragile, while larger fingers are stronger but may not look as refined.</p>
+                <p>The finger joint size is automatically calculated based on your box dimensions, but you can manually adjust it if needed. Remember that you will need to hot glue these joints, so consider their sizing and number carefully.</p>
             </div>`;
         stepInstructions[2] = `<h3>Export Settings</h3>
             <p>Now that you've set up the basic parameters for your box, let's configure some export settings to customize your design.</p>
@@ -203,24 +203,74 @@
 
         let threeJsAnimationInitialized = false;
         let animationFrameId = null; 
+        let scene, camera, renderer, controls;
         let groupA, groupB; // To hold the Three.js groups
         let targetJoinedPosition, targetSeparatedPosition;
         let joinButton, separateButton;
         let currentTween = null; // To manage ongoing tweens
 
-        function initThreeJsAnimation() {
-            if (threeJsAnimationInitialized) return;
+        function cleanupThreeJs() {
+            // Stop animation loop
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            
+            // Stop any running tweens
+            if (currentTween) {
+                currentTween.stop();
+                currentTween = null;
+            }
+            
+            // Dispose of Three.js resources
+            if (renderer) {
+                renderer.dispose();
+                renderer = null;
+            }
+            
+            if (controls) {
+                controls.dispose();
+                controls = null;
+            }
+            
+            // Clear scene
+            if (scene) {
+                scene.clear();
+                scene = null;
+            }
+            
+            camera = null;
+            groupA = null;
+            groupB = null;
+            
+            // Reset initialization flag
+            threeJsAnimationInitialized = false;
+        }
 
+        function initThreeJsAnimation() {
             const container = document.getElementById('threejs-container');
             if (!container) return;
+            
+            // Check if renderer is already attached and working
+            if (threeJsAnimationInitialized && renderer && renderer.domElement && renderer.domElement.parentNode === container) {
+                // Animation is already properly initialized, just restart the loop if needed
+                if (!animationFrameId) {
+                    animate();
+                }
+                return;
+            }
+            
+            // Clean up any existing Three.js setup
+            cleanupThreeJs();
+            
             const loadingMessage = document.getElementById('threejs-loading');
 
-            const scene = new THREE.Scene();
+            scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf9f9f9);
 
-            const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
             
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             
@@ -236,7 +286,6 @@
             directionalLight.position.set(15, 25, 35);
             scene.add(directionalLight);
 
-            let controls;
             if (typeof THREE.OrbitControls !== 'undefined') {
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
                 controls.enableDamping = true;
@@ -306,7 +355,7 @@
             camera.lookAt(0, edgeLength * 0.1, 0); // Adjust lookAt for better framing
             if (controls) controls.target.set(0, edgeLength * 0.1, 0);
 
-
+            // Animation controls - get fresh references
             joinButton = document.getElementById('joinButton');
             separateButton = document.getElementById('separateButton');
 
@@ -330,35 +379,56 @@
                     .start();
             }
             
-            joinButton.addEventListener('click', () => animateToPosition(targetJoinedPosition));
-            separateButton.addEventListener('click', () => animateToPosition(targetSeparatedPosition));
+            // Remove any existing event listeners and add new ones
+            if (joinButton) {
+                joinButton.onclick = null;
+                joinButton.addEventListener('click', () => animateToPosition(targetJoinedPosition));
+            }
+            if (separateButton) {
+                separateButton.onclick = null;
+                separateButton.addEventListener('click', () => animateToPosition(targetSeparatedPosition));
+            }
             
             // Initial button state
-            joinButton.disabled = groupB.position.equals(targetJoinedPosition);
-            separateButton.disabled = groupB.position.equals(targetSeparatedPosition);
+            if (joinButton) joinButton.disabled = groupB.position.equals(targetJoinedPosition);
+            if (separateButton) separateButton.disabled = groupB.position.equals(targetSeparatedPosition);
 
-
-            function animate(timestamp) {
-                animationFrameId = requestAnimationFrame(animate);
-                TWEEN.update(timestamp);
-                if (controls) controls.update();
-                renderer.render(scene, camera);
-            }
-
-            animate();
             threeJsAnimationInitialized = true;
+            animate();
 
-            window.addEventListener('resize', () => {
-                if (container.clientWidth > 0 && container.clientHeight > 0) {
+            // Resize handler
+            const resizeHandler = () => {
+                if (container.clientWidth > 0 && container.clientHeight > 0 && camera && renderer) {
                     camera.aspect = container.clientWidth / container.clientHeight;
                     camera.updateProjectionMatrix();
                     renderer.setSize(container.clientWidth, container.clientHeight);
                 }
-            }, false);
+            };
+            
+            window.removeEventListener('resize', resizeHandler);
+            window.addEventListener('resize', resizeHandler);
         }
 
+        function animate(timestamp) {
+            if (!threeJsAnimationInitialized) {
+                animationFrameId = null;
+                return;
+            }
+            
+            animationFrameId = requestAnimationFrame(animate);
+            TWEEN.update(timestamp);
+            if (controls) controls.update();
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
+        }
 
         function showStep(step) {
+            // Clean up Three.js when leaving step 0
+            if (currentStep === 0 && step !== 0) {
+                cleanupThreeJs();
+            }
+            
             stepButtons.forEach((button, index) => button.classList.toggle('active', index === step));
             stepTitleEl.textContent = stepTitles[step];
             contentTitle.textContent = stepTitles[step];
@@ -372,6 +442,7 @@
             initCarousels();
             currentStep = step;
 
+            // Initialize Three.js when entering step 0
             if (step === 0) {
                 setTimeout(() => { 
                     if (typeof THREE !== 'undefined' && typeof TWEEN !== 'undefined') {

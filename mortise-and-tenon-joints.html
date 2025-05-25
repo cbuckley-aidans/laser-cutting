@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortise and Tenon Joint Design Tutorial</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Assuming styles.css exists -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css">
+    
+    <!-- Three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls for Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- TWEEN.js for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
+    
+    <style>
+        .content-display .card {
+            /* overflow: auto; */
+        }
+        #threejs-container {
+            width: 100%; 
+            height: 350px; /* Increased height a bit for 90-deg view */
+            margin-bottom: 10px; 
+            border: 1px solid var(--border-color, #e0e0e0); 
+            position: relative; 
+            background-color: #f9f9f9; 
+            border-radius: 8px; 
+            overflow: hidden;
+        }
+        #threejs-loading {
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-style: italic; 
+            color: #777;
+        }
+        .animation-controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .animation-controls button {
+            padding: 8px 15px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary-color, #007bff); /* Use theme color if available */
+            color: white;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .animation-controls button:hover {
+            opacity: 0.8;
+        }
+        .animation-controls button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .construction-banner {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="tutorial-container">
+        <div class="sidebar">
+            <div class="sidebar-logo">MORTISE &<br>TENON JOINTS</div>
+            <div class="step-button active" data-step="0" data-tooltip="Introduction">
+                <i class="fas fa-cube"></i>
+            </div>
+            <div class="step-button" data-step="1" data-tooltip="Adobe Illustrator Setup">
+                <span>1</span>
+            </div>
+        </div>
+
+        <div class="instructions-panel">
+            <h1 id="current-step-title">Introduction</h1>
+            <div id="step-instructions"></div>
+            <div class="navigation">
+                <button id="prevButton" class="nav-button" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                <button id="nextButton" class="nav-button">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="progress-container">
+                <div class="progress-text">Progress: <span id="progress-percentage">0%</span></div>
+                <div class="progress-bar"><div class="progress" style="width: 0%;"></div></div>
+            </div>
+            <div class="footer">
+                Made with <span style="color: var(--accent-color);">♥</span> by <span id="creator-name">Buckley</span>
+            </div>
+        </div>
+
+        <div class="content-display">
+            <div class="card">
+                <h2 id="content-title">Introduction</h2>
+                <div id="media-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="modal-close">×</span>
+        <img id="modalImage" class="modal-content">
+    </div>
+
+    <script>
+        const stepTitles = [
+            "Introduction",
+            "Adobe Illustrator Setup"
+        ];
+
+        const stepInstructions = [
+            `<h3>Introduction to Mortise and Tenon Joints</h3>
+            <div class="alert-box alert-info">
+                <p>Mr Buckley is still working on this page. Please be patient :)</p>
+            </div>`,
+            
+            `<h3>Adobe Illustrator Setup</h3>
+            <div class="construction-banner">
+                <i class="fas fa-hard-hat"></i> In Construction!
+                <br>
+                <small>This step is currently being developed. Check back soon for detailed Adobe Illustrator instructions.</small>
+            </div>`
+        ];
+
+        const stepMedia = [
+            `<div id="threejs-container">
+                <div id="threejs-loading">Loading 3D Animation...</div>
+            </div>
+            <div class="animation-controls">
+                <button id="insertButton">Insert Tenon</button>
+                <button id="removeButton">Remove Tenon</button>
+            </div>
+            <div class="alert-box alert-info">
+                <p><strong>Interactive Mortise & Tenon Visualization</strong></p>
+                <p><em>Use the buttons above to control the animation. Click and drag on the 3D view to rotate, and use the mouse wheel to zoom. Watch how the tenon (pink piece) fits precisely into the mortise (blue piece).</em></p>
+            </div>`,
+            
+            `<div class="alert-box alert-warning">
+                <p><strong><i class="fas fa-tools"></i> Coming Soon!</strong></p>
+            </div>`
+        ];
+
+        let currentStep = 0;
+        const totalSteps = stepInstructions.length;
+        const stepButtons = document.querySelectorAll('.step-button');
+        const stepTitleEl = document.getElementById('current-step-title');
+        const instructionsPanel = document.getElementById('step-instructions');
+        const mediaContent = document.getElementById('media-content');
+        const contentTitle = document.getElementById('content-title');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressBar = document.querySelector('.progress');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalClose = document.querySelector('.modal-close');
+
+        let threeJsAnimationInitialized = false;
+        let animationFrameId = null; 
+        let scene, camera, renderer, controls;
+        let mortiseGroup, tenonGroup;
+        let targetInsertedPosition, targetRemovedPosition;
+        let insertButton, removeButton;
+        let currentTween = null;
+        let isVisible = true;
+
+        // Handle visibility changes for proper animation restart
+        document.addEventListener('visibilitychange', function() {
+            isVisible = !document.hidden;
+            if (isVisible && threeJsAnimationInitialized && animationFrameId === null) {
+                animate();
+            } else if (!isVisible && animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        });
+
+        function cleanupThreeJs() {
+            // Stop animation loop
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            
+            // Stop any running tweens
+            if (currentTween) {
+                currentTween.stop();
+                currentTween = null;
+            }
+            
+            // Dispose of Three.js resources
+            if (renderer) {
+                renderer.dispose();
+                renderer = null;
+            }
+            
+            if (controls) {
+                controls.dispose();
+                controls = null;
+            }
+            
+            // Clear scene
+            if (scene) {
+                scene.clear();
+                scene = null;
+            }
+            
+            camera = null;
+            mortiseGroup = null;
+            tenonGroup = null;
+            
+            // Reset initialization flag
+            threeJsAnimationInitialized = false;
+        }
+
+        function initThreeJsAnimation() {
+            const container = document.getElementById('threejs-container');
+            if (!container) return;
+            
+            // Check if renderer is already attached and working
+            if (threeJsAnimationInitialized && renderer && renderer.domElement && renderer.domElement.parentNode === container) {
+                // Animation is already properly initialized, just restart the loop if needed
+                if (!animationFrameId && isVisible) {
+                    animate();
+                }
+                return;
+            }
+            
+            // Clean up any existing Three.js setup
+            cleanupThreeJs();
+            
+            const loadingMessage = document.getElementById('threejs-loading');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf9f9f9);
+
+            camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            // Clear container and add renderer
+            while (container.firstChild && container.firstChild !== loadingMessage) {
+                container.removeChild(container.firstChild);
+            }
+            container.appendChild(renderer.domElement);
+            if (loadingMessage) loadingMessage.style.display = 'none';
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+            directionalLight.position.set(15, 25, 35);
+            scene.add(directionalLight);
+
+            if (typeof THREE.OrbitControls !== 'undefined') {
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+                controls.minDistance = 20;
+                controls.maxDistance = 250;
+                controls.target.set(0, 0, 0);
+            }
+
+            // Mortise and Tenon Parameters
+            const materialThickness = 8;
+            const mortiseWidth = 12;
+            const mortiseHeight = 8; 
+            const mortiseDepth = 15;
+            const boardSize = 40;
+            const separationDistance = 60;
+
+            const matA_Blue = new THREE.MeshStandardMaterial({ color: 0x007bff, roughness: 0.7, metalness: 0.1 });
+            const matB_Pink = new THREE.MeshStandardMaterial({ color: 0xff69b4, roughness: 0.7, metalness: 0.1 });
+
+            // Create Mortise Group (Static, Blue) - with rectangular slot
+            mortiseGroup = new THREE.Group();
+            
+            // Main board with mortise slot
+            const mortiseShape = new THREE.Shape();
+            mortiseShape.moveTo(-boardSize/2, -boardSize/2);
+            mortiseShape.lineTo(boardSize/2, -boardSize/2);
+            mortiseShape.lineTo(boardSize/2, boardSize/2);
+            mortiseShape.lineTo(-boardSize/2, boardSize/2);
+            mortiseShape.lineTo(-boardSize/2, -boardSize/2);
+            
+            // Create the mortise hole
+            const mortiseHole = new THREE.Path();
+            mortiseHole.moveTo(-mortiseWidth/2, -mortiseHeight/2);
+            mortiseHole.lineTo(mortiseWidth/2, -mortiseHeight/2);
+            mortiseHole.lineTo(mortiseWidth/2, mortiseHeight/2);
+            mortiseHole.lineTo(-mortiseWidth/2, mortiseHeight/2);
+            mortiseHole.lineTo(-mortiseWidth/2, -mortiseHeight/2);
+            mortiseShape.holes.push(mortiseHole);
+
+            const mortiseGeometry = new THREE.ExtrudeGeometry(mortiseShape, {
+                depth: materialThickness,
+                bevelEnabled: false
+            });
+            
+            const mortisePiece = new THREE.Mesh(mortiseGeometry, matA_Blue);
+            mortisePiece.position.set(0, 0, 0);
+            mortiseGroup.add(mortisePiece);
+            scene.add(mortiseGroup);
+
+            // Create Tenon Group (Animated, Pink) - rotated 90 degrees like real joint
+            tenonGroup = new THREE.Group();
+            
+            // Main tenon board 
+            const tenonBoardGeom = new THREE.BoxGeometry(boardSize, boardSize, materialThickness);
+            const tenonBoard = new THREE.Mesh(tenonBoardGeom, matB_Pink);
+            tenonBoard.position.set(-boardSize/2, 0, 0);
+            tenonGroup.add(tenonBoard);
+            
+            // Tenon projection that fits into mortise
+            const tenonProjectionGeom = new THREE.BoxGeometry(mortiseDepth, mortiseWidth, mortiseHeight);
+            const tenonProjection = new THREE.Mesh(tenonProjectionGeom, matB_Pink);
+            tenonProjection.position.set(mortiseDepth/2, 0, 0);
+            tenonGroup.add(tenonProjection);
+
+            // Rotate tenon group 90 degrees to simulate real joint orientation
+            tenonGroup.rotation.x = -(Math.PI / 2);
+            tenonGroup.rotation.z = Math.PI / 2;
+            scene.add(tenonGroup);
+
+            // Position settings
+            targetInsertedPosition = new THREE.Vector3(0, 0, 15.1);
+            targetRemovedPosition = new THREE.Vector3(0, 0, separationDistance);
+            
+            tenonGroup.position.copy(targetRemovedPosition);
+
+            // Camera positioning for good 90-degree view
+            camera.position.set(boardSize * 2.0, boardSize * 1.5, boardSize * 2.5);
+            camera.lookAt(0, 0, 0);
+            if (controls) controls.target.set(0, 0, 0);
+
+            // Animation controls - get fresh references
+            insertButton = document.getElementById('insertButton');
+            removeButton = document.getElementById('removeButton');
+
+            const tweenDuration = 1200;
+
+            function animateToPosition(targetPosition) {
+                if (currentTween) {
+                    currentTween.stop();
+                }
+                insertButton.disabled = true;
+                removeButton.disabled = true;
+
+                currentTween = new TWEEN.Tween(tenonGroup.position)
+                    .to(targetPosition, tweenDuration)
+                    .easing(TWEEN.Easing.Quadratic.InOut)
+                    .onComplete(() => {
+                        currentTween = null;
+                        insertButton.disabled = tenonGroup.position.equals(targetInsertedPosition);
+                        removeButton.disabled = tenonGroup.position.equals(targetRemovedPosition);
+                    })
+                    .start();
+            }
+            
+            // Remove any existing event listeners and add new ones
+            if (insertButton) {
+                insertButton.onclick = null;
+                insertButton.addEventListener('click', () => animateToPosition(targetInsertedPosition));
+            }
+            if (removeButton) {
+                removeButton.onclick = null;
+                removeButton.addEventListener('click', () => animateToPosition(targetRemovedPosition));
+            }
+            
+            // Initial button state
+            if (insertButton) insertButton.disabled = tenonGroup.position.equals(targetInsertedPosition);
+            if (removeButton) removeButton.disabled = tenonGroup.position.equals(targetRemovedPosition);
+
+            threeJsAnimationInitialized = true;
+            animate();
+
+            // Resize handler
+            const resizeHandler = () => {
+                if (container.clientWidth > 0 && container.clientHeight > 0 && camera && renderer) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            };
+            
+            window.removeEventListener('resize', resizeHandler);
+            window.addEventListener('resize', resizeHandler);
+        }
+
+        function animate(timestamp) {
+            if (!isVisible || !threeJsAnimationInitialized) {
+                animationFrameId = null;
+                return;
+            }
+            
+            animationFrameId = requestAnimationFrame(animate);
+            TWEEN.update(timestamp);
+            if (controls) controls.update();
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
+        }
+
+        function showStep(step) {
+            // Clean up Three.js when leaving step 0
+            if (currentStep === 0 && step !== 0) {
+                cleanupThreeJs();
+            }
+            
+            stepButtons.forEach((button, index) => button.classList.toggle('active', index === step));
+            stepTitleEl.textContent = stepTitles[step];
+            contentTitle.textContent = stepTitles[step];
+            instructionsPanel.innerHTML = stepInstructions[step];
+            mediaContent.innerHTML = stepMedia[step];
+            prevButton.disabled = step === 0;
+            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'flex';
+            const progress = Math.round(((step + 1) / totalSteps) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${progress}%`;
+            initCarousels();
+            currentStep = step;
+
+            // Initialize Three.js when entering step 0
+            if (step === 0) {
+                setTimeout(() => { 
+                    if (typeof THREE !== 'undefined' && typeof TWEEN !== 'undefined') {
+                        initThreeJsAnimation();
+                    } else {
+                        const loadingEl = document.getElementById('threejs-loading');
+                        if (loadingEl) loadingEl.textContent = 'Error: 3D libraries not loaded.';
+                        console.error("Three.js or TWEEN.js not loaded.");
+                    }
+                }, 100); 
+            }
+        }
+
+        function initCarousels() {
+            // Placeholder function - implement as needed
+        }
+
+        function scrollToSlide(carousel, indicators, index) {
+            // Placeholder function - implement as needed
+        }
+
+        function setupTooltips() {
+            // Placeholder function - implement as needed
+        }
+
+        stepButtons.forEach((button, index) => button.addEventListener('click', () => showStep(index)));
+        prevButton.addEventListener('click', () => { if (currentStep > 0) showStep(currentStep - 1); });
+        nextButton.addEventListener('click', () => { if (currentStep < totalSteps - 1) showStep(currentStep + 1); });
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG' && e.target.parentElement.classList.contains('image-container')) {
+                modal.style.display = 'block'; modalImg.src = e.target.src; modalImg.alt = e.target.alt;
+            }
+            if (e.target.id === 'startWalkthrough' || (e.target.parentElement && e.target.parentElement.id === 'startWalkthrough')) {
+                const intro = introJs();
+                intro.setOptions({
+                    steps: [
+                        { element: document.querySelector('.sidebar'), intro: 'Use these icons to navigate steps.', position: 'right' },
+                        { element: document.querySelector('.instructions-panel'), intro: 'Read instructions here.', position: 'right' },
+                        { element: document.querySelector('.content-display'), intro: 'View demonstrations or interactive elements like this 3D animation.', position: 'left' },
+                        { element: document.querySelector('.animation-controls') || document.querySelector('.navigation'), intro: 'Use buttons to interact or navigate.', position: 'top' },
+                        { element: document.getElementById('current-step-title'), intro: 'Current step title.', position: 'bottom' }
+                    ],
+                    showBullets: true, showProgress: true, disableInteraction: false, doneLabel: 'Got it!'
+                });
+                intro.start();
+                intro.oncomplete(() => confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }));
+            }
+        });
+
+        modalClose.addEventListener('click', () => { modal.style.display = 'none'; });
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'block') modal.style.display = 'none'; });
+        document.getElementById('creator-name').addEventListener('click', () => confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } }));
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(0);
+            setupTooltips();
+            window.addEventListener('resize', setupTooltips);
+            document.querySelectorAll('.step-button').forEach(button => button.addEventListener('click', () => setTimeout(setupTooltips, 100)));
+        });
+
+        // Ensure placeholder functions exist
+        if (typeof setupTooltips !== 'function') {
+            window.setupTooltips = function() { console.log("setupTooltips called (dummy)"); };
+        }
+        if (typeof initCarousels !== 'function') {
+            window.initCarousels = function() { console.log("initCarousels called (dummy)"); };
+        }
+
+    </script>
+</body>
+</html>
