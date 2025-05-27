@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Living Hinges in Adobe Illustrator Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="tutorial-container">
+        <!-- Left Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-logo">LIVING<br>HINGES</div>
+            <div class="step-button active" data-step="0" data-tooltip="Introduction">
+                <i class="fas fa-list-ol"></i>
+            </div>
+            <div class="step-button" data-step="1" data-tooltip="Bend Radius Theory">
+                <span>1</span>
+            </div>
+            <div class="step-button" data-step="2" data-tooltip="Hinge Patterns">
+                <span>2</span>
+            </div>
+            <div class="step-button" data-step="3" data-tooltip="Online Generator">
+                <span>3</span>
+            </div>
+        </div>
+
+        <!-- Middle Instructions Panel -->
+        <div class="instructions-panel">
+            <h1 id="current-step-title">Introduction</h1>
+            
+            <div id="step-instructions">
+                <!-- Will be populated by JavaScript -->
+                <h3>Learning Intentions and Success Criteria</h3>
+                
+                <div class="card">
+                    <p><strong>Learning Intentions:</strong></p>
+                    <ol class="steps-list">
+                        <li>Understand living hinge concepts</li>
+                        <li>Learn bend radius principles</li>
+                        <li>Create hinge patterns in Illustrator</li>
+                    </ol>
+                
+                    <p><strong>Success Criteria:</strong></p>
+                    <ol class="steps-list">
+                        <li>Design functional living hinges for laser cutting</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation">
+                <button id="prevButton" class="nav-button" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                <button id="nextButton" class="nav-button">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-text">Progress: <span id="progress-percentage">0%</span></div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="footer">
+                Made with <span style="color: var(--accent-color);">♥</span> by <span id="creator-name">Design Lab</span>
+            </div>
+        </div>
+
+        <!-- Right Content Display Area -->
+        <div class="content-display">
+            <div class="card">
+                <h2 id="content-title">Introduction</h2>
+                <div id="media-content">
+                    <!-- Will be populated by JavaScript -->
+                    <div class="alert-box alert-info">
+                        <p><strong>Tutorial Overview</strong></p>
+                        <p>Learn how to create living hinges for laser cutting projects. Living hinges allow materials to bend repeatedly without breaking by using a series of cuts that create flexibility in rigid materials.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing images -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img id="modalImage" class="modal-content">
+    </div>
+
+    <script>
+        // Tutorial content configuration
+        // Define your step titles
+        const stepTitles = [
+            "Introduction",
+            "Understanding Bend Radius",
+            "Laser Cut Hinge Patterns",
+            "Online Pattern Generator"
+        ];
+
+        // Define your step instructions (middle panel content)
+        const stepInstructions = [
+            // Step 0: Introduction
+            `<h3>Introduction to Living Hinges</h3>
+            
+            <div class="card">
+                <p><strong>Learning Intentions:</strong></p>
+                <ol class="steps-list">
+                    <li>Understand living hinge concepts</li>
+                    <li>Learn bend radius principles</li>
+                    <li>Create hinge patterns in Illustrator</li>
+                </ol>
+            
+                <p><strong>Success Criteria:</strong></p>
+                <ol class="steps-list">
+                    <li>Design functional living hinges for laser cutting</li>
+                </ol>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What are Living Hinges?</strong></p>
+                <p>Living hinges are flexible joints created by making strategic cuts in rigid materials. They allow the material to bend repeatedly without breaking, making them perfect for laser-cut projects that need moving parts.</p>
+            </div>`,
+            
+            // Step 1: Bend Radius Theory
+            `<h3>Understanding Bend Radius</h3>
+            <p>The bend radius is crucial for creating functional living hinges. This determines how tightly your hinge can bend without breaking.</p>
+            
+            <div class="card">
+                <h4>Key Concepts:</h4>
+                <ol class="steps-list">
+                    <li>Watch the video to understand how bend radius affects hinge performance</li>
+                    <li>Material thickness directly impacts minimum bend radius</li>
+                    <li>Cut width and spacing determine flexibility</li>
+                    <li>Test different patterns to find optimal settings for your material</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title"><i class="fas fa-lightbulb"></i> Pro Tip</div>
+                <p>Start with wider cuts and closer spacing for maximum flexibility, then adjust based on your material's response during testing.</p>
+            </div>`,
+            
+            // Step 2: Hinge Patterns
+            `<h3>Laser Cut Hinge Patterns</h3>
+            <p>Different hinge patterns provide various levels of flexibility and strength. Choose the right pattern for your specific application.</p>
+            
+            <div class="card">
+                <h4>Common Hinge Patterns:</h4>
+                <ol class="steps-list">
+                    <li><strong>Parallel Lines:</strong> Simple straight cuts perpendicular to the fold line</li>
+                    <li><strong>Spiral Cuts:</strong> Curved cuts that distribute stress more evenly</li>
+                    <li><strong>Wavy Patterns:</strong> Sinusoidal cuts for smoother bending</li>
+                    <li><strong>Cross-Hatch:</strong> Multiple direction cuts for multi-directional flexibility</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title"><i class="fas fa-lightbulb"></i> Design Tip</div>
+                <p>Always create test pieces first. Small variations in cut spacing and width can dramatically affect the hinge's performance and durability.</p>
+            </div>`,
+            
+            // Step 3: Online Generator
+            `<h3>Online Pattern Generator</h3>
+            
+            <div class="card">
+                <h4 style="text-decoration: underline; margin-bottom: 20px;">Website Link:</h4>
+                <p style="font-size: 1.2em; margin-bottom: 25px;">
+                    <a href="https://boxes.hackerspace-bamberg.de/" target="_blank" style="color: var(--accent-color); text-decoration: underline; font-weight: 600;">https://boxes.hackerspace-bamberg.de/</a>
+                </p>
+                
+                <p><strong>The website includes generators for:</strong></p>
+                <ul style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                    <li>Living hinge patterns</li>
+                    <li>Box designs with hinges</li>
+                    <li>Custom parametric patterns</li>
+                    <li>Various joint types</li>
+                </ul>
+            </div>`
+        ];
+
+        // Define your media content (right panel)
+        const stepMedia = [
+            // Step 0: Introduction
+            `<div class="alert-box alert-info">
+                <p><strong>MR BUCKLEY STILL WORKIN ON THIS PAGE PLEASE BE PATIENT :)</strong></p>
+
+                <p><strong>Living Hinges Overview</strong></p>
+                <p>Living hinges are an essential technique for creating flexible joints in laser-cut projects. They enable rigid materials like wood, acrylic, or cardboard to bend and flex repeatedly without breaking.</p>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title"><i class="fas fa-info-circle"></i> Applications</div>
+                <p>Living hinges are commonly used in:</p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Folding furniture and fixtures</li>
+                    <li>Packaging and boxes</li>
+                    <li>Artistic sculptures</li>
+                    <li>Functional prototypes</li>
+                </ul>
+            </div>`,
+            
+            // Step 1: Bend Radius Theory
+            `<div class="video-container">
+                <iframe width="100%" height="315" src="https://www.youtube.com/embed/QvcpBnxsQws" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: calc(var(--border-radius) - 5px);"></iframe>
+                <p style="text-align: center; margin-top: 15px;">Understanding Bend Radius in Living Hinges</p>
+            </div>
+            
+            <div class="alert-box alert-warning">
+                <p><strong>Key Takeaways from Video:</strong></p>
+                <p>Pay attention to how the bend radius affects the hinge's functionality and durability. Notice how different cut patterns respond to bending forces.</p>
+            </div>`,
+            
+            // Step 2: Hinge Patterns
+            `<div class="carousel">
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn">&#10094;</button>
+                    <button class="carousel-btn next-btn">&#10095;</button>
+                </div>
+                <div class="carousel-container" id="carousel-patterns">
+                    <div class="carousel-slide">
+                        <div class="image-container">
+                            <img src="/api/placeholder/400/300" alt="Parallel line hinge pattern" class="cursor-pointer">
+                            <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to zoom</div>
+                        </div>
+                        <p>Parallel Lines Pattern - Simple and effective for basic bending</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="image-container">
+                            <img src="/api/placeholder/400/300" alt="Spiral cut hinge pattern" class="cursor-pointer">
+                            <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to zoom</div>
+                        </div>
+                        <p>Spiral Cuts Pattern - Better stress distribution</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="image-container">
+                            <img src="/api/placeholder/400/300" alt="Wavy hinge pattern" class="cursor-pointer">
+                            <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to zoom</div>
+                        </div>
+                        <p>Wavy Pattern - Smooth bending motion</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="image-container">
+                            <img src="/api/placeholder/400/300" alt="Cross-hatch hinge pattern" class="cursor-pointer">
+                            <div class="zoom-hint"><i class="fas fa-search-plus"></i> Click to zoom</div>
+                        </div>
+                        <p>Cross-Hatch Pattern - Multi-directional flexibility</p>
+                    </div>
+                </div>
+                <div class="carousel-indicators" id="carousel-indicators-patterns">
+                    <div class="carousel-indicator active" data-index="0"></div>
+                    <div class="carousel-indicator" data-index="1"></div>
+                    <div class="carousel-indicator" data-index="2"></div>
+                    <div class="carousel-indicator" data-index="3"></div>
+                </div>
+            </div>`,
+            
+            // Step 3: Online Generator
+            `<div class="alert-box alert-info">
+                <p><strong>Screenshot of Website Examples</strong></p>
+                <p>The image shows various pattern generators available on the website, demonstrating the different types of living hinge patterns and box designs you can create.</p>
+            </div>
+            
+            <div class="video-container">
+                <img src="/api/placeholder/600/400" alt="Screenshot of boxes.hackerspace-bamberg.de showing various pattern generators" style="width: 100%; border-radius: calc(var(--border-radius) - 5px);">
+                <p style="text-align: center; margin-top: 15px;">Website interface showing available pattern generators</p>
+            </div>`
+        ];
+
+        // Current step tracking
+        let currentStep = 0;
+        const totalSteps = stepInstructions.length;
+
+        // DOM Elements
+        const stepButtons = document.querySelectorAll('.step-button');
+        const stepTitleEl = document.getElementById('current-step-title');
+        const instructionsPanel = document.getElementById('step-instructions');
+        const mediaContent = document.getElementById('media-content');
+        const contentTitle = document.getElementById('content-title');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressBar = document.querySelector('.progress');
+        const progressPercentage = document.getElementById('progress-percentage');
+
+        // Image modal
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalClose = document.querySelector('.modal-close');
+
+        // Initialize the tutorial
+        function showStep(step) {
+            // Update active step button
+            stepButtons.forEach((button, index) => {
+                button.classList.toggle('active', index === step);
+            });
+
+            // Update step title
+            stepTitleEl.textContent = stepTitles[step];
+            contentTitle.textContent = stepTitles[step];
+
+            // Update content
+            instructionsPanel.innerHTML = stepInstructions[step];
+            mediaContent.innerHTML = stepMedia[step];
+
+            // Update navigation buttons
+            prevButton.disabled = step === 0;
+            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'flex';
+            
+            // Update progress
+            const progress = Math.round(((step + 1) / totalSteps) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${progress}%`;
+            
+            // Initialize carousels if present
+            initCarousels();
+            
+            currentStep = step;
+        }
+
+        // Initialize all carousels on the page
+        function initCarousels() {
+            // Find all carousel elements in the current step
+            document.querySelectorAll('.carousel').forEach((carouselElement) => {
+                const carouselContainer = carouselElement.querySelector('.carousel-container');
+                if (!carouselContainer) return;
+                
+                const slides = carouselContainer.querySelectorAll('.carousel-slide');
+                if (slides.length <= 1) return;
+                
+                // Get carousel controls
+                const prevBtn = carouselElement.querySelector('.prev-btn');
+                const nextBtn = carouselElement.querySelector('.next-btn');
+                const indicators = carouselElement.querySelector('.carousel-indicators');
+                
+                if (!prevBtn || !nextBtn || !indicators) return;
+                
+                // Clear existing indicators and recreate them
+                indicators.innerHTML = '';
+                slides.forEach((_, i) => {
+                    const indicator = document.createElement('div');
+                    indicator.className = `carousel-indicator ${i === 0 ? 'active' : ''}`;
+                    indicator.dataset.index = i;
+                    indicator.addEventListener('click', () => {
+                        scrollToSlide(carouselContainer, indicators, i);
+                    });
+                    indicators.appendChild(indicator);
+                });
+                
+                // Track the current slide for this carousel
+                carouselContainer.dataset.currentSlide = '0';
+                
+                // Add click handlers to navigation buttons
+                prevBtn.onclick = function() {
+                    const currentSlide = parseInt(carouselContainer.dataset.currentSlide || '0');
+                    const newSlide = (currentSlide - 1 + slides.length) % slides.length;
+                    scrollToSlide(carouselContainer, indicators, newSlide);
+                    carouselContainer.dataset.currentSlide = newSlide.toString();
+                };
+                
+                nextBtn.onclick = function() {
+                    const currentSlide = parseInt(carouselContainer.dataset.currentSlide || '0');
+                    const newSlide = (currentSlide + 1) % slides.length;
+                    scrollToSlide(carouselContainer, indicators, newSlide);
+                    carouselContainer.dataset.currentSlide = newSlide.toString();
+                };
+            });
+        }
+
+        // Scroll carousel to specific slide
+        function scrollToSlide(carousel, indicators, index) {
+            // Calculate the scroll position
+            const slideWidth = carousel.clientWidth;
+            const scrollPosition = slideWidth * index;
+            
+            // Animate the scroll
+            carousel.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+            
+            // Update indicators
+            const allIndicators = indicators.querySelectorAll('.carousel-indicator');
+            allIndicators.forEach((ind, i) => {
+                ind.classList.toggle('active', i === index);
+            });
+        }
+
+        // Simple tooltip implementation
+        function setupTooltips() {
+            // Remove any existing tooltips
+            const existingTooltips = document.querySelectorAll('.tooltip');
+            existingTooltips.forEach(t => t.remove());
+            
+            // Create new tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+            
+            // Add event listeners to all step buttons
+            const stepButtons = document.querySelectorAll('.step-button');
+            stepButtons.forEach(button => {
+                const tooltipText = button.getAttribute('data-tooltip');
+                if (!tooltipText) return;
+                
+                // On mouse enter
+                button.addEventListener('mouseenter', () => {
+                    // Set tooltip text
+                    tooltip.textContent = tooltipText;
+                    
+                    // Position tooltip based on viewport width
+                    const rect = button.getBoundingClientRect();
+                    if (window.innerWidth <= 1024) {
+                        // Position below on mobile
+                        tooltip.className = 'tooltip bottom';
+                        tooltip.style.top = `${rect.bottom + 10}px`;
+                        tooltip.style.left = `${rect.left + rect.width/2}px`;
+                        tooltip.style.transform = 'translateX(-50%)';
+                    } else {
+                        // Position to the right on desktop
+                        tooltip.className = 'tooltip right';
+                        tooltip.style.top = `${rect.top + rect.height/2}px`;
+                        tooltip.style.left = `${rect.right + 10}px`;
+                        tooltip.style.transform = 'translateY(-50%)';
+                    };
+                    
+                    // Make tooltip visible
+                    tooltip.style.opacity = '1';
+                });
+                
+                // On mouse leave
+                button.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        // Event Listeners
+        stepButtons.forEach((button, index) => {
+            button.addEventListener('click', () => showStep(index));
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 0) showStep(currentStep - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentStep < totalSteps - 1) showStep(currentStep + 1);
+        });
+
+        // Image modal functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG' && e.target.parentElement.classList.contains('image-container')) {
+                modal.style.display = 'block';
+                modalImg.src = e.target.src;
+                modalImg.alt = e.target.alt;
+            }
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Creator name with confetti
+        document.getElementById('creator-name').addEventListener('click', () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.8 },
+                colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
+            });
+        });
+
+        // Initialize with first step and set up tooltips
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(0);
+            setupTooltips();
+            
+            // Update tooltips on window resize
+            window.addEventListener('resize', () => {
+                setupTooltips();
+            });
+            
+            // Update tooltips whenever a step button is clicked
+            document.querySelectorAll('.step-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    setTimeout(setupTooltips, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
