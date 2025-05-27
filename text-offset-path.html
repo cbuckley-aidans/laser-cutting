@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Offset Path in Illustrator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --accent-color: #002654;
+            --active-color: #002654;
+        }
+    </style>
+</head>
+<body>
+    <div class="tutorial-container">
+        <!-- Left Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-logo">TEXT<br>OFFSET PATH</div>
+            <div class="step-button active" data-step="0" data-tooltip="Introduction">
+                <i class="fas fa-list-ol"></i>
+            </div>
+            <div class="step-button" data-step="1" data-tooltip="Text Offset Path">
+                <span>1</span>
+            </div>
+        </div>
+
+        <!-- Middle Instructions Panel -->
+        <div class="instructions-panel">
+            <h1 id="current-step-title">Introduction</h1>
+            
+            <div id="step-instructions">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation">
+                <button id="prevButton" class="nav-button" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                <button id="nextButton" class="nav-button">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-text">Progress: <span id="progress-percentage">0%</span></div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="footer">
+                Made with <span style="color: var(--accent-color);">♥</span> by <span id="creator-name">Buckley</span>
+            </div>
+        </div>
+
+        <!-- Right Content Display Area -->
+        <div class="content-display">
+            <div class="card">
+                <h2 id="content-title">Introduction</h2>
+                <div id="media-content">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tutorial content configuration
+        const stepTitles = [
+            "Introduction",
+            "Text Offset Path"
+        ];
+
+        const stepInstructions = [
+            // Step 0: Introduction
+            `<h3>Learning Intention and Success Criteria</h3>
+            
+            <div class="card">
+                <p><strong>Learning Intention:</strong></p>
+                <ol class="steps-list">
+                    <li>Master creating offset paths for text using expand and compound shapes</li>
+                </ol>
+            
+                <p><strong>Success Criteria:</strong></p>
+                <ol class="steps-list">
+                    <li>Successfully create text outlines using expand, compound shapes, and offset path</li>
+                </ol>
+            </div>`,
+            
+            // Step 1: Tutorial
+            `<h3>Creating Offset Paths for Text</h3>
+            <p>Trying to create outlines for text is messy unless you follow specific steps first. This technique shows you how to make nice combined outlines for your text.</p>
+            
+            <div class="card">
+                <h4>Step-by-Step Instructions:</h4>
+                <ol class="steps-list">
+                    <li>Select the text object you want to create an offset path for</li>
+                    <li>Go to <strong>Object > Expand...</strong> in the menu</li>
+                    <li>In the Expand dialog, make sure both "Object" and "Fill" are checked, then click <strong>OK</strong></li>
+                    <li>With the expanded text still selected, click on it again to ensure it's properly selected</li>
+                    <li>Open the Pathfinder panel (<strong>Window > Pathfinder</strong> if not visible)</li>
+                    <li>In the Pathfinder panel, click on the three dots menu (•••) to access additional options</li>
+                    <li>From the dropdown menu, select <strong>"Create Compound Shape"</strong></li>
+                    <li>Now go to <strong>Object > Path > Offset Path...</strong></li>
+                    <li>Enter your desired offset distance and click <strong>OK</strong></li>
+                </ol>
+            </div>
+
+            <div class="alert-box alert-info">
+                <p><strong><i class="fas fa-lightbulb"></i> Pro Tip:</strong></p>
+                <p>This process is essential for creating clean, unified outlines for text that will cut properly on a laser cutter.</p>
+            </div>`
+        ];
+
+        const stepMedia = [
+            // Step 0: Introduction
+            `<div class="alert-box alert-info">
+                <p><strong>Tutorial Overview</strong></p>
+                <p>Learn the proper technique for creating clean offset paths from text using expand and compound shapes.</p>
+            </div>`,
+            
+            // Step 1: Tutorial Demo
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/WqptzKF.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What's happening in this video:</strong></p>
+                <p>In this demonstration, I'm showing the special process for creating offset paths from text:</p>
+                
+                <p>1. I select the text and go to Object > Expand to convert it to paths</p>
+                <p>2. I click on the expanded text object again to ensure proper selection</p>
+                <p>3. I open the Pathfinder panel and click the three dots menu</p>
+                <p>4. I then click the other small menu button just underneath it</p>
+                <p>5. I select "Create Compound Shape" from the dropdown and then click "Expand"</p>
+                <p>6. I then use Object > Path > Offset Path to create a clean text outline</p>
+            </div>`
+        ];
+
+        // Current step tracking
+        let currentStep = 0;
+        const totalSteps = stepInstructions.length;
+
+        // DOM Elements
+        const stepButtons = document.querySelectorAll('.step-button');
+        const stepTitleEl = document.getElementById('current-step-title');
+        const instructionsPanel = document.getElementById('step-instructions');
+        const mediaContent = document.getElementById('media-content');
+        const contentTitle = document.getElementById('content-title');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressBar = document.querySelector('.progress');
+        const progressPercentage = document.getElementById('progress-percentage');
+
+        // Initialize the tutorial
+        function showStep(step) {
+            // Update active step button
+            stepButtons.forEach((button, index) => {
+                button.classList.toggle('active', index === step);
+            });
+
+            // Update step title
+            stepTitleEl.textContent = stepTitles[step];
+            contentTitle.textContent = stepTitles[step];
+
+            // Update content
+            instructionsPanel.innerHTML = stepInstructions[step];
+            mediaContent.innerHTML = stepMedia[step];
+
+            // Update navigation buttons
+            prevButton.disabled = step === 0;
+            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'flex';
+            
+            // Update progress
+            const progress = Math.round(((step + 1) / totalSteps) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${progress}%`;
+            
+            currentStep = step;
+        }
+
+        // Event Listeners
+        stepButtons.forEach((button, index) => {
+            button.addEventListener('click', () => showStep(index));
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 0) showStep(currentStep - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentStep < totalSteps - 1) showStep(currentStep + 1);
+        });
+
+        // Creator name with confetti
+        document.getElementById('creator-name').addEventListener('click', () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.8 },
+                colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
+            });
+        });
+
+        // Initialize with first step
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(0);
+        });
+    </script>
+</body>
+</html>
