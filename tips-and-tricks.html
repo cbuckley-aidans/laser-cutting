@@ -33,11 +33,20 @@
             <div class="step-button" data-step="2" data-tooltip="Shape Operations">
                 <span>2</span>
             </div>
-            <div class="step-button" data-step="3" data-tooltip="Shape Builder Tool">
+            <div class="step-button" data-step="3" data-tooltip="Measuring">
                 <span>3</span>
             </div>
-            <div class="step-button" data-step="4" data-tooltip="Measuring">
+            <div class="step-button" data-step="4" data-tooltip="Shape Builder Tool">
                 <span>4</span>
+            </div>
+            <div class="step-button" data-step="5" data-tooltip="Layers">
+                <span>5</span>
+            </div>
+            <div class="step-button" data-step="6" data-tooltip="Offset Path">
+                <span>6</span>
+            </div>
+            <div class="step-button" data-step="7" data-tooltip="Text Offset Path">
+                <span>7</span>
             </div>
         </div>
 
@@ -54,16 +63,22 @@
                     <ol class="steps-list">
                         <li>Learn how to efficiently align objects both vertically and horizontally</li>
                         <li>Master shape operations: Unite, Minus, and Exclude</li>
-                        <li>Learn how to use the Shape Builder tool for intuitive shape creation</li>
                         <li>Learn how to use the measuring tool to get precise measurements</li>
+                        <li>Learn how to use the Shape Builder tool for intuitive shape creation</li>
+                        <li>Understand how to organize and manage content using layers</li>
+                        <li>Learn how to use the Offset Path feature to create outlines and borders</li>
+                        <li>Master creating offset paths for text using expand and compound shapes</li>
                     </ol>
                 
                     <p><strong>Success Criteria:</strong></p>
                     <ol class="steps-list">
                         <li>Successfully align multiple objects using Illustrator's alignment tools</li>
                         <li>Successfully create complex shapes by combining simpler shapes using Unite, Minus, and Exclude operations</li>
-                        <li>Successfully use the Shape Builder tool to create and remove parts of shapes intuitively</li>
                         <li>Successfully measure objects and distances using the measuring tool</li>
+                        <li>Successfully use the Shape Builder tool to create and remove parts of shapes intuitively</li>
+                        <li>Successfully organize content by moving objects between layers using the layers panel</li>
+                        <li>Successfully create clean outline paths using the Offset Path feature</li>
+                        <li>Successfully create text outlines using expand, compound shapes, and offset path</li>
                     </ol>
                 </div>
             </div>
@@ -123,8 +138,11 @@
             "Introduction",
             "Aligning Objects",
             "Uniting, Minusing, Excluding",
+            "Measuring Objects",
             "Shape Builder Tool",
-            "Measuring Objects"
+            "Working with Layers",
+            "Offset Path Feature",
+            "Text Offset Path"
         ];
 
         // Define your step instructions (middle panel content)
@@ -137,16 +155,22 @@
                 <ol class="steps-list">
                     <li>Learn how to efficiently align objects both vertically and horizontally</li>
                     <li>Master shape operations: Unite, Minus, and Exclude</li>
-                    <li>Learn how to use the Shape Builder tool for intuitive shape creation</li>
                     <li>Learn how to use the measuring tool to get precise measurements</li>
+                    <li>Learn how to use the Shape Builder tool for intuitive shape creation</li>
+                    <li>Understand how to organize and manage content using layers</li>
+                    <li>Learn how to use the Offset Path feature to create outlines and borders</li>
+                    <li>Master creating offset paths for text using expand and compound shapes</li>
                 </ol>
             
                 <p><strong>Success Criteria:</strong></p>
                 <ol class="steps-list">
                     <li>Successfully align multiple objects using Illustrator's alignment tools</li>
                     <li>Successfully create complex shapes by combining simpler shapes using Unite, Minus, and Exclude operations</li>
-                    <li>Successfully use the Shape Builder tool to create and remove parts of shapes intuitively</li>
                     <li>Successfully measure objects and distances using the measuring tool</li>
+                    <li>Successfully use the Shape Builder tool to create and remove parts of shapes intuitively</li>
+                    <li>Successfully organize content by moving objects between layers using the layers panel</li>
+                    <li>Successfully create clean outline paths using the Offset Path feature</li>
+                    <li>Successfully create text outlines using expand, compound shapes, and offset path</li>
                 </ol>
             </div>`,
             
@@ -184,25 +208,7 @@
                 </ol>
             </div>`,
             
-            // Step 3 - Shape Builder Tool
-            `<h3>Using the Shape Builder Tool</h3>
-            <p>The Shape Builder tool provides an intuitive way to create complex shapes by simply clicking and dragging to combine or remove parts of overlapping objects.</p>
-            
-            <div class="card">
-                <h4>How to Use the Shape Builder Tool:</h4>
-                <ol class="steps-list">
-                    <li>Create two or more overlapping shapes</li>
-                    <li>Select all the shapes you want to work with using <span class="kbd">Shift</span>+click</li>
-                    <li>Choose the Shape Builder tool from the toolbar (shortcut: <span class="kbd">Shift</span>+<span class="kbd">M</span>)</li>
-                    <li>To combine areas: Click and drag across the areas you want to merge together</li>
-                    <li>To remove areas: Hold <span class="kbd">Alt</span> and click on the areas you want to delete</li>
-                    <li>Continue clicking and dragging to build your desired shape</li>
-                </ol>
-            </div>
-            
-            `,
-            
-            // Step 4 - Measuring
+            // Step 3 - Measuring
             `<h3>Using the Measuring Tool</h3>
             <p>The measuring tool allows you to precisely measure distances, angles, and objects in your designs.</p>
             
@@ -228,7 +234,104 @@
             <div class="alert-box alert-info">
                 <p><strong><i class="fas fa-lightbulb"></i> Pro Tip:</strong></p>
                 <p>The measurement tool saves you time when trying to create perfectly sized objects or when aligning elements at specific distances from each other.</p>
-            </div>`
+            </div>`,
+            
+            // Step 4 - Shape Builder Tool
+            `<h3>Using the Shape Builder Tool</h3>
+            <p>The Shape Builder tool provides an intuitive way to create complex shapes by simply clicking and dragging to combine or remove parts of overlapping objects.</p>
+            
+            <div class="card">
+                <h4>How to Use the Shape Builder Tool:</h4>
+                <ol class="steps-list">
+                    <li>Create two or more overlapping shapes</li>
+                    <li>Select all the shapes you want to work with using <span class="kbd">Shift</span>+click</li>
+                    <li>Choose the Shape Builder tool from the toolbar (shortcut: <span class="kbd">Shift</span>+<span class="kbd">M</span>)</li>
+                    <li>To combine areas: Click and drag across the areas you want to merge together</li>
+                    <li>To remove areas: Hold <span class="kbd">Alt</span> and click on the areas you want to delete</li>
+                    <li>Continue clicking and dragging to build your desired shape</li>
+                </ol>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong><i class="fas fa-lightbulb"></i> Pro Tip:</strong></p>
+                <p>The Shape Builder tool is perfect for cleaning up some image traces.</p>
+            </div>`,
+            
+            // Step 5 - Working with Layers
+            `<h3>Working with Layers</h3>
+            <p>Layers help you organize your artwork by separating different elements onto different levels, making it easier to manage complex designs.</p>
+            
+            <div class="card">
+                <h4>How to Organize Content with Layers:</h4>
+                <ol class="steps-list">
+                    <li>Open the Layers panel by going to <strong>Window > Layers</strong> (or press <span class="kbd">F7</span>)</li>
+                    <li>To create a new layer, click the "Create New Layer" button at the bottom of the Layers panel</li>
+                    <li>To move an object to a different layer:
+                        <ul>
+                            <li>First, select the object you want to move on your artboard</li>
+                            <li>In the Layers panel, look for the small colored dot that appears next to the layer name - this indicates which layer contains your selected object</li>
+                            <li>Click and drag this colored dot to a different layer in the panel</li>
+                            <li>The object will now be assigned to the new layer</li>
+                        </ul>
+                    </li>
+                    <li>You can rename layers by double-clicking on the layer name in the panel</li>
+                    <li>Lock layers by clicking the empty space next to the eye icon (a lock icon will appear)</li>
+                    <li>Hide/show layers by clicking the eye icon</li>
+                </ol>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong><i class="fas fa-lightbulb"></i> Pro Tip:</strong></p>
+                <p>This is a great way to organise projects where you are cutting across multiple different sheets of material.</p>
+            </div>`,
+            
+            // Step 6 - Offset Path Feature
+            `<h3>Using the Offset Path Feature</h3>
+            <p>The Offset Path feature allows you to create outlines, borders, and clean up paths by expanding or contracting shapes from their original position.</p>
+            
+            <div class="card">
+                <h4>How to Use Offset Path:</h4>
+                <ol class="steps-list">
+                    <li>Select the object or path you want to create an offset from</li>
+                    <li>Go to <strong>Object > Path > Offset Path...</strong> in the menu</li>
+                    <li>In the dialog box, enter your desired offset distance:
+                        <ul>
+                            <li>Positive values create an outline that expands outward</li>
+                            <li>Negative values create an outline that contracts inward</li>
+                        </ul>
+                    </li>
+                    <li>Try changing the settings to see the changes</li>
+                    <li>Click <strong>OK</strong> to apply the offset</li>
+                    <li>Click the <strong>Unite</strong> button in the pathfinder options to clean up any crazy lines.</li>
+                    <li>Move the created offset lines as needed to achieve your desired result</li>
+                </ol>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong><i class="fas fa-lightbulb"></i> Pro Tip:</strong></p>
+                <p>This is an easy way to create an outline to cut out the shape for your object. Don't forget to change the stroke width to 0.003pts!</p>
+            </div>`,
+            
+            // Step 7 - Text Offset Path
+            `<h3>Creating Offset Paths for Text</h3>
+            <p>Trying to create outlines for text is messy unless you follow specific steps first. This technique shows you how to make nice combined outlines for your text.</p>
+            
+            <div class="card">
+                <h4>How to Create Text Offset Paths:</h4>
+                <ol class="steps-list">
+                    <li>Select the text object you want to create an offset path for</li>
+                    <li>Go to <strong>Object > Expand...</strong> in the menu</li>
+                    <li>In the Expand dialog, make sure both "Object" and "Fill" are checked, then click <strong>OK</strong></li>
+                    <li>With the expanded text still selected, click on it again to ensure it's properly selected</li>
+                    <li>Open the Pathfinder panel (<strong>Window > Pathfinder</strong> if not visible)</li>
+                    <li>In the Pathfinder panel, click on the three dots menu (•••) to access additional options</li>
+                    <li>From the dropdown menu, select <strong>"Create Compound Shape"</strong></li>
+                    <li>Now go to <strong>Object > Path > Offset Path...</strong></li>
+                    <li>Enter your desired offset distance and click <strong>OK</strong></li>
+                </ol>
+            </div>
+            
+            `
         ];
 
         // Define your media content (right panel)
@@ -283,26 +386,7 @@
                 <p>Notice how each operation creates distinctly different results from the same starting shapes!</p>
             </div>`,
             
-            // Step 3 - Shape Builder Tool
-            `<div class="video-container">
-                <video width="100%" controls autoplay loop muted playsinline>
-                    <source src="https://i.imgur.com/zDtSPam.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            
-            <div class="alert-box alert-info">
-                <p><strong>What's happening in this video:</strong></p>
-                <p>In this demonstration, I'm showing how to use the Shape Builder tool with overlapping shapes:</p>
-                
-                <p>1. I start with multiple overlapping shapes selected</p>
-                <p>2. I select the Shape Builder tool (Shift+M)</p>
-                <p>3. I click and drag across areas to combine them into new shapes</p>
-                <p>5. I continue building until I have the desired final shape</p>
-                
-            </div>`,
-            
-            // Step 4 - Measuring
+            // Step 3 - Measuring
             `<div class="video-container">
                 <video width="100%" controls autoplay loop muted playsinline>
                     <source src="https://i.imgur.com/Mn71zUU.mp4" type="video/mp4">
@@ -323,6 +407,83 @@
                 <p>7. I click once more to visually display the measurement</p>
                 
                 <p>This tool is perfect for precise design work when measurements matter!</p>
+            </div>`,
+            
+            // Step 4 - Shape Builder Tool
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/zDtSPam.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What's happening in this video:</strong></p>
+                <p>In this demonstration, I'm showing how to use the Shape Builder tool with overlapping shapes:</p>
+                
+                <p>1. I start by selecting multiple shapes first</p>
+                <p>2. I select the Shape Builder tool (Shift+M)</p>
+                <p>3. I click and drag across areas to combine them into new shapes</p>
+            </div>`,
+            
+            // Step 5 - Working with Layers
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/E8I6ywz.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What's happening in this video:</strong></p>
+                <p>In this demonstration, I'm showing how to organize content using layers in Illustrator:</p>
+                
+                <p>1. I open the Layers panel (Window > Layers or F7)</p>
+                <p>2. I create a new layer by clicking the "Create New Layer" button</p>
+                <p>3. I select an object on the artboard</p>
+                <p>4. I locate the coloured dot in the Layers panel that represents the selected object</p>
+                <p>5. I drag this dot from one layer to another to move the object</p>            </div>`,
+            
+            // Step 6 - Offset Path Feature
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/jO9KZm7.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What's happening in this video:</strong></p>
+                <p>In this demonstration, I'm showing how to use the Offset Path feature:</p>
+                
+                <p>1. I select an object and go to Object > Path > Offset Path</p>
+                <p>2. I use the Offset Path dialog to create an outline around the shape</p>
+                <p>3. I move the created offset lines to position them as needed</p>
+                <p>4. I click the Unite button under the pathfinder settings (the two white squares)</p>
+                
+                <p>This technique is essential for creating borders and creating specific laser cutting outlines.</p>
+            </div>`,
+            
+            // Step 7 - Text Offset Path
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/WqptzKF.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What's happening in this video:</strong></p>
+                <p>In this demonstration, I'm showing the special process for creating offset paths from text:</p>
+                
+                <p>1. I select the text and go to Object > Expand to convert it to paths</p>
+                <p>2. I click on the expanded text object again to ensure proper selection</p>
+                <p>3. I open the Pathfinder panel and click the three dots menu</p>
+                <p>4. I then click the other small menu button just underneath it</p>
+
+                <p>5. I select "Create Compound Shape" from the dropdown and then click "Expand"</p>
+                <p>6. I then use Object > Path > Offset Path to create a clean text outline</p>
+                
             </div>`
         ];
 
@@ -480,7 +641,7 @@
                         tooltip.style.top = `${rect.top + rect.height/2}px`;
                         tooltip.style.left = `${rect.right + 10}px`;
                         tooltip.style.transform = 'translateY(-50%)';
-                    };
+                    }
                     
                     // Make tooltip visible
                     tooltip.style.opacity = '1';
