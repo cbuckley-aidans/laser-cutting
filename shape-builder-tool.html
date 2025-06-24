@@ -26,6 +26,9 @@
             <div class="step-button" data-step="1" data-tooltip="Shape Builder Tool">
                 <span>1</span>
             </div>
+            <div class="step-button" data-step="2" data-tooltip="Curvature Tool + Subtraction">
+                <span>2</span>
+            </div>
         </div>
 
         <!-- Middle Instructions Panel -->
@@ -70,7 +73,8 @@
         // Tutorial content configuration
         const stepTitles = [
             "Introduction",
-            "Shape Builder Tool"
+            "Shape Builder Tool",
+            "Curvature Tool + Subtraction"
         ];
 
         const stepInstructions = [
@@ -107,7 +111,29 @@
 
             <div class="alert-box alert-info">
                 <p><strong><i class="fas fa-lightbulb"></i> Pro Tip:</strong></p>
-                <p>The Shape Builder tool is perfect for cleaning up some image traces and creating organic, flowing shapes from geometric starting points.</p>
+                <p>The Shape Builder tool is perfect for cleaning up some image traces.</p>
+            </div>`,
+
+            // Step 2: Curvature Tool + Subtraction
+            `<h3>Using Curvature Tool with Shape Builder Subtraction</h3>
+            <p>Combine the Curvature tool with the Shape Builder tool's subtraction feature to create precise cutouts, shadows, and highlights in your designs.</p>
+            
+            <div class="card">
+                <h4>Step-by-Step Instructions:</h4>
+                <ol class="steps-list">
+                    <li>Start with an existing shape or create one using basic shape tools</li>
+                    <li>Select the Curvature tool from the toolbar (shortcut: <span class="kbd">Shift</span>+<span class="kbd">~</span>)</li>
+                    <li>Create a curved shape that overlaps with your original shape</li>
+                    <li>Select both shapes using <span class="kbd">Shift</span>+click</li>
+                    <li>Choose the Shape Builder tool (shortcut: <span class="kbd">Shift</span>+<span class="kbd">M</span>)</li>
+                    <li>Hold <span class="kbd">Alt</span> and click on the areas you want to subtract/remove</li>
+                    <li>The overlapping area will be cut out from the original shape</li>
+                </ol>
+            </div>
+
+            <div class="alert-box alert-info">
+                <p><strong><i class="fas fa-lightbulb"></i> Creative Applications:</strong></p>
+                <p>This technique is excellent for creating shadows, highlights, cutout effects, or adding organic details to geometric shapes. Perfect for logo design and illustration work.</p>
             </div>`
         ];
 
@@ -135,6 +161,26 @@
                 <p>3. I click and drag across areas to combine them into new shapes</p>
                 
                 <p>This tool makes it incredibly easy to experiment with different shape combinations!</p>
+            </div>`,
+
+            // Step 2: Curvature Tool + Subtraction Demo
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/Vrm5P75.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div class="alert-box alert-info">
+                <p><strong>What's happening in this video:</strong></p>
+                <p>This demonstration shows the power of combining the Curvature tool with Shape Builder subtraction:</p>
+                
+                <p>1. I create a curved shape using the Curvature tool</p>
+                <p>2. I position it to overlap with an existing shape</p>
+                <p>3. I select both shapes and use the Shape Builder tool</p>
+                <p>4. Holding Alt, I click to subtract the overlapping area</p>
+                
+                <p>This creates clean cutouts perfect for shadows, highlights, or design details!</p>
             </div>`
         ];
 
