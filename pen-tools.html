@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illustrator Pen & Curvature Tools Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="tutorial-container">
+        <!-- Left Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-logo">PEN &<br>CURVATURE<br>TOOLS</div>
+            <div class="step-button active" data-step="0" data-tooltip="Introduction">
+                <i class="fas fa-list-ol"></i>
+            </div>
+            <div class="step-button" data-step="1" data-tooltip="Basic Pen Tool">
+                <span>1</span>
+            </div>
+            <div class="step-button" data-step="2" data-tooltip="Creating Curves">
+                <span>2</span>
+            </div>
+            <div class="step-button" data-step="3" data-tooltip="Curvature Tool">
+                <span>3</span>
+            </div>
+        </div>
+
+        <!-- Middle Instructions Panel -->
+        <div class="instructions-panel">
+            <h1 id="current-step-title">Introduction</h1>
+            
+            <div id="step-instructions">
+                <!-- Will be populated by JavaScript -->
+                <h3>Learning Intentions and Success Criteria</h3>
+                
+                <div class="card">
+                    <p><strong>Learning Intentions:</strong></p>
+                    <ol class="steps-list">
+                        <li>Master the pen tool for creating precise paths</li>
+                        <li>Learn to create and edit curved paths</li>
+                        <li>Use the curvature tool for organic shapes</li>
+                    </ol>
+                
+                    <p><strong>Success Criteria:</strong></p>
+                    <ol class="steps-list">
+                        <li>Create straight lines and add anchor points</li>
+                        <li>Use Alt to create smooth curves</li>
+                        <li>Build shapes with the curvature tool and shape builder</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation">
+                <button id="prevButton" class="nav-button" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                <button id="nextButton" class="nav-button">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-text">Progress: <span id="progress-percentage">0%</span></div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="footer">
+                Made with <span style="color: var(--accent-color);">♥</span> by <span id="creator-name">Buckley</span>
+            </div>
+        </div>
+
+        <!-- Right Content Display Area -->
+        <div class="content-display">
+            <div class="card">
+                <h2 id="content-title">Introduction</h2>
+                <div id="media-content">
+                    <!-- Will be populated by JavaScript -->
+                    <div class="alert-box alert-info">
+                        <p><strong>Tutorial Overview</strong></p>
+                        <p>Learn to master Illustrator's pen and curvature tools for creating precise vector paths and organic shapes.</p>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing images -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img id="modalImage" class="modal-content">
+    </div>
+
+    <script>
+        // Tutorial content configuration
+        // Define your step titles
+        const stepTitles = [
+            "Introduction",
+            "Basic Pen Tool",
+            "Creating Curves",
+            "Curvature Tool"
+        ];
+
+        // Define your step instructions (middle panel content)
+        const stepInstructions = [
+            // Step 0: Introduction
+            `<h3>Introduction to Pen and Curvature Tools</h3>
+            
+            <div class="card">
+                <p><strong>Learning Intentions:</strong></p>
+                <ol class="steps-list">
+                    <li>Master the pen tool for creating precise paths</li>
+                    <li>Learn to create and edit curved paths</li>
+                    <li>Use the curvature tool for organic shapes</li>
+                </ol>
+            
+                <p><strong>Success Criteria:</strong></p>
+                <ol class="steps-list">
+                    <li>Create straight lines and add anchor points</li>
+                    <li>Use Alt to create smooth curves</li>
+                    <li>Build shapes with the curvature tool and shape builder</li>
+                </ol>
+            </div>`,
+            
+            // Step 1: Basic Pen Tool
+            `<h3>Basic Pen Tool</h3>
+            <p>Learn the fundamentals of the pen tool for creating precise straight paths.</p>
+            
+            <div class="card">
+                <h4>Key Steps:</h4>
+                <ol class="steps-list">
+                    <li>Select the <strong>Pen Tool</strong> <span class="kbd">P</span></li>
+                    <li>Hold <span class="kbd">Shift</span> and click to create straight lines between points</li>
+                    <li>Press <span class="kbd">Esc</span> to stop drawing</li>
+                    <li>Hover over the line until you see the <strong>+ icon</strong>, then click to add a new point</li>
+                    <li>Switch to the <strong>Direct Selection Tool</strong> <span class="kbd">A</span> (white arrow) to move points</li>
+                </ol>
+            </div>`,
+            
+            // Step 2: Creating Curves
+            `<h3>Creating Curves</h3>
+            <p>Learn to create smooth curves using the Alt modifier key.</p>
+            
+            <div class="card">
+                <h4>Key Steps:</h4>
+                <ol class="steps-list">
+                    <li>With the <strong>Pen Tool</strong> <span class="kbd">P</span> selected, hold <span class="kbd">Alt</span></li>
+                    <li>Hover over an existing point and click</li>
+                    <li><strong>Drag</strong> to create a curve handle</li>
+                    <li>Use the <strong>Direct Selection Tool</strong> <span class="kbd">A</span> to further adjust curve handles</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title"><i class="fas fa-lightbulb"></i> Tip</div>
+                <p>The Alt key converts corner points to smooth curve points. The direction and length of your drag determines the curve shape.</p>
+            </div>`,
+            
+            // Step 3: Curvature Tool
+            `<h3>Curvature Tool</h3>
+            <p>Create organic shapes quickly with the curvature tool and shape builder.</p>
+            
+            <div class="card">
+                <h4>Key Steps:</h4>
+                <ol class="steps-list">
+                    <li>Select the <strong>Curvature Tool</strong> <span class="kbd">Shift</span> <span class="kbd-plus">+</span> <span class="kbd">~</span></li>
+                    <li>Click points to create smooth curves automatically</li>
+                    <li>Click on the <strong>first point</strong> to close your shape</li>
+                    <li>Select multiple objects</li>
+                    <li>Use <strong>Shape Builder Tool</strong> <span class="kbd">Shift</span> <span class="kbd-plus">+</span> <span class="kbd">M</span> to combine or subtract shapes</li>
+                </ol>
+            </div>
+            
+            `
+        ];
+
+        // Define your media content (right panel)
+        const stepMedia = [
+            // Step 0: Introduction
+            `<div class="alert-box alert-info">
+                <p><strong>Pen & Curvature Tools</strong></p>
+                <p>Learn Illustrator's path creation tools for creating precise lines and organic shapes.</p>
+            </div>`,
+            
+            // Step 1: Basic Pen Tool
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/rUcozZ8.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p style="text-align: center; margin-top: 15px;">Basic Pen Tool: Creating straight lines and adding points</p>
+            </div>`,
+            
+            // Step 2: Creating Curves
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/hfEo6zD.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p style="text-align: center; margin-top: 15px;">Creating smooth curves with Alt + click and drag</p>
+            </div>`,
+            
+            // Step 3: Curvature Tool
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/MUQ8Fys.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p style="text-align: center; margin-top: 15px;">Curvature tool and Shape Builder for organic shapes</p>
+            </div>`
+        ];
+
+        // Current step tracking
+        let currentStep = 0;
+        const totalSteps = stepInstructions.length;
+
+        // DOM Elements
+        const stepButtons = document.querySelectorAll('.step-button');
+        const stepTitleEl = document.getElementById('current-step-title');
+        const instructionsPanel = document.getElementById('step-instructions');
+        const mediaContent = document.getElementById('media-content');
+        const contentTitle = document.getElementById('content-title');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressBar = document.querySelector('.progress');
+        const progressPercentage = document.getElementById('progress-percentage');
+
+        // Image modal
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalClose = document.querySelector('.modal-close');
+
+        // Initialize the tutorial
+        function showStep(step) {
+            // Update active step button
+            stepButtons.forEach((button, index) => {
+                button.classList.toggle('active', index === step);
+            });
+
+            // Update step title
+            stepTitleEl.textContent = stepTitles[step];
+            contentTitle.textContent = stepTitles[step];
+
+            // Update content
+            instructionsPanel.innerHTML = stepInstructions[step];
+            mediaContent.innerHTML = stepMedia[step];
+
+            // Update navigation buttons
+            prevButton.disabled = step === 0;
+            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'flex';
+            
+            // Update progress
+            const progress = Math.round(((step + 1) / totalSteps) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${progress}%`;
+            
+            // Initialize carousels if present
+            initCarousels();
+            
+            currentStep = step;
+        }
+
+        // Initialize all carousels on the page
+        function initCarousels() {
+            // Find all carousel elements in the current step
+            document.querySelectorAll('.carousel').forEach((carouselElement) => {
+                const carouselContainer = carouselElement.querySelector('.carousel-container');
+                if (!carouselContainer) return;
+                
+                const slides = carouselContainer.querySelectorAll('.carousel-slide');
+                if (slides.length <= 1) return;
+                
+                // Get carousel controls
+                const prevBtn = carouselElement.querySelector('.prev-btn');
+                const nextBtn = carouselElement.querySelector('.next-btn');
+                const indicators = carouselElement.querySelector('.carousel-indicators');
+                
+                if (!prevBtn || !nextBtn || !indicators) return;
+                
+                // Clear existing indicators and recreate them
+                indicators.innerHTML = '';
+                slides.forEach((_, i) => {
+                    const indicator = document.createElement('div');
+                    indicator.className = `carousel-indicator ${i === 0 ? 'active' : ''}`;
+                    indicator.dataset.index = i;
+                    indicator.addEventListener('click', () => {
+                        scrollToSlide(carouselContainer, indicators, i);
+                    });
+                    indicators.appendChild(indicator);
+                });
+                
+                // Track the current slide for this carousel
+                carouselContainer.dataset.currentSlide = '0';
+                
+                // Add click handlers to navigation buttons
+                prevBtn.onclick = function() {
+                    const currentSlide = parseInt(carouselContainer.dataset.currentSlide || '0');
+                    const newSlide = (currentSlide - 1 + slides.length) % slides.length;
+                    scrollToSlide(carouselContainer, indicators, newSlide);
+                    carouselContainer.dataset.currentSlide = newSlide.toString();
+                };
+                
+                nextBtn.onclick = function() {
+                    const currentSlide = parseInt(carouselContainer.dataset.currentSlide || '0');
+                    const newSlide = (currentSlide + 1) % slides.length;
+                    scrollToSlide(carouselContainer, indicators, newSlide);
+                    carouselContainer.dataset.currentSlide = newSlide.toString();
+                };
+            });
+        }
+
+        // Scroll carousel to specific slide
+        function scrollToSlide(carousel, indicators, index) {
+            // Calculate the scroll position
+            const slideWidth = carousel.clientWidth;
+            const scrollPosition = slideWidth * index;
+            
+            // Animate the scroll
+            carousel.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+            
+            // Update indicators
+            const allIndicators = indicators.querySelectorAll('.carousel-indicator');
+            allIndicators.forEach((ind, i) => {
+                ind.classList.toggle('active', i === index);
+            });
+        }
+
+        // Simple tooltip implementation
+        function setupTooltips() {
+            // Remove any existing tooltips
+            const existingTooltips = document.querySelectorAll('.tooltip');
+            existingTooltips.forEach(t => t.remove());
+            
+            // Create new tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+            
+            // Add event listeners to all step buttons
+            const stepButtons = document.querySelectorAll('.step-button');
+            stepButtons.forEach(button => {
+                const tooltipText = button.getAttribute('data-tooltip');
+                if (!tooltipText) return;
+                
+                // On mouse enter
+                button.addEventListener('mouseenter', () => {
+                    // Set tooltip text
+                    tooltip.textContent = tooltipText;
+                    
+                    // Position tooltip based on viewport width
+                    const rect = button.getBoundingClientRect();
+                    if (window.innerWidth <= 1024) {
+                        // Position below on mobile
+                        tooltip.className = 'tooltip bottom';
+                        tooltip.style.top = `${rect.bottom + 10}px`;
+                        tooltip.style.left = `${rect.left + rect.width/2}px`;
+                        tooltip.style.transform = 'translateX(-50%)';
+                    } else {
+                        // Position to the right on desktop
+                        tooltip.className = 'tooltip right';
+                        tooltip.style.top = `${rect.top + rect.height/2}px`;
+                        tooltip.style.left = `${rect.right + 10}px`;
+                        tooltip.style.transform = 'translateY(-50%)';
+                    }
+                    
+                    // Make tooltip visible
+                    tooltip.style.opacity = '1';
+                });
+                
+                // On mouse leave
+                button.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        // Event Listeners
+        stepButtons.forEach((button, index) => {
+            button.addEventListener('click', () => showStep(index));
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 0) showStep(currentStep - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentStep < totalSteps - 1) showStep(currentStep + 1);
+        });
+
+        // Image modal functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG' && e.target.parentElement.classList.contains('image-container')) {
+                modal.style.display = 'block';
+                modalImg.src = e.target.src;
+                modalImg.alt = e.target.alt;
+            }
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Creator name with confetti
+        document.getElementById('creator-name').addEventListener('click', () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.8 },
+                colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
+            });
+        });
+
+        // Initialize with first step and set up tooltips
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(0);
+            setupTooltips();
+            
+            // Update tooltips on window resize
+            window.addEventListener('resize', () => {
+                setupTooltips();
+            });
+            
+            // Update tooltips whenever a step button is clicked
+            document.querySelectorAll('.step-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    setTimeout(setupTooltips, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
