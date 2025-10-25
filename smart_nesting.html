@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xTool Smart Nesting Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="tutorial-container">
+        <!-- Left Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-logo">xTOOL<br>SMART NESTING</div>
+            <div class="step-button active" data-step="0" data-tooltip="Introduction">
+                <i class="fas fa-list-ol"></i>
+            </div>
+            <div class="step-button" data-step="1" data-tooltip="Smart Nesting Setup">
+                <span>1</span>
+            </div>
+            <div class="step-button" data-step="2" data-tooltip="Export Layout">
+                <span>2</span>
+            </div>
+        </div>
+
+        <!-- Middle Instructions Panel -->
+        <div class="instructions-panel">
+            <h1 id="current-step-title">Introduction</h1>
+            
+            <div id="step-instructions">
+                <!-- Will be populated by JavaScript -->
+                <h3>Learning Intentions and Success Criteria</h3>
+                
+                <div class="card">
+                    <p><strong>Learning Intentions:</strong></p>
+                    <ol class="steps-list">
+                        <li>Use xTool's smart nesting feature to optimise material usage</li>
+                        <li>Export nested layouts for use in other software</li>
+                    </ol>
+                
+                    <p><strong>Success Criteria:</strong></p>
+                    <ol class="steps-list">
+                        <li>Efficiently arrange design parts on material using smart nesting</li>
+                        <li>Export nested layout as an SVG file</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation">
+                <button id="prevButton" class="nav-button" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                <button id="nextButton" class="nav-button">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-text">Progress: <span id="progress-percentage">0%</span></div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="footer">
+                Made with <span style="color: var(--accent-color);">♥</span> by <span id="creator-name">Buckley</span>
+            </div>
+        </div>
+
+        <!-- Right Content Display Area -->
+        <div class="content-display">
+            <div class="card">
+                <h2 id="content-title">Introduction</h2>
+                <div id="media-content">
+                    <!-- Will be populated by JavaScript -->
+                    <div class="alert-box alert-info">
+                        <p><strong>Tutorial Overview</strong></p>
+                        <p>Learn how to use xTool's smart nesting feature to conserve material by efficiently arranging your design parts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing images -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img id="modalImage" class="modal-content">
+    </div>
+
+    <script>
+        // Tutorial content configuration
+        const stepTitles = [
+            "Introduction",
+            "Smart Nesting Setup",
+            "Export Layout"
+        ];
+
+        const stepInstructions = [
+            // Step 0: Introduction
+            `<h3>Introduction to xTool Smart Nesting</h3>
+            
+            <div class="card">
+                <p><strong>Learning Intentions:</strong></p>
+                <ol class="steps-list">
+                    <li>Use xTool's smart nesting feature to optimise material usage</li>
+                    <li>Export nested layouts for use in other software</li>
+                </ol>
+            
+                <p><strong>Success Criteria:</strong></p>
+                <ol class="steps-list">
+                    <li>Efficiently arrange design parts on material using smart nesting</li>
+                    <li>Export nested layout as an SVG file</li>
+                </ol>
+            </div>`,
+            
+            // Step 1: Smart Nesting Setup
+            `<h3>Smart Nesting Setup</h3>
+            <p>Configure and apply smart nesting to your design.</p>
+            
+            <div class="card">
+                <h4>Steps:</h4>
+                <ol class="steps-list">
+                    <li>Drag your SVG file into the xTool project.</li>
+                    <li>Select the imported design(s) and click "Ungroup" in the top toolbar.</li>
+                    <li>Press <span class="kbd">Ctrl</span> + <span class="kbd">A</span> to select all parts.</li>
+                    <li>Click the "Applications" icon (four squares) on the left toolbar.</li>
+                    <li>Select "Smart nesting" from the menu.</li>
+                    <li>Set "Sheet Size(mm)" to match your material dimensions (e.g., 300×300).</li>
+                    <li>Toggle off "Densest packing".</li>
+                    <li>Set "Spacing(mm)" value (e.g., 4mm).</li>
+                    <li>Click the green "Start nesting" button.</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-title"><i class="fas fa-lightbulb"></i> Tip</div>
+                <p>Don't ungroup components that belong together, like slots from their base piece.</p>
+            </div>`,
+            
+            // Step 2: Export Layout
+            `<h3>Export Nested Layout</h3>
+            <p>Export your nested layout to use in other software.</p>
+            
+            <div class="card">
+                <h4>Steps:</h4>
+                <ol class="steps-list">
+                    <li>Press <span class="kbd">Ctrl</span> + <span class="kbd">A</span> to select all arranged parts.</li>
+                    <li>Right-click on the selection.</li>
+                    <li>Choose "Export as SVG..." from the menu.</li>
+                </ol>
+            </div>`
+        ];
+
+        const stepMedia = [
+            // Step 0: Introduction
+            `<div class="alert-box alert-info">
+                <p><strong>xTool Smart Nesting</strong></p>
+                <p>Smart nesting automatically arranges your design parts efficiently on your material, reducing waste and saving costs.</p>
+            </div>`,
+            
+            // Step 1: Smart Nesting Setup
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/D2XmaMP.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p style="text-align: center; margin-top: 15px;">Smart Nesting Setup Demonstration</p>
+            </div>`,
+            
+            // Step 2: Export Layout
+            `<div class="video-container">
+                <video width="100%" controls autoplay loop muted playsinline>
+                    <source src="https://i.imgur.com/pypLWOe.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p style="text-align: center; margin-top: 15px;">Exporting Your Nested Layout</p>
+            </div>`
+        ];
+
+        // Current step tracking
+        let currentStep = 0;
+        const totalSteps = stepInstructions.length;
+
+        // DOM Elements
+        const stepButtons = document.querySelectorAll('.step-button');
+        const stepTitleEl = document.getElementById('current-step-title');
+        const instructionsPanel = document.getElementById('step-instructions');
+        const mediaContent = document.getElementById('media-content');
+        const contentTitle = document.getElementById('content-title');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressBar = document.querySelector('.progress');
+        const progressPercentage = document.getElementById('progress-percentage');
+
+        // Image modal
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalClose = document.querySelector('.modal-close');
+
+        // Initialize the tutorial
+        function showStep(step) {
+            // Update active step button
+            stepButtons.forEach((button, index) => {
+                button.classList.toggle('active', index === step);
+            });
+
+            // Update step title
+            stepTitleEl.textContent = stepTitles[step];
+            contentTitle.textContent = stepTitles[step];
+
+            // Update content
+            instructionsPanel.innerHTML = stepInstructions[step];
+            mediaContent.innerHTML = stepMedia[step];
+
+            // Update navigation buttons
+            prevButton.disabled = step === 0;
+            nextButton.style.display = step === totalSteps - 1 ? 'none' : 'flex';
+            
+            // Update progress
+            const progress = Math.round(((step + 1) / totalSteps) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${progress}%`;
+            
+            currentStep = step;
+        }
+
+        // Simple tooltip implementation
+        function setupTooltips() {
+            // Remove any existing tooltips
+            const existingTooltips = document.querySelectorAll('.tooltip');
+            existingTooltips.forEach(t => t.remove());
+            
+            // Create new tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+            
+            // Add event listeners to all step buttons
+            const stepButtons = document.querySelectorAll('.step-button');
+            stepButtons.forEach(button => {
+                const tooltipText = button.getAttribute('data-tooltip');
+                if (!tooltipText) return;
+                
+                // On mouse enter
+                button.addEventListener('mouseenter', () => {
+                    // Set tooltip text
+                    tooltip.textContent = tooltipText;
+                    
+                    // Position tooltip based on viewport width
+                    const rect = button.getBoundingClientRect();
+                    if (window.innerWidth <= 1024) {
+                        // Position below on mobile
+                        tooltip.className = 'tooltip bottom';
+                        tooltip.style.top = `${rect.bottom + 10}px`;
+                        tooltip.style.left = `${rect.left + rect.width/2}px`;
+                        tooltip.style.transform = 'translateX(-50%)';
+                    } else {
+                        // Position to the right on desktop
+                        tooltip.className = 'tooltip right';
+                        tooltip.style.top = `${rect.top + rect.height/2}px`;
+                        tooltip.style.left = `${rect.right + 10}px`;
+                        tooltip.style.transform = 'translateY(-50%)';
+                    }
+                    
+                    // Make tooltip visible
+                    tooltip.style.opacity = '1';
+                });
+                
+                // On mouse leave
+                button.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        // Event Listeners
+        stepButtons.forEach((button, index) => {
+            button.addEventListener('click', () => showStep(index));
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 0) showStep(currentStep - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentStep < totalSteps - 1) showStep(currentStep + 1);
+        });
+
+        // Image modal functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG' && e.target.parentElement.classList.contains('image-container')) {
+                modal.style.display = 'block';
+                modalImg.src = e.target.src;
+                modalImg.alt = e.target.alt;
+            }
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Creator name with confetti
+        document.getElementById('creator-name').addEventListener('click', () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.8 },
+                colors: ['#002654', '#f7f7f7', '#f0f0f0', '#191919']
+            });
+        });
+
+        // Initialize with first step and set up tooltips
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(0);
+            setupTooltips();
+            
+            // Update tooltips on window resize
+            window.addEventListener('resize', () => {
+                setupTooltips();
+            });
+            
+            // Update tooltips whenever a step button is clicked
+            document.querySelectorAll('.step-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    setTimeout(setupTooltips, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
